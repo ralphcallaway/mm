@@ -69,7 +69,7 @@ class MavensMateRequestHandler():
             #example: mm -o new_project --ui
             if self.args.ui_switch == True:
                 config.logger.debug('UI operation requested, attempting to launch MavensMate UI')
-                tmp_html_file = util.generate_ui(self.operation,self.payload)
+                tmp_html_file = util.generate_ui(self.operation,self.payload,self.args)
                 if config.connection.plugin_client == 'ATOM': #returning location of html file here so we can open the page inside an atom panel
                     self.__printr(util.generate_success_response(tmp_html_file))
                 else:
@@ -157,6 +157,7 @@ def parse_args():
     parser.add_argument('-o', '--operation', help='The requested operation') #name of the operation being requested
     parser.add_argument('-c', '--client', help='The plugin client being used') #name of the plugin client ("SUBLIME_TEXT_2", "SUBLIME_TEXT_3", "TEXTMATE", "NOTEPAD_PLUS_PLUS", "BB_EDIT", etc.)
     parser.add_argument('-f', '--format', default='json', help='The response format') #json, plain
+    parser.add_argument('-uid', help='Unique identifier for the UI (to be used in conjunction with --ui)')
     parser.add_argument('--ui', action='store_true', default=False, 
         dest='ui_switch', help='Launch the default UI for the operation')
     parser.add_argument('--quiet', action='store_true', default=False, 

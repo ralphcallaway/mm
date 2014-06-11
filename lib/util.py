@@ -478,9 +478,10 @@ def static_resource_path():
         else:
             return 'file:///'+config.base_path  
 
-def generate_ui(operation,params={}):
+def generate_ui(operation,params={},args={}):
     template_path = config.base_path + "/lib/ui/templates"
     env = Environment(loader=FileSystemLoader(template_path),trim_blocks=True)
+    env.globals['uid']                      = args.uid
     env.globals['platform']                 = platform
     env.globals['play_sounds']              = play_sounds
     env.globals['project_settings']         = project_settings
