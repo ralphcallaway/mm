@@ -471,7 +471,7 @@ def platform():
 
 def static_resource_path():
     if config.connection.plugin_client.lower() == 'atom':
-        return 'https://rawgit.com/joeferraro/mm/master'
+        return 'https://rawgit.com/joeferraro/mm/atom' #TODO: switch to master for v1
     else:
         if sys.platform == 'win32':
             return 'file:///'+config.base_path.replace('\\', '/')
