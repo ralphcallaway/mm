@@ -29,7 +29,7 @@
         });
 
         $(function() {
-           
+            
             //instantiate tabs on page, if any
             $('.nav-tabs a').click(function (e) {
               e.preventDefault();
@@ -57,7 +57,16 @@
             $("input[type='text']:first").focus(); //focus first input element
         });
 
-        function notify_sound() {
+        function closeWindow() {
+            var client = '{{ client }}';
+            if (client.toLowerCase() === 'atom') {
+                parent.$('body').trigger( 'mavensmate-close-iframe' );    
+            } else {
+                window.close();
+            }
+        }
+
+        function notifySound() {
             if ({{ play_sounds()|lower }}) {
                 var snd = new Audio("{{ static_resource_path() }}/lib/ui/resources/sounds/pling.mp3"); // buffers automatically when created
                 snd.play(); 
@@ -247,7 +256,7 @@
                 resizeElements()
             })
 
-            function check_status(request_id) {
+            function checkRequestStatus(request_id) {
                 $.ajax({
                     type: "GET",
                     url: "{{ base_local_server_url() }}/status", 
@@ -262,7 +271,7 @@
                             try {
                                 response = JSON.parse(data.responseText)
                                 if (response["status"] == 'pending') {
-                                    setTimeout(function() { check_status(request_id); }, CHECK_STATUS_INTERVAL); //poll for completed async request
+                                    setTimeout(function() { checkRequestStatus(request_id); }, CHECK_STATUS_INTERVAL); //poll for completed async request
                                 } else {
                                     handle_response(response);
                                 }
@@ -273,7 +282,7 @@
                         } catch(e) {
                             console.log(e)
                             console.log('caught an error, polling again...')
-                            setTimeout(function() { check_status(request_id); }, 2000);
+                            setTimeout(function() { checkRequestStatus(request_id); }, 2000);
                         }
                                     
                     } 

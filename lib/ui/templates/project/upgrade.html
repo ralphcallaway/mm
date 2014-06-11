@@ -56,7 +56,7 @@
 
 {% block buttons %}					
 	<input type="button" id="btnSubmit" class="btn btn-info btn-embossed" value="Upgrade Project"  onclick="upgrade();">
-	<button id="btnCancel" class="btn btn-embossed" onclick="window.close();">Cancel</button>
+	<button id="btnCancel" class="btn btn-embossed" onclick="closeWindow();">Cancel</button>
 {% endblock %}
 
 {% block body_js %}
@@ -89,12 +89,12 @@
 		function handle_response(response) {
 			if (response["success"] == false) {
 				show_message(response["body"])
-				notify_sound()
+				notifySound()
 			} else {
 				$("#btnSubmit").remove()
 				$("#btnCancel").html("Done")
 				show_message("Your project has been successfully upgraded. Happy coding :)", 'success', true)
-				notify_sound()
+				notifySound()
 			}
 			hideLoading();
 		}

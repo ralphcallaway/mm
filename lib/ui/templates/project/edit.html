@@ -120,7 +120,7 @@
 
 {% block buttons %}					
 	<input type="button" id="btnSubmit" class="btn btn-info btn-embossed" value="Update Project"  onclick="updateProject();">
-	<button type="reset" class="btn btn-embossed" onclick="window.close();">Cancel</button>
+	<button type="reset" class="btn btn-embossed" onclick="closeWindow();">Cancel</button>
 {% endblock %}  
 
 {% block body_js %}
@@ -243,7 +243,7 @@
 						$("#tree").dynatree("getTree").reload();
 					}
 				}
-				notify_sound()
+				notifySound()
 				hideLoading();
 			} else if (operation == "update") {
 				if (response["success"] == false) {
@@ -251,7 +251,7 @@
 				} else {
 					show_message("Project updated successfully.", "success", true)
 				}
-				notify_sound()
+				notifySound()
 				hideLoading();
 			}
 			resizeProjectWrapper()

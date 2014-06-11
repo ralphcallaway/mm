@@ -107,7 +107,7 @@
 
 {% block buttons %}					
 	<input type="button" id="btnSubmit" class="btn btn-info btn-embossed btn-embossed" value="Create Project"  onclick='new_custom_project();'>
-	<button class="btn btn-embossed" onclick="window.close();">Cancel</button>
+	<button class="btn btn-embossed" onclick="closeWindow();">Cancel</button>
 {% endblock %}
 
 {% block body_js %}
@@ -151,7 +151,7 @@
 			if (operation == "new") {
 				if (response["success"] == false) {
 					show_message(response["body"])
-					notify_sound()
+					notifySound()
 				} else {
 					window.close()
 				}
@@ -159,7 +159,7 @@
 			} else if (operation == "check_creds") {
 				if (response["success"] == false) {
 					show_message(response["body"])
-					notify_sound()
+					notifySound()
 				} else {
 					$('#sid').val(response["sid"])	
 					$('#metadata_server_url').val(response["metadata_server_url"])
@@ -231,7 +231,7 @@
 						if (response["success"] == false) {
 							$("#project_details_tab").click();
 							show_message(response["body"]);
-							notify_sound();
+							notifySound();
 						} else {
 							console.log(response);
 							renderBufferedTree(response['metadata']);
@@ -248,7 +248,7 @@
 					} catch(e) {
 						console.log(e);
 						show_message('The local MavensMate server did not respond properly. This likely means it is not running or it is malfunctioning. Try restarting your text editor and MavensMate.app.');
-						notify_sound();
+						notifySound();
 						hideLoading();
 					}
 					

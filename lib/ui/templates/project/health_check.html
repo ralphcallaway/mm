@@ -27,7 +27,7 @@
 
 {% block buttons %}					
 	<button id="" class="btn btn-info btn-embossed" onclick="run_health_check();">Analyze Project</button>
-	<button id="btnCancel" class="btn btn-embossed" onclick="window.close();">Close</button>
+	<button id="btnCancel" class="btn btn-embossed" onclick="closeWindow();">Close</button>
 {% endblock %}
 
 {% block body_js %}
@@ -78,13 +78,13 @@
 							//nothing?
 						} else {
 							show_message(response["body"]);
-							notify_sound();
+							notifySound();
 						}
 						hideLoading();
 					} catch(e) {
 						console.log(e);
 						show_message(e);
-						notify_sound();
+						notifySound();
 						hideLoading();
 					}
 					$(el).html('<span class="typ">View</span>');
@@ -97,11 +97,11 @@
 			console.log(response)
 			if (response["success"] == true) {
 				$("#report_body").html((response["body"]))
-				notify_sound()
+				notifySound()
 				window.prettyPrint && prettyPrint()
 			} else {
 				show_message(response["body"])
-				notify_sound()
+				notifySound()
 			}
 			hideLoading();
 		}

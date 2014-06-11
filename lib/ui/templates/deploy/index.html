@@ -612,7 +612,7 @@
 			toggleRunningIndicator();
 			$("#btnDeploy").show();
 			$("#btnCompare").show();
-			notify_sound();
+			notifySound();
 		} else if (operation == "compare") {
 			$(".results_hidden").hide();
 			if (response["success"] === false) {
@@ -654,7 +654,7 @@
 			toggleRunningIndicator();
 			$("#btnDeploy").show();
 			$("#btnCompare").show();
-			notify_sound();
+			notifySound();
 		} else if (operation == "index") {
 			if (response["success"] == false) {
 				show_message(response["body"])
@@ -666,7 +666,7 @@
 				}
 			}
 			resizeProjectWrapper(140);
-			notify_sound();
+			notifySound();
 			hideLoading();
 		}
 	}
