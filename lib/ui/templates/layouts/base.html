@@ -60,7 +60,7 @@
         function closeWindow() {
             var client = '{{ client }}';
             if (client.toLowerCase() === 'atom') {
-                parent.$('body').trigger( 'mavensmate-close-iframe' );    
+                parent.$('body').trigger( 'mavensmateCloseIframe' );    
             } else {
                 window.close();
             }
