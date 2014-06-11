@@ -76,12 +76,12 @@
 		var response;
 
 		function new_project() {
-			operation = "new"
+			operation = "new";
 			$.ajax({
 				type: "POST",
 				dataType: 'json',
 				contentType: 'application/json; charset=utf-8',
-				url: "{{ base_local_server_url() }}/project/existing", 
+				url: "{{ base_local_server_url() }}/generic/async", 
 				data: JSON.stringify({
 					 project_name 	: $("#pn").val(), 
 					 username 		: $("#un").val(), 
@@ -90,11 +90,12 @@
 					 directory 		: $("#directory").val(),
 					 org_url 		: $("#custom-url").val(),
 					 workspace 		: $("#workspace").val(),
-					 action 		: "existing"
+					 action 		: "existing",
+					 command 		: "new_project_from_existing_directory"
 				}),
 				beforeSend: function() { showLoading('Creating new MavensMate project'); },
 				complete: function(data){
-					global_init_handler(data)
+					global_init_handler(data);
 				} 
 		 	});
 		}
@@ -109,13 +110,13 @@
 				}
 				hideLoading();
 			} else if (operation == "check_creds") {
-				if (response["success"] == false) {
-					$("#error_message").html(response["body"])
-					$("#result_output").show()
+				if (response["success"] === false) {
+					$("#error_message").html(response["body"]);
+					$("#result_output").show();
 				} else {
-					$('#sid').val(response["sid"])	
-					$('#murl').val(response["metadata_server_url"])
-					$("#result_output").hide()
+					$('#sid').val(response["sid"]);
+					$('#murl').val(response["metadata_server_url"]);
+					$("#result_output").hide();
 				}
 				hideLoading();
 			}
@@ -123,17 +124,17 @@
 				
 		$(function() {		   						
 			
-		    window.resizeTo(650, 700)
-		    centerWindow()
+		    window.resizeTo(650, 700);
+		    centerWindow();
 
 		    $("#org_type").change(function() {
 		    	if ($(this).val() == 'custom') {
-		    		$("#custom-url").show()
+		    		$("#custom-url").show();
 		    	} else {
-		    		$("#custom-url").hide()
-		    		$("#custom-url").val('')
+		    		$("#custom-url").hide();
+		    		$("#custom-url").val('');
 		    	}
-		    })
+		    });
 											
 			//submit form on enter
 			$(".content").bind('keyup', function(e) {

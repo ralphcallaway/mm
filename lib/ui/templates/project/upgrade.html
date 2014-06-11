@@ -65,7 +65,7 @@
 		function upgrade() {
 			$.ajax({
 				type: "POST",
-				url: "{{ base_local_server_url() }}/project/upgrade", 
+				url: "{{ base_local_server_url() }}/generic/async", 
 				dataType: 'json',
 				contentType: 'application/json; charset=utf-8',
 				data: JSON.stringify({
@@ -76,11 +76,12 @@
 			    	defer_connection 	: true,
 			    	org_url 			: $("#custom-url").val(),
 			    	project_name 		: '{{ name }}',
-			    	project_location	: $("#STATIC-project-location").val()
+			    	project_location	: $("#STATIC-project-location").val(),
+			    	command 			: "upgrade_project"
 				}),
 				beforeSend: function() { showLoading('Upgrading your project'); },
 				complete: function(data){	
-					global_init_handler(data)			
+					global_init_handler(data);			
 				} 
 			});
 		}

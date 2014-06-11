@@ -44,7 +44,9 @@ class MavensMateRequestHandler():
             each operation requested represents a session
             the session holds information about the plugin running it
             and establishes a project object
-        """        
+        """    
+        if self.payload != None and type(self.payload) is dict and 'settings' in self.payload:
+            config.plugin_client_settings = self.payload['settings']
         config.connection = PluginConnection(
             client=self.args.client or 'SUBLIME_TEXT_3',
             ui=self.args.ui_switch,
@@ -69,10 +71,10 @@ class MavensMateRequestHandler():
                 config.logger.debug('UI operation requested, attempting to launch MavensMate UI')
                 tmp_html_file = util.generate_ui(self.operation,self.payload)
                 if config.connection.plugin_client == 'ATOM': #returning location of html file here so we can open the page inside an atom panel
-                    return tmp_html_file
+                    self.__printr(util.generate_success_response(tmp_html_file))
                 else:
                     util.launch_ui(tmp_html_file)
-                self.__printr(util.generate_success_response('UI Generated Successfully'))
+                    self.__printr(util.generate_success_response('UI Generated Successfully'))
             
             #non-ui command
             else:        
@@ -166,6 +168,7 @@ def parse_args():
     args, unknown = parser.parse_known_args()
     return args, unknown
 
+#reads piped (via STDIN) request payload
 def get_request_payload():
     try:
         if sys.stdin.isatty():

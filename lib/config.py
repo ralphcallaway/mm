@@ -47,6 +47,7 @@ def __get_is_frozen():
 frozen = __get_is_frozen()
 base_path = __get_base_path()
 
+plugin_client_settings = None
 connection = None
 project = None
 sfdc_client = None

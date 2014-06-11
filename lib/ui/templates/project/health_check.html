@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% block yield %}
 
-<link rel="stylesheet" href="file:///{{ base_path_normal() }}/lib/ui/resources/css/health.css"></link>
+<link rel="stylesheet" href="{{ static_resource_path() }}/lib/ui/resources/css/health.css"></link>
 
 <div id="result_output">
 	<div class="alert alert-error">
@@ -46,14 +46,14 @@
 				}),
 				beforeSend: function() { showLoading('Analyzing MavensMate project...'); },
 				complete: function(data){	
-					global_init_handler(data)	
+					global_init_handler(data);	
 				} 
 			});
 		}
 
 		function open_file(el, file_name, line_number) {
-			$(el).html('<span class="typ">Opening...</span>')
-			$(el).removeClass('btn-info')
+			$(el).html('<span class="typ">Opening...</span>');
+			$(el).removeClass('btn-info');
 
 			$.ajax({
 				type: "POST",
@@ -71,24 +71,24 @@
 					//showLoading('Opening file in Sublime Text...'); 
 				},
 				complete: function(data){	
-					console.log(data)
+					console.log(data);
 					try {
 						var response = JSON.parse(data.responseText)
-						if (response["success"] == true) {
+						if (response["success"] === true) {
 							//nothing?
 						} else {
-							show_message(response["body"])
-							notify_sound()
+							show_message(response["body"]);
+							notify_sound();
 						}
 						hideLoading();
 					} catch(e) {
-						console.log(e)
-						show_message(e)
-						notify_sound()
+						console.log(e);
+						show_message(e);
+						notify_sound();
 						hideLoading();
 					}
-					$(el).html('<span class="typ">View</span>')
-					$(el).addClass('btn-info')
+					$(el).html('<span class="typ">View</span>');
+					$(el).addClass('btn-info');
 				} 
 			});
 		}

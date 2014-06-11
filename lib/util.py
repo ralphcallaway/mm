@@ -469,11 +469,14 @@ def platform():
     else:
         return 'osx'
 
-def base_path_normal():
-    if sys.platform == 'win32':
-        return config.base_path.replace('\\', '/')
+def static_resource_path():
+    if config.connection.plugin_client.lower() == 'atom':
+        return 'https://rawgit.com/joeferraro/mm/master'
     else:
-        return config.base_path
+        if sys.platform == 'win32':
+            return 'file:///'+config.base_path.replace('\\', '/')
+        else:
+            return 'file:///'+config.base_path  
 
 def generate_ui(operation,params={}):
     template_path = config.base_path + "/lib/ui/templates"
@@ -486,19 +489,23 @@ def generate_ui(operation,params={}):
     env.globals['base_local_server_url']    = base_local_server_url
     env.globals['operation']                = operation
     env.globals['project_location']         = config.project.location
-    env.globals['base_path_normal']         = base_path_normal
+    env.globals['static_resource_path']     = static_resource_path
+    env.globals['client']                   = config.connection.plugin_client
+
     temp = tempfile.NamedTemporaryFile(delete=False, prefix="mm", suffix=".html")
     if operation == 'new_project':
         template = env.get_template('/project/new.html')
         file_body = template.render(
             user_action='new',
             workspace=config.connection.workspace,
-            client=config.connection.plugin_client,
             workspaces=config.connection.get_workspaces()
             ).encode('UTF-8')
     elif operation == 'checkout_project':
         template = env.get_template('/project/new.html')
-        file_body = template.render(user_action='checkout',workspace=config.connection.workspace,client=config.connection.plugin_client).encode('UTF-8')
+        file_body = template.render(
+            user_action='checkout',
+            workspace=config.connection.workspace
+        ).encode('UTF-8')
     elif operation == 'upgrade_project':
         template = env.get_template('/project/upgrade.html')
         creds = config.project.get_creds()
@@ -508,7 +515,6 @@ def generate_ui(operation,params={}):
         file_body = template.render(
             name=config.project.project_name,
             project_location=config.project.location,
-            client=config.connection.plugin_client,
             username=creds['username'],
             org_type=creds['org_type'],
             org_url=org_url,
@@ -527,8 +533,7 @@ def generate_ui(operation,params={}):
             org_type=creds['org_type'],
             org_url=org_url,
             has_indexed_metadata=config.project.is_metadata_indexed,
-            project_location=config.project.location,
-            client=config.connection.plugin_client
+            project_location=config.project.location
         ).encode('UTF-8')
     elif operation == 'unit_test':
         if int(float(SFDC_API_VERSION)) < 29 or config.connection.get_plugin_client_setting("mm_use_legacy_test_ui", False):
@@ -555,10 +560,10 @@ def generate_ui(operation,params={}):
         else:
             selected = []
         file_body = template.render(
-            name=config.project.project_name,
-            classes=apex_classes,
-            selected=selected,
-            client=config.connection.plugin_client).encode('UTF-8')
+                name=config.project.project_name,
+                classes=apex_classes,
+                selected=selected
+            ).encode('UTF-8')
     elif operation == 'deploy':
         compare = config.connection.get_plugin_client_setting("mm_compare_before_deployment", True)
         template = env.get_template('/deploy/index.html')
@@ -569,41 +574,38 @@ def generate_ui(operation,params={}):
             connections=config.project.get_org_connections(),
             operation=operation,
             compare=compare,
-            deployments=config.project.get_deployments(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            deployments=config.project.get_deployments()
+        ).encode('UTF-8')
     elif operation == 'execute_apex':
         template = env.get_template('/execute_apex/index.html')
         file_body = template.render(
             name=config.project.project_name,
-            project_location=config.project.location,
-            client=config.connection.plugin_client).encode('UTF-8')
+            project_location=config.project.location
+        ).encode('UTF-8')
     elif operation == 'new_project_from_existing_directory':
         project_name = os.path.basename(params['directory'])
         template = env.get_template('/project/new_from_existing.html')
         file_body = template.render(
             project_name=project_name,
             directory=params['directory'],
-            workspaces=config.connection.get_workspaces(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            workspaces=config.connection.get_workspaces()
+        ).encode('UTF-8')
     elif operation == 'debug_log':
         template = env.get_template('/debug_log/index.html')
         file_body = template.render(
             project_name=config.project.project_name,
             users=config.project.get_org_users_list(),
             user_id=config.sfdc_client.user_id,
-            apex_items=config.sfdc_client.get_apex_classes_and_triggers(),
-            #logs=config.project.get_org_logs(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            apex_items=config.sfdc_client.get_apex_classes_and_triggers()
+        ).encode('UTF-8')
     elif operation == 'github':
         template = env.get_template('/github/index.html')
-        file_body = template.render(
-            client=config.connection.plugin_client).encode('UTF-8')
+        file_body = template.render().encode('UTF-8')
     elif operation == 'project_health_check':
         template = env.get_template('/project/health_check.html')
         file_body = template.render(
-            client=config.connection.plugin_client,
             name=config.project.project_name
-            ).encode('UTF-8')
+        ).encode('UTF-8')
     else:
         raise MMException('Unsupported UI Command')
     temp.write(file_body)

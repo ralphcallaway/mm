@@ -68,6 +68,10 @@ class NewProjectCommand(Command):
                             subl_location = subl_location.replace("Program Files", "Program Files (x86)")
                         cmd = '"{0}" --project "{1}"'.format(subl_location,os.path.join(config.project.location,config.project.project_name+".sublime-project"))
                         subprocess.call(cmd)
+                elif config.connection.plugin_client == config.connection.PluginClients.ATOM:
+                    if sys.platform == 'darwin':
+                        os.chdir(config.project.location)
+                        os.system("/usr/local/bin/atom")
             return result
         except BaseException, e:
             return util.generate_error_response(e.message)

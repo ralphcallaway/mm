@@ -32,7 +32,7 @@ class MavensMateProject(object):
 
     def __init__(self, params={}, **kwargs):
         params = dict(params.items() + kwargs.items())
-        self.deferred_project_commands = ['new_project', 'new_project_from_existing_directory']
+        self.deferred_project_commands = ['new_project', 'new_project_from_existing_directory', 'get_active_session']
         self.ui_commands_that_require_client = ['debug_log']
         self.sfdc_session       = None
         self.id                 = params.get('id', None)
@@ -49,6 +49,10 @@ class MavensMateProject(object):
         self.subscription       = params.get('subscription', [])
         self.location           = None
         self.conflict_manager   = None
+        if config.connection.operation not in self.deferred_project_commands and self.project_name == None: #=> existing project on the disk
+            config.connection.workspace = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+            self.project_name = os.path.basename(os.getcwd())
+
         if config.connection.operation not in self.deferred_project_commands and self.project_name != None and os.path.exists(os.path.join(config.connection.workspace,self.project_name)): #=> existing project on the disk
             self.location                   = os.path.join(config.connection.workspace,self.project_name)
             self.settings                   = self.__get_settings()
@@ -94,7 +98,7 @@ class MavensMateProject(object):
             debug('>>>>>> ')
             debug(os.path.join(config.connection.workspace,self.project_name))
             if os.path.isdir(os.path.join(config.connection.workspace,self.project_name)) and action == 'new':
-                raise MMException('A project with this name already exists in your workspace. To create a MavensMate project from an existing non-MavensMate Force.com project, open the project directory in Sublime Text, right click the project name in the sidebar and select "Create MavensMate Project"')
+                raise MMException('A project with this name already exists in your workspace. To create a MavensMate project from an existing non-MavensMate Force.com project, open the project directory in your MavensMate-enabled IDE/editor, right click the project name in the sidebar and select "Create MavensMate Project"')
             
             if action == 'existing':
                 existing_parent_directory = os.path.dirname(self.directory)
@@ -1149,6 +1153,7 @@ class MavensMateProject(object):
             src.close()
 
     def __put_project_settings_file(self):
+        #TODO: what about atom?
         if config.connection.plugin_client == 'SUBLIME_TEXT_2' or config.connection.plugin_client == 'SUBLIME_TEXT_3':
             body = [
                 '/*',

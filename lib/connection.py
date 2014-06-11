@@ -24,29 +24,47 @@ class PluginConnection(object):
     def __init__(self, params={}, **kwargs):
         params = dict(params.items() + kwargs.items()) #join params and kwargs
         self.params                 = params
+        
         self.operation              = params.get('operation', None)
+        if self.operation == None:
+            raise MMException('Please specify an operation')
+
         self.args                   = params.get('args', None)
-        self.plugin_client          = params.get('client', 'SUBLIME_TEXT_3') #=> "Sublime Text", "Notepad++", "TextMate"
+        
+        self.plugin_client          = params.get('client', None) #=> "Sublime Text", "Notepad++", "TextMate"
         if self.plugin_client not in self.currently_supported_clients:
-            self.plugin_client = 'SUBLIME_TEXT_3'
+            raise MMException('Unsupported plugin client')
+        
         self.project_name           = params.get('project_name', None)
         self.project_location       = params.get('project_location', None)
         self.plugin_client_settings = self.get_plugin_client_settings()
+        
+        '''
+            if project location is not specified, set workspace based on workspace param or the first specified in their settings
+            if project location is specified, set it based on the directory of the project
+        '''
         if self.project_location == None:
             self.workspace              = params.get('workspace', self.get_workspace())
         else:
             self.workspace              = os.path.dirname(self.project_location)
+        
+        '''
+            if project name is specified but location isn't, set it
+        '''
         if self.project_name != None and self.project_location == None:
             self.project_location = os.path.join(self.workspace,self.project_name)
+        
         self.project_id             = params.get('project_id', None)
         self.project                = None
         self.sfdc_api_version       = self.get_sfdc_api_version()
         self.ui                     = params.get('ui', False) #=> whether this connection was created for the purposes of generating a UI
         self.verbose                = params.get('verbose', False)
+        
         if 'wsdl_path' in params:
             util.WSDL_PATH = params.get('wsdl_path')
 
         self.setup_logging()
+        
         if self.get_plugin_client_setting('mm_timeout', None) != None:
             socket.setdefaulttimeout(self.get_plugin_client_setting('mm_timeout'))
 
@@ -147,26 +165,43 @@ class PluginConnection(object):
 
     #returns the MavensMate settings as a dict for the current plugin
     def get_plugin_client_settings(self):
+        settings = {}
         user_path = self.get_plugin_settings_path("User")
         def_path = self.get_plugin_settings_path("MavensMate")
-        settings = {}
 
-        workspace = self.params.get('workspace', None)
-        if self.project_name != None and workspace != None:
-            try:
-                settings['project'] = util.parse_json_from_file(os.path.join(workspace,self.project_name,self.project_name+'.sublime-settings'))
-            except:
-                debug('Project settings could not be loaded')
-        if not user_path == None:
-            try:
-                settings['user'] = util.parse_json_from_file(user_path)
-            except:
-                debug('User settings could not be loaded')
-        if not def_path == None:
-            try:
-                settings['default'] = util.parse_json_from_file(def_path)
-            except:
-                raise MMException('Could not load default MavensMate settings.')
+        '''
+            if the default path for settings is none, we're either dealing with a bad client setup or
+            a new client like Atom.io. Let's load the settings from the default cache and optionally allow 
+            them to pipe settings in via STDIN
+        '''
+        if def_path == None:
+            if 'ATOM' in self.plugin_client:
+                file_name = 'atom'
+            elif 'SUBLIME_TEXT' in self.plugin_client:
+                file_name = 'st3'
+            elif 'BRACKETS' in self.plugin_client:
+                file_name = 'brackets'
+            settings['default'] = util.parse_json_from_file(config.base_path + "/lib/config/"+file_name+".json")
+
+            if config.plugin_client_settings != None:
+                settings['user'] = config.plugin_client_settings
+        else:
+            workspace = self.params.get('workspace', None)
+            if self.project_name != None and workspace != None:
+                try:
+                    settings['project'] = util.parse_json_from_file(os.path.join(workspace,self.project_name,self.project_name+'.sublime-settings'))
+                except:
+                    debug('Project settings could not be loaded')
+            if not user_path == None:
+                try:
+                    settings['user'] = util.parse_json_from_file(user_path)
+                except:
+                    debug('User settings could not be loaded')
+            if not def_path == None:
+                try:
+                    settings['default'] = util.parse_json_from_file(def_path)
+                except:
+                    raise MMException('Could not load default MavensMate settings.')
         if settings == {}:
             raise MMException('Could not load MavensMate settings. Please ensure they contain valid JSON')
         return settings
@@ -191,16 +226,12 @@ class PluginConnection(object):
                     return os.path.join(os.path.expanduser('~'),"Library","Application Support","Brackets","extensions","user","mavensmate-user-settings.json")
                 else:
                     return os.path.join(os.path.expanduser('~'),"Library","Application Support","Brackets","extensions","user","mavensmate","settings.json")
-            # elif 'ATOM' in self.plugin_client: #TODO: atom's settings are written in cson which python cannot currently parse, will need to have atom calls include settings in payload
-            #     if type == "User":
-            #         atom_settings = util.get_file_as_string(os.path.join(os.path.expanduser('~'),'.atom','config.cson'))
-            #         json_data = cson.csons2json(atom_settings, 1)
-            #         json_file_location = util.put_generic_tmp_file_on_disk(json_data, 'json')
-            #         return json_file_location
         elif sys.platform == 'win32' or sys.platform == 'cygwin':
-            return os.path.join(os.environ['APPDATA'], sublime_ver, 'Packages',type,obj)
+            if 'SUBLIME_TEXT' in self.plugin_client:
+                return os.path.join(os.environ['APPDATA'], sublime_ver, 'Packages',type,obj)
         elif sys.platform == 'linux2':
-            return os.path.join(os.path.expanduser('~'),".config","sublime-text-3","Packages",type,obj)
+            if 'SUBLIME_TEXT' in self.plugin_client:
+                return os.path.join(os.path.expanduser('~'),".config","sublime-text-3","Packages",type,obj)
         else:
             return None
 

@@ -105,7 +105,7 @@
 	function new_log() {
 		$.ajax({
 			type: "POST",
-			url: "{{ base_local_server_url() }}/project/new_log", 
+			url: "{{ base_local_server_url() }}/generic/async", 
 			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
@@ -116,24 +116,25 @@
 				 project_location	: $("#STATIC-project-location").val(),
 				 debug_categories 	: get_log_levels_json_tooling(),
 				 expiration 		: $("#expiration").val(),
+				 command 			: 'new_log'
 			}),
 			beforeSend: function() { showLoading('Creating Debug Log...'); },
 			complete: function(data){	
-				global_init_handler(data)		
+				global_init_handler(data);		
 			} 
 		});
 	}
 
 	function handle_response(response) {
-		console.log(response)
+		console.log(response);
 		try {
 			if (response["success"] == true) {
-				show_message("Debug log created successfully.", 'success', true)
+				show_message("Debug log created successfully.", 'success', true);
 			} else {
-				show_message(response["message"])
+				show_message(response["message"]);
 			}
 		} catch(e) {
-			console.log(e)
+			console.log(e);
 		}
 		
 		hideLoading();
@@ -141,7 +142,7 @@
 
 	$(function(){
 		$(window).resize(function() {
-			resizeProjectWrapper(10)
+			resizeProjectWrapper(10);
 		});
 
 		$("#apex").prop('disabled', true);
@@ -154,10 +155,10 @@
 				$("#apex").prop('disabled', false);
 				$("#un_list").prop('disabled', true);
 			}
-		})
+		});
 
-		window.resizeTo(780, 810)
-		centerWindow()
+		window.resizeTo(780, 810);
+		centerWindow();
 	});
 
 	</script>

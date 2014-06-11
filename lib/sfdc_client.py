@@ -63,6 +63,10 @@ class MavensMateClient(object):
             else:
                 self.endpoint = util.get_sfdc_endpoint_by_type(self.org_type) 
 
+        debug(self.org_type)
+        debug('endpont is ::: ')
+        debug(self.endpoint)
+
         #we do this to prevent an unnecessary "login" call
         #if the getUserInfo call fails, we catch it and reset our class variables 
         if self.override_session == False and self.sid != None and self.user_id != None and self.metadata_server_url != None and self.endpoint != None and self.server_url != None:
