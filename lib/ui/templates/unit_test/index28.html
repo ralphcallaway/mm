@@ -369,14 +369,14 @@
 	});
 
 	function selectAllTests() {
-		$("#class-list-wrapper").find("div.alert label input[type='checkbox']").each(function() {
+		$("#class-list-wrapper").find("div.alert:visible label input[type='checkbox']").each(function() {
 			$(this).attr('checked', true);
 			$(this).parent().addClass('checked')
 		});
 	}
 
 	function selectNoTests() {
-		$("#class-list-wrapper").find("div.alert label input[type='checkbox']").each(function() {
+		$("#class-list-wrapper").find("div.alert:visible label input[type='checkbox']").each(function() {
 			$(this).attr('checked', false);
 			$(this).parent().removeClass('checked')
 		});
