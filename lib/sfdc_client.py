@@ -310,7 +310,36 @@ class MavensMateClient(object):
                 config.logger.debug(payload)
                 r = requests.post(self.get_tooling_url()+"/sobjects/"+metadata_type, data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
                 response = util.parse_rest_response(r.text)
-                content_entity_id = response['id']
+                debug('Create new member response')
+                debug(r.text)
+
+                # In theory we should get a consistent response format back, so let's just
+                # make it consistent
+                # Success Response (a map):
+                # {"id":"01pi0000005XtNUAA0","success":true,"errors":[]}
+                # Error Response (a map in a list)
+                # [{"message":"No such column 'Body' on sobject of type ApexPage","errorCode":"INVALID_FIELD"}]
+                if type(response) is list:
+                    response = response[0]
+
+
+                # handle the response as gracefully as possible
+                if type(response) is dict:
+                    if 'errorCode' in response:
+                        # crap, compile issue
+                        error_msg = "Create member failed. Error Code: " + response['errorCode'] + ". Message: " + response['message']
+                        raise MMException(error_msg)
+                    elif 'id' in response:
+                        # yay we got an id!!
+                        content_entity_id = response['id']
+                    else:
+                        # crap, who knows
+                        raise MMException('Error generating new content id. Raw response: ' + r.text)
+                else:
+                    # double crap, no idea
+                    raise MMException('Error generating new content id. Raw response: ' + r.text)
+
+                # reset payload
                 payload = {}
             
             # create/update member 
@@ -380,7 +409,8 @@ class MavensMateClient(object):
         #     #delete member
         #     r = requests.delete(self.get_tooling_url()+"/sobjects/{0}/{1}".format(tooling_type, member_id), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
         #     r.raise_for_status()
-
+        debug('down here!')
+        debug(response)
         return response   
 
     def get_metadata_container_id(self):
