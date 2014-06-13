@@ -299,8 +299,14 @@ class MavensMateClient(object):
             
             # create new component if needed
             if content_entity_id == None:
-                payload['Body']                 = open(file_path, 'r').read()
                 payload['Name']                 = file_name
+                # apex pages use "markup" and need a label (not that the docs mark it as required)
+                if metadata_type == 'ApexPage':
+                    payload['Markup']           = open(file_path, 'r').read()
+                    payload['MasterLabel']            = file_name
+                else:
+                    payload['Body']             = open(file_path, 'r').read()
+                
                 if metadata_type == 'ApexTrigger':
                     # grab object from body
                     m = re.search('on (.*?) \(', payload['Body'])
@@ -677,7 +683,7 @@ class MavensMateClient(object):
         for c in class_name_result:
             if c.Id == None: continue
             payload = json.dumps({ "ApexClassId" : c.Id })
-            r = requests.post(self.get_tooling_url()+"/sobjects/ApexTestQueueItem", data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
+            r = requests.post(self.get_base_url()+"/sobjects/ApexTestQueueItem", data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
                 self.__exception_handler(r)
             res = util.parse_rest_response(r.text)
