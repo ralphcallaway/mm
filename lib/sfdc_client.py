@@ -332,6 +332,16 @@ class MavensMateClient(object):
                 if response[0]['errorCode'] == 'DUPLICATE_VALUE':
                     dup_id = response[0]['message'].split(':')[-1]
                     dup_id = dup_id.strip()
+
+                    # in some case we get <unknown> back from sfdc for the dup id, instead query it
+                    if dup_id == '<unknown>':
+                        query_string = 'select Id From ' + tooling_type + ' Where MetadataContainerId = \'' + container_id + '\' AND ContentEntityId = \'' + content_entity_id + '\''
+                        r = requests.get(self.get_tooling_url()+"/query/", params={'q':query_string}, headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
+                        debug('response text ')
+                        debug(r.text);
+                        query_result = util.parse_rest_response(r.text)
+                        if query_result["size"] == 1 and 'records' in query_result and 'Id' in query_result['records'][0]:
+                            dup_id = query_result['records'][0]['Id']
                     
                     payload = json.loads(payload)
                     payload.pop("MetadataContainerId", None)
