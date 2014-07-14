@@ -57,10 +57,19 @@
             $("input[type='text']:first").focus(); //focus first input element
         });
 
+        function notifyOnloadListeners() {
+            console.log('LOADED WINDOW!!!');
+            var client = '{{ client }}';
+            if (client.toLowerCase() === 'atom') {
+                var event = new CustomEvent('mavensmateIframeLoaded', { 'detail': '{{ uid }}' });
+                parent.document.dispatchEvent(event);
+            }   
+        }
+
         function closeWindow() {
             var client = '{{ client }}';
             if (client.toLowerCase() === 'atom') {
-                var event = new CustomEvent('mavensmateCloseIframe', { 'detail': {{ uid }} });
+                var event = new CustomEvent('mavensmateCloseIframe', { 'detail': '{{ uid }}' });
                 parent.document.dispatchEvent(event);
             } else {
                 window.close();
@@ -152,7 +161,7 @@
         }
     </script>
 </head>
-<body id="body" class="{% block body_class %}{% endblock %}">
+<body id="body" class="{% block body_class %}{% endblock %}" onload="notifyOnloadListeners()">
   	
     {% include 'snippets/context-menu.html' %}
 

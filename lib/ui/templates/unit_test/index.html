@@ -289,11 +289,13 @@
 		$.ajax({
 			type: "POST",
 			url: "{{ base_local_server_url() }}/generic/async", 
-			dataType: "json",
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				project_name 		: '{{ name }}',
 				project_location	: $("#STATIC-project-location").val(),
 				command 			: "unit_test",
+				ajax_args 			: ['--html'],
 				classes 			: get_tests_to_run(),
 				generate_logs		: $("#enable_logging").is(":checked")
 			}),

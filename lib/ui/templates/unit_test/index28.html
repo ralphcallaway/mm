@@ -282,13 +282,15 @@
 		$.ajax({
 			type: "POST",
 			url: "{{ base_local_server_url() }}/generic/async", 
-			dataType: "json",
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				project_name 		: '{{ name }}',
 				classes 			: get_tests_to_run(),
 				debug_categories 	: get_log_levels_json(),
 				project_location	: $("#STATIC-project-location").val(),
-				command 			: 'unit_test'
+				command 			: 'unit_test',
+				ajax_args 			: ['--html']
 			}),
 			beforeSend: function() { toggleRunningIndicator(); $("#btnRunTests").hide() },
 			complete: function(data){

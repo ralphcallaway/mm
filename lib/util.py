@@ -501,12 +501,6 @@ def generate_ui(operation,params={},args={}):
             workspace=config.connection.workspace,
             workspaces=config.connection.get_workspaces()
             ).encode('UTF-8')
-    elif operation == 'checkout_project':
-        template = env.get_template('/project/new.html')
-        file_body = template.render(
-            user_action='checkout',
-            workspace=config.connection.workspace
-        ).encode('UTF-8')
     elif operation == 'upgrade_project':
         template = env.get_template('/project/upgrade.html')
         creds = config.project.get_creds()
@@ -606,6 +600,29 @@ def generate_ui(operation,params={},args={}):
         template = env.get_template('/project/health_check.html')
         file_body = template.render(
             name=config.project.project_name
+        ).encode('UTF-8')
+    elif operation == 'new_metadata':
+        template_source = config.connection.get_plugin_client_setting('mm_template_source', 'joeferraro/MavensMate-Templates/master')
+        template_location = config.connection.get_plugin_client_setting('mm_template_location', 'remote')
+        try:
+            if template_location == 'remote':
+                if 'linux' in sys.platform:
+                    template_package = os.popen("wget https://raw.github.com/{0}/package.json -q -O -".format(template_source)).read()
+                else:
+                    template_package = urllib2.urlopen("https://raw.github.com/{0}/package.json".format(template_source)).read()
+            else:
+                template_package = get_file_as_string(os.path.join(template_source,'package.json'))
+        except:
+            template_package = get_file_as_string(os.path.join(config.base_path,"lib","templates","github-local","package.json"))
+
+        metadata_type = params['metadata_type']
+        template_package_json = json.loads(template_package)
+
+        template = env.get_template('/metadata/new.html')
+        file_body = template.render(
+            name=config.project.project_name,
+            template_list=template_package_json[metadata_type],
+            templates=json.dumps(template_package_json[metadata_type])
         ).encode('UTF-8')
     else:
         raise MMException('Unsupported UI Command')

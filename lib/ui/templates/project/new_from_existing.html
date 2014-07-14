@@ -103,10 +103,10 @@
 		function handle_response(response) {
 			if (operation == "checkout" || operation == "new") {
 				if (response["success"] == false) {
-					$("#error_message").html(response["body"])
+					$("#error_message").html(response["body"]);
 					$("#result_output").show()
 				} else {
-					window.close()
+					closeWindow();
 				}
 				hideLoading();
 			} else if (operation == "check_creds") {

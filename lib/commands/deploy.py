@@ -159,7 +159,7 @@ class DeloyToServerCommand(Command):
                 #         break
                 return json.dumps(response)
             else:
-                return json.dumps(final_compare_result,index=4)   
+                return json.dumps(final_compare_result,indent=4)   
 
         for destination in destinations:
             if archive_deployments:

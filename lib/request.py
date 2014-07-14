@@ -31,10 +31,12 @@ class MavensMateRequestHandler():
 
     def __set_operation(self):
         if self.payload != None and 'operation' in self.payload:
+            self.args.operation = self.payload['operation']
             self.operation = self.payload['operation']
         elif self.args.operation != None:
             self.operation = self.args.operation
         elif self.unknown_args != [] and self.unknown_args[0]:
+            self.args.operation = self.unknown_args[0]
             self.operation = self.unknown_args[0]
         if self.operation == None:
             raise MMException('Unsupported operation')

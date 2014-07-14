@@ -1,5 +1,10 @@
 {% extends "layouts/base.html" %}
 {% block yield %}
+<style>
+	div#main-tab-content .select.select-block {
+		width: 712px;
+	}
+</style>
 <div id="result_output">
 	<div class="alert alert-error">
 		<button type="button" class="close fui-cross"></button>
@@ -150,10 +155,10 @@
 		function handle_response(response) {
 			if (operation == "new") {
 				if (response["success"] == false) {
-					show_message(response["body"])
-					notifySound()
+					show_message(response["body"]);
+					notifySound();
 				} else {
-					window.close()
+					closeWindow();
 				}
 				hideLoading();
 			} else if (operation == "check_creds") {

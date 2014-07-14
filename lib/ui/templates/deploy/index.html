@@ -544,6 +544,8 @@
 		$.ajax({
 			type: "POST",
 			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				project_name 		: '{{ name }}',
 				project_location	: $("#STATIC-project-location").val(),
@@ -676,6 +678,8 @@
 		$.ajax({
 			type: "POST",
 			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				destinations 		: get_target_json(),
 			    check_only 			: isValidateOnly(),
@@ -687,7 +691,8 @@
 			    debug_categories 	: get_log_levels_json(),
 			    project_location	: $("#STATIC-project-location").val(),
 			    finish 				: false,
-			    command 			: 'deploy'
+			    command 			: 'deploy',
+			    ajax_args 			: ['--html']
 			}),
 			beforeSend: function() { toggleRunningIndicator(); $("#btnDeploy").hide(); $("#btnCompare").hide();  },
 			complete: function(data){
@@ -701,6 +706,8 @@
 		$.ajax({
 			type: "POST",
 			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				destinations 		: get_target_json(),
 			    check_only 			: isValidateOnly(),
@@ -712,7 +719,8 @@
 			    debug_categories 	: get_log_levels_json(),
 			    project_location	: $("#STATIC-project-location").val(),
 			    finish 				: true,
-			    command 			: 'deploy'
+			    command 			: 'deploy',
+			    ajax_args 			: ['--html']
 			}),
 			beforeSend: function() { toggleRunningIndicator(); $("#btnDeploy").hide(); $("#btnCompare").hide();  },
 			complete: function(data){
@@ -729,6 +737,8 @@
 		$.ajax({
 			type: "GET",
 			url: "{{ base_local_server_url() }}/generic", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: {
 				 project_name		: '{{name}}',
 				 project_location	: $("#STATIC-project-location").val(),

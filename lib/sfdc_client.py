@@ -384,7 +384,6 @@ class MavensMateClient(object):
         #     #delete member
         #     r = requests.delete(self.get_tooling_url()+"/sobjects/{0}/{1}".format(tooling_type, member_id), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
         #     r.raise_for_status()
-
         return response   
 
     def get_metadata_container_id(self):
