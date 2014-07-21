@@ -260,6 +260,8 @@
                                     handle_response(response);
                                 }
                             } catch(e) {
+                                console.log('error handling response');
+                                console.log(e);
                                 response = data.responseText
                                 show_global_error(response)
                             }

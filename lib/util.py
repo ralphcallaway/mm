@@ -673,6 +673,8 @@ def generate_html_response(operation, obj, params=None):
         config.logger.debug(json.dumps(result, sort_keys=True,indent=4))
         html = template.render(result=result,results_normal={},args=params)
     elif operation == 'deploy':
+        config.logger.debug('\n\n\n\n\n ------> GENERATING HTML RESPONSE FOR DPELOYYYYY\n\n\n\n\n\n')
+
         template = env.get_template('/deploy/result.html')
         deploy_results = []
         for result in obj:
@@ -688,11 +690,11 @@ def generate_html_response(operation, obj, params=None):
                     if m['success'] == False:
                         result['success'] = False
                         break
-            if 'runTestResult' in result and 'codeCoverage' in result['runTestResult']:
-                result['parsedTestResults'] = process_unit_test_result(result['runTestResult'])
-                deploy_results.append(result)
-            else:
-                deploy_results.append(result)
+                if 'runTestResult' in result and 'codeCoverage' in result['runTestResult']:
+                    result['parsedTestResults'] = process_unit_test_result(result['runTestResult'])
+                    deploy_results.append(result)
+                else:
+                    deploy_results.append(result)
         config.logger.debug(obj)
         config.logger.debug(deploy_results)
         html = template.render(deploy_results=deploy_results,args=params)

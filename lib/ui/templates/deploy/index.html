@@ -396,6 +396,7 @@
 	var operation;
 	var compareModeEnabled = {{compare|lower}};
 	var hasCompared = false;
+	var isFinish = false;
 
 	function isValidateOnly() {
 		return $("#check_only").is(":checked")
@@ -573,7 +574,11 @@
 	}
 
 	function handle_response(response) {
-		if (operation == "deploy" && isFinish) {
+		console.log('handling responsE!!');
+		console.log(operation);
+		console.log(response);
+		if (operation === "deploy" && isFinish === true) {
+			console.log('handling deploy finishhhhh')
 			$(".compare_results_hidden").addClass('hidden');
 			if (response["success"] === false) {
 				show_message(response["body"])
@@ -612,6 +617,41 @@
 			$("#btnDeploy").show();
 			$("#btnCompare").show();
 			notify_sound();
+		} else if (operation === "deploy") {
+			console.log('wooooo!!!!');
+			$(".result_wrapper").remove()
+
+			$("#result").html(response["body"]);
+
+			$("#dropdown-destinations").html($("#destination_options ul").html());
+			$("#destination_options").remove()
+
+			if (response["deploy_success"] == true){
+				$("#check_only").attr('checked', false);
+				$("#check_only").parent().removeClass('checked')
+				$("#btnDeploy").val('Deploy to Server');
+			}
+
+			$("#main-tab-content").append($("#extra_tabs").html());
+			$("#extra_tabs").remove()
+
+			$('.nav-tabs a').click(function (e) {
+			  e.preventDefault();
+			  $(this).tab('show');
+			})
+
+			$(".results_hidden").show();
+			if ($("#arcade").css("display") == "none") {
+				$("ul#main-tabs > li.active").removeClass('active')
+				$("div#main-tab-content > div.active").removeClass('active')
+				$("#result-0").addClass('active')
+				$('li.dropdown ul li a.test_result_link').tab('show');
+				$(".results_hidden").addClass('active');
+			}
+
+			toggleRunningIndicator();
+			$("#btnDeploy").show();
+			notify_sound()
 		} else if (operation == "compare") {
 			$(".results_hidden").hide();
 			if (response["success"] === false) {
