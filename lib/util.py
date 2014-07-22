@@ -430,9 +430,9 @@ def put_skeleton_files_on_disk(metadata_type, where, github_template=None, param
     try:
         if template_location == 'remote':
             if 'linux' in sys.platform:
-                template_body = os.popen("wget https://raw.github.com/{0}/{1}/{2} -q -O -".format(template_source, metadata_type, file_name)).read()
+                template_body = os.popen("wget https://raw.githubusercontent.com/{0}/{1}/{2} -q -O -".format(template_source, metadata_type, file_name)).read()
             else:
-                template_body = urllib2.urlopen("https://raw.github.com/{0}/{1}/{2}".format(template_source, metadata_type, file_name)).read()
+                template_body = urllib2.urlopen("https://raw.githubusercontent.com/{0}/{1}/{2}".format(template_source, metadata_type, file_name)).read()
         else:
             template_body = get_file_as_string(os.path.join(template_source,metadata_type,file_name))
     except:
