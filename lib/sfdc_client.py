@@ -462,8 +462,6 @@ class MavensMateClient(object):
                 api_name = util.get_file_name_no_extension(file_path)
                 mtype = util.get_meta_type_by_suffix(ext)
                 id = self.get_apex_entity_id_by_name(object_type=mtype['xmlName'], name=api_name)
-
-
             query_string = "Select Id, Line, Iteration, ExpirationDate, IsDumpingHeap from ApexExecutionOverlayAction Where ExecutableEntityId = '{0}'".format(id)
             payload = { 'q' : query_string }
             r = requests.get(self.get_tooling_url()+"/query/", params=payload, headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
@@ -492,7 +490,9 @@ class MavensMateClient(object):
         payload = json.dumps(payload)
         r = requests.post(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction", data=payload, proxies=self.__get_proxies(), headers=self.get_rest_headers('POST'), verify=False)
         if self.__is_failed_request(r):
-            self.__exception_handler(r)
+            response = r.json()
+            if (response[0] is not None) & (response[0]['errorCode'] != 'STORAGE_LIMIT_EXCEEDED'):
+                self.__exception_handler(r)
 
         ##WE ALSO NEED TO CREATE A TRACE FLAG FOR THIS USER
         expiration = util.get_iso_8601_timestamp(30)
@@ -529,9 +529,7 @@ class MavensMateClient(object):
         if 'overlay_id' in kwargs:
             r = requests.delete(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction/{0}".format(kwargs['overlay_id']), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
-                response = r.json()
-                if (response[0] is not None) & (response[0]['errorCode'] != 'INVALID_CROSS_REFERENCE_KEY') & (response[0]['errorCode'] != 'STORAGE_LIMIT_EXCEEDED'):
-                    self.__exception_handler(r)
+                self.__exception_handler(r)
             return util.generate_success_response('OK')
         else:
             id = kwargs.get('id', None)
@@ -551,7 +549,9 @@ class MavensMateClient(object):
             overlay_id = query_result['records'][0]['Id']
             r = requests.delete(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction/{0}".format(overlay_id), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
-                self.__exception_handler(r)
+                response = r.json()
+                if (response[0] is not None) & (response[0]['errorCode'] != 'INVALID_CROSS_REFERENCE_KEY'):
+                    self.__exception_handler(r)
             return util.generate_success_response('OK')
 
     ########################
