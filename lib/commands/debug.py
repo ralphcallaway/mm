@@ -2,6 +2,7 @@ import os.path
 import lib.util as util
 import json
 import lib.config as config
+import shutil
 from lib.exceptions import *
 from lib.basecommand import Command
 
