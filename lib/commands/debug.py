@@ -147,7 +147,7 @@ class IndexApexOverlaysCommand(Command):
     def execute(self):
         result = config.sfdc_client.get_apex_checkpoints()
         if 'records' not in result or len(result['records']) == 0:
-            project.put_overlays_file('[]')
+            config.project.put_overlays_file('[]')
             return util.generate_success_response('Could Not Find Any Apex Execution Overlays')
         else:
             id_to_name_map = {}
