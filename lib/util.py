@@ -3,7 +3,7 @@ import json
 import re
 import config
 import shutil
-import tempfile 
+import tempfile
 import string
 import random
 import base64
@@ -132,9 +132,9 @@ def get_sfdc_endpoint(url):
     return endpoint
 
 def get_sfdc_endpoint_by_type(type):
-    if type in ENDPOINTS: 
-        return ENDPOINTS[type] 
-    else: 
+    if type in ENDPOINTS:
+        return ENDPOINTS[type]
+    else:
         return ""
 
 def is_directory_empty(path):
@@ -340,7 +340,7 @@ def get_empty_package_xml_contents():
 
 def get_default_metadata_data():
     return parse_json_from_file(config.base_path + "/lib/sforce/metadata/default_metadata.json")
-    
+
 def get_child_metadata_data():
     return parse_json_from_file(config.base_path + "/lib/sforce/metadata/default_child_metadata.json")
 
@@ -351,7 +351,7 @@ def get_meta_type_by_suffix(suffix):
         data = get_default_metadata_data()
         if '.' in suffix:
             suffix = suffix.replace('.','')
-        for item in data["metadataObjects"]: 
+        for item in data["metadataObjects"]:
             if 'suffix' in item and item['suffix'] == suffix:
                 return item
         if config.describe_data != None:
@@ -359,7 +359,7 @@ def get_meta_type_by_suffix(suffix):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'suffix' in item and item['suffix'] == suffix:
                     return item
     except:
@@ -369,7 +369,7 @@ def get_meta_type_by_dir(dir_name):
     parent_data = get_default_metadata_data()
     child_data = get_child_metadata_data()
     data = parent_data['metadataObjects'] + child_data
-    for item in data: 
+    for item in data:
         if 'directoryName' in item and item['directoryName'].lower() == dir_name.lower():
             return item
         elif 'tagName' in item and item['tagName'].lower() == dir_name.lower():
@@ -384,7 +384,7 @@ def get_meta_type_by_dir(dir_name):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'directoryName' in item and item['directoryName'].lower() == dir_name.lower():
                     return item
                 elif 'tagName' in item and item['tagName'].lower() == dir_name.lower():
@@ -395,10 +395,10 @@ def get_meta_type_by_dir(dir_name):
 def get_meta_type_by_name(name):
     data = get_default_metadata_data()
     child_data = get_child_metadata_data()
-    for item in data["metadataObjects"]: 
+    for item in data["metadataObjects"]:
         if 'xmlName' in item and item['xmlName'] == name:
-            return item 
-    for item in child_data: 
+            return item
+    for item in child_data:
         if 'xmlName' in item and item['xmlName'] == name:
             return item
     '''
@@ -411,7 +411,7 @@ def get_meta_type_by_name(name):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'xmlName' in item and item['xmlName'] == name:
                     return item
     except:
@@ -437,7 +437,7 @@ def put_skeleton_files_on_disk(metadata_type, where, github_template=None, param
             template_body = get_file_as_string(os.path.join(template_source,metadata_type,file_name))
     except:
         template_body = get_file_as_string(os.path.join(config.base_path,"lib","templates","github-local",metadata_type,file_name))
-    
+
     template = env.from_string(template_body)
     file_body = template.render(params)
     metadata_type = get_meta_type_by_name(metadata_type)
@@ -476,7 +476,7 @@ def static_resource_path():
         if sys.platform == 'win32':
             return 'file:///'+config.base_path.replace('\\', '/')
         else:
-            return 'file:///'+config.base_path  
+            return 'file:///'+config.base_path
 
 def generate_ui(operation,params={},args={}):
     template_path = config.base_path + "/lib/ui/templates"
@@ -535,7 +535,7 @@ def generate_ui(operation,params={},args={}):
             template = env.get_template('/unit_test/index28.html')
         else:
             template = env.get_template('/unit_test/index.html')
-            
+
         istest = re.compile(r"@istest", re.I)
         testmethod = re.compile(r"testmethod", re.I)
 
@@ -643,18 +643,18 @@ def calculate_coverage(result, id_to_name_map):
         elif r["ApexClassOrTriggerId"].startswith('01p'):
             r["ApexClassOrTrigger"] = "ApexClass"
         r["ApexClassOrTriggerName"] = id_to_name_map[r["ApexClassOrTriggerId"]]
-        key = r["ApexClassOrTrigger"]+r["ApexClassOrTriggerName"] 
+        key = r["ApexClassOrTrigger"]+r["ApexClassOrTriggerName"]
         if key not in coverage:
             coverage[key] = r #ApexClass01pxyz123 : { coverage }
         else:
             existing_covered_lines = coverage[key]["Coverage"]["coveredLines"]
             this_class_covered_lines = r["Coverage"]["coveredLines"]
-            new_covered_lines = list(set(existing_covered_lines) | set(this_class_covered_lines))  
+            new_covered_lines = list(set(existing_covered_lines) | set(this_class_covered_lines))
             coverage[key]["Coverage"]["coveredLines"] = new_covered_lines
 
             existing_uncovered_lines = coverage[key]["Coverage"]["uncoveredLines"]
             this_class_uncovered_lines = r["Coverage"]["uncoveredLines"]
-            new_covered_lines = list(set(existing_uncovered_lines) | set(this_class_uncovered_lines))  
+            new_covered_lines = list(set(existing_uncovered_lines) | set(this_class_uncovered_lines))
             coverage[key]["Coverage"]["uncoveredLines"] = new_covered_lines
 
             new_uncovered = []
@@ -805,7 +805,7 @@ def launch_ui(tmp_html_file_location):
             threading.Thread(target=b).start()
         elif 'darwin' in sys.platform:
             webbrowser.open("{0}{1}".format("file:///",tmp_html_file_location))
-        else: 
+        else:
             webbrowser.get('windows-default').open("{0}{1}".format("file:///",tmp_html_file_location))
     else:
         os.system("open -n '"+config.base_path+"/bin/MavensMateWindowServer.app' --args -url '"+tmp_html_file_location+"'")
@@ -826,7 +826,7 @@ def generate_success_response(message, type="text"):
         "body_type" : type,
         "body"      : message
     }
-    return json.dumps(res)
+    return res
 
 def generate_request_for_action_response(message, operation, actions=[], **kwargs):
     res = {
@@ -944,7 +944,7 @@ def lower_keys(x):
 
 #prepares the unit test result for processing by the jinja template
 def process_unit_test_result(result):
-    
+
     config.logger.debug('>>>> RUN TEST RESULT')
     config.logger.debug(result)
 
@@ -961,7 +961,7 @@ def process_unit_test_result(result):
             if 'numLocations' in coverage_result and 'numLocationsNotCovered' in coverage_result:
                 locations = int(float(coverage_result['numLocations']))
                 locations_not_covered = int(float(coverage_result['numLocationsNotCovered']))
-                percent_covered = 0 
+                percent_covered = 0
                 if locations > 0:
                     percent_covered = int(round(100 * ((float(locations) - float(locations_not_covered)) / locations)))
                 coverage_result['percentCovered'] = percent_covered
@@ -992,7 +992,7 @@ def process_unit_test_result(result):
             result['codeCoverageWarnings'] = [result['codeCoverageWarnings']]
         for warning in result['codeCoverageWarnings']:
             if 'name' in warning and type(warning['name']) is not str and type(warning['name']) is not unicode:
-               warning['name'] = None 
+               warning['name'] = None
 
     results_normal = {}
     #{"foo"=>[{:name = "foobar"}{:name = "something else"}], "bar"=>[]}
@@ -1009,13 +1009,13 @@ def process_unit_test_result(result):
                 }
             else:
                 pass_fail[success['name']]['pass'] += 1
-            if success['name'] not in results_normal: #key isn't there yet, put it in        
+            if success['name'] not in results_normal: #key isn't there yet, put it in
                 results_normal[success['name']] = [success]
             else: #key is there, let's add metadata to it
                 arr = results_normal[success['name']] #get the existing array
                 arr.append(success) #add the new piece of metadata
                 results_normal[success['name']] = arr #replace the key
-    
+
     if 'failures' in result:
         # for single results we don't get a list back
         if type(result['failures']) is not list:
@@ -1028,7 +1028,7 @@ def process_unit_test_result(result):
                 }
             else:
                 pass_fail[failure['name']]['fail'] += 1
-            if failure['name'] not in results_normal: #key isn't there yet, put it in        
+            if failure['name'] not in results_normal: #key isn't there yet, put it in
                 results_normal[failure['name']] = [failure]
             else: #key is there, let's add metadata to it
                 arr = results_normal[failure['name']] #get the existing array
@@ -1060,13 +1060,13 @@ def get_metadata_hash(selected_files=[]):
         if '-meta.xml' in f:
             continue
         name, ext = os.path.splitext(f)
-        ext_no_period = ext.replace(".", "")   
+        ext_no_period = ext.replace(".", "")
         if os.path.basename(f).count('.') > 1: #fix for weird metadata types like approvalprocess
             base_name_no_ext = os.path.basename(f).split(".")[0]+"."+os.path.basename(f).split(".")[1]
         else:
             base_name_no_ext = os.path.basename(f).split(".")[0]
         try:
-            metadata_definition = get_meta_type_by_suffix(ext_no_period)      
+            metadata_definition = get_meta_type_by_suffix(ext_no_period)
             meta_type = metadata_definition["xmlName"]
         except:
             if sys.platform == "win32":
@@ -1074,10 +1074,10 @@ def get_metadata_hash(selected_files=[]):
             else:
                 dir_parts = f.split("/")
             if 'documents' in dir_parts:
-                metadata_definition = get_meta_type_by_name("Document") 
+                metadata_definition = get_meta_type_by_name("Document")
                 meta_type = metadata_definition["xmlName"]
 
-        if meta_type not in meta_hash: #key isn't there yet, put it in        
+        if meta_type not in meta_hash: #key isn't there yet, put it in
             if metadata_definition['inFolder']:
                 arr = f.split("/")
                 if arr[len(arr)-2] != metadata_definition['directoryName']:
@@ -1096,12 +1096,12 @@ def get_metadata_hash(selected_files=[]):
                     meta_array.append(base_name_no_ext) #add the new piece of metadata
             else:
                 meta_array.append(base_name_no_ext) #file name with no extension
-            
+
             meta_hash[meta_type] = meta_array #replace the key
-        
+
     return meta_hash
- 
-def parse_deploy_result(res):  
+
+def parse_deploy_result(res):
     return_result = {
         "id"        : res["id"],
         "success"   : res["success"]
@@ -1110,11 +1110,11 @@ def parse_deploy_result(res):
     retrieve_result = {}
     run_test_result = {}
 
-   
+
     if 'runTestResult' in res and type(res['runTestResult']) is not list:
         return_result['runTestResult'] = [res['runTestResult']]
     else:
-        return_result['runTestResult'] = res['runTestResult']    
+        return_result['runTestResult'] = res['runTestResult']
     return return_result
 
 def parse_deploy_messages(res):
@@ -1164,7 +1164,7 @@ def parse_run_test_result(res):
         successes = [res['runTestResult']['successes']]
     else:
         successes = res['runTestResult']['successes']
-    
+
     for c in code_coverage:
         code_coverage_return.append({
             "changed"       : m["changed"],
@@ -1190,4 +1190,3 @@ def grouper(n, iterable, fillvalue=None):
 def list_grouper(n, iterable):
     args = [iter(iterable)] * n
     return ([e for e in t if e != None] for t in itertools.izip_longest(*args))
-     
