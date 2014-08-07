@@ -1,6 +1,7 @@
 import os.path
 import lib.util as util
 import json
+import shutil
 import lib.config as config
 from lib.exceptions import *
 from lib.basecommand import Command
@@ -73,11 +74,11 @@ class FetchLogsCommand(Command):
                 file_name = modstamp+"-"+log["userid"]+".log"
                 src = open(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name), "w")
                 src.write(log["log"])
-                src.close() 
+                src.close()
         else:
             config.logger.debug("No logs to download")
 
-        return util.generate_success_response(str(number_of_logs)+' Logs successfully downloaded') 
+        return util.generate_success_response(str(number_of_logs)+' Logs successfully downloaded')
 
 class NewTraceFlagCommand(Command):
     aliases=["new_log"]
@@ -116,7 +117,7 @@ class NewTraceFlagCommand(Command):
                 request[c['category']] = c['level']
             else:
                 request[c] = self.params['debug_categories'][c]
-        
+
         request['ExpirationDate'] = util.get_iso_8601_timestamp(int(float(self.params.get('expiration', 30))))
 
         config.logger.debug(self.params['debug_categories'])
@@ -163,7 +164,7 @@ class IndexApexOverlaysCommand(Command):
 
             class_filter = ' or '.join(class_ids)
             trigger_filter = ' or '.join(trigger_ids)
-            
+
             if len(class_ids) > 0:
                 soql = 'Select Id, Name From ApexClass WHERE '+class_filter
                 class_result = config.sfdc_client.execute_query(soql)
@@ -218,7 +219,7 @@ class DeleteApexOverlayCommand(Command):
         delete_result = config.sfdc_client.delete_apex_checkpoint(overlay_id=self.params['id'])
         IndexApexOverlaysCommand(params=self.params).execute()
         return delete_result
-  
+
 class FetchCheckpointsCommand(Command):
     def execute(self):
         number_of_checkpoints = 0
@@ -256,8 +257,8 @@ class FetchCheckpointsCommand(Command):
                     file_path = os.path.join(config.project.location,"debug","checkpoints",r['HeapDump']['className'],str(r['Line']),file_name)
                     src = open(file_path, "w")
                     src.write(json.dumps(r,sort_keys=True,indent=4))
-                    src.close() 
+                    src.close()
         else:
             config.logger.debug("No checkpoints to download")
-    
-        return util.generate_success_response(str(number_of_checkpoints)+' Checkpoints successfully downloaded') 
+
+        return util.generate_success_response(str(number_of_checkpoints)+' Checkpoints successfully downloaded')
