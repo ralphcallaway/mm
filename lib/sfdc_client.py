@@ -379,7 +379,10 @@ class MavensMateClient(object):
         finished = False
         while finished == False:
             time.sleep(1)
-            query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
+            if int(float(util.SFDC_API_VERSION)) >= 31:
+                query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, DeployDetails, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
+            else:
+                query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
             r = requests.get(self.get_tooling_url()+"/query/", params={'q':query_string}, headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
                 self.__exception_handler(r)
@@ -982,8 +985,10 @@ class MavensMateClient(object):
     def __get_partner_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'partner-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner.xml')
         try:
@@ -1003,8 +1008,10 @@ class MavensMateClient(object):
     def __get_metadata_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata.xml')
 
@@ -1025,8 +1032,10 @@ class MavensMateClient(object):
     def __get_apex_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'apex-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex.xml')
 
