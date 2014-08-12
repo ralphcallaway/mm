@@ -405,7 +405,6 @@ class MavensMateClient(object):
         if self.__is_failed_request(r):
             self.__exception_handler(r)
         query_result = util.parse_rest_response(r.text)
-        #print query_result
         try:
             return query_result['records'][0]['Id']
         except:

@@ -181,8 +181,12 @@ class SforceMetadataClient(SforceBaseClient):
         debug(result)
 
         if result.done == False:
-            self._waitForRetrieveRequest(result.id)
-            return self._getRetrieveBody(result.id)
+            debug('---> result is not done')
+            if int(float(util.SFDC_API_VERSION)) > 30:
+                return self._waitForRetrieveRequest(result.id) # will loop until done
+            else:
+                self._waitForRetrieveRequest(result.id) # will loop until done
+                return self._getRetrieveBody(result.id)
         else:
             return result
 
@@ -469,6 +473,7 @@ class SforceMetadataClient(SforceBaseClient):
         return self._handleResultTyping(self._sforce.service.checkRetrieveStatus(id))
 
     def _waitForRetrieveRequest(self, id):
+        debug('waiting for retrieve request ...')
         finished = False
         checkStatusResponse = None
         while finished == False:
@@ -478,8 +483,10 @@ class SforceMetadataClient(SforceBaseClient):
                 finished = checkStatusResponse[0].done
                 if finished:
                     return None
-            else:
+            else: #api 31.0 and greeater
                 checkStatusResponse = self._sforce.service.checkRetrieveStatus(id)                
+                debug('checkStatusResponse --->')
+                debug(checkStatusResponse)
                 finished = checkStatusResponse.success
                 if finished:
                     return checkStatusResponse
