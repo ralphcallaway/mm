@@ -10,5 +10,5 @@ general:
   build_dir: test
 test:
   override:
-    - python suite.py:
+    - sudo python suite.py:
         timeout: 1200
