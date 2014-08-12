@@ -2,6 +2,7 @@ language: python
 python:
   - "2.7"
 before_install:
+  - "sudo apt-get install python-keyring"
   - "sudo apt-get install python-gnomekeyring"
 install:
   - "pip install jinja2 suds keyring markupsafe pyyaml requests"
