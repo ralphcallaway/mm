@@ -45,7 +45,7 @@ class MetadataOperationTest(MavensMateTest):
         client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         stdin = {
             "project_name": "unit test metadata project", 
-            "files": [os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls")] 
+            "files": [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")] 
         }
         mm_response = self.runCommand('compile', stdin)
         self.assertTrue(mm_response['State'] == "Completed")
@@ -54,7 +54,7 @@ class MetadataOperationTest(MavensMateTest):
     def test_03_should_delete_apex_class(self): 
         client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         stdin = {
-            "files": [os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls")], 
+            "files": [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")], 
             "project_name": "unit test metadata project"
         }
         mm_response = self.runCommand('delete', stdin)

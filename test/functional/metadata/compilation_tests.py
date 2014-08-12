@@ -21,20 +21,20 @@ class CompilationTests(MavensMateTest):
         
         test_helper.create_project(self, "unit test metadata project")
         test_helper.create_apex_metadata(self, "unit test metadata project", "ApexClass", "unittestapexclass")
-        mm_response = test_helper.compile(self, "unit test metadata project", [os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls")])
+        mm_response = test_helper.compile(self, "unit test metadata project", [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")])
         
         self.assertTrue(mm_response['State'] == 'Completed')
         self.assertTrue(mm_response['CompilerErrors'] == '[]')
 
     def test_02_should_be_a_bad_compile(self):
         client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
-        src = open(os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls"), "w")
+        src = open(os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls"), "w")
         src.write('public class unittestapexclass { public unittestapexclass() { String foo } }')
         src.close()
 
-        mm_response = test_helper.compile(self, "unit test metadata project", [os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls")])
+        mm_response = test_helper.compile(self, "unit test metadata project", [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")])
         self.assertTrue(mm_response['State'] == 'Failed')
-        result = test_helper.delete_apex_metadata(self, "unit test metadata project", [os.path.join(client_settings["mm_workspace"],"unit test metadata project","src","classes","unittestapexclass.cls")])
+        result = test_helper.delete_apex_metadata(self, "unit test metadata project", [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")])
         
     @classmethod    
     def tearDownClass(self):

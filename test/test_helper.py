@@ -53,6 +53,10 @@ class MavensMateTest(unittest.TestCase):
         # found in default_client_settings.json and user_client_settings.json
         self.settings = util.get_plugin_client_settings()
         
+        # test suite runs for each supported version of the api
+        api_version = os.environ.get('SFDC_API_VERSION', 30)
+        self.settings['user']['mm_api_version'] = api_version
+        
         # set up CI-specific settings
         is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True
         if is_ci:
