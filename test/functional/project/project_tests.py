@@ -13,7 +13,6 @@ import test_helper
 from test_helper import MavensMateTest
 import lib.request as request
 
-
 base_test_directory = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 class ProjectTest(MavensMateTest):

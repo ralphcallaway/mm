@@ -54,7 +54,7 @@ class MavensMateTest(unittest.TestCase):
         self.settings = util.get_plugin_client_settings()
         
         # test suite runs for each supported version of the api
-        api_version = os.environ.get('SFDC_API_VERSION', 30)
+        api_version = os.environ.get('SFDC_API_VERSION', 30.0)
         self.settings['user']['mm_api_version'] = api_version
         
         # set up CI-specific settings
@@ -67,6 +67,9 @@ class MavensMateTest(unittest.TestCase):
     def tearDown(self):
         self.output.close()
         sys.stdout = self.saved_stdout
+
+    def getTestApiVersion(self):
+        return os.environ.get('SFDC_API_VERSION', 30.0)
 
 def create_project(clz, name="unit test project", package=None):
     if package is None:

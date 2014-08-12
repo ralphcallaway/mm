@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+import argparse
 
 from functional.project.project_tests import ProjectTest
 from functional.project.project_create_tests import ProjectCreateTest
@@ -13,6 +14,8 @@ from functional.metadata.refresh_tests import MetadataRefreshTest
 from functional.project.ui_integration_test import ProjectUiIntegrationTest
 from functional.metadata.compilation_tests import CompilationTests
 
+# to run a specific test method in one of the test suite classes:
+#     $ python -m unittest project_tests.ProjectTest.test_01_should_create_new_project
 
 def suite():
     test_classes = [
@@ -35,9 +38,19 @@ def suite():
     return suite
 
 if __name__ == '__main__':
-    supported_sfdc_api_versions = ['30.0', '29.0']
+    supported_sfdc_api_versions = ['31.0', '30.0', '29.0']
+    testing_api_versions = []
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--api', help='Salesforce.com API version') # run tests for specific version
+    args, unknown = parser.parse_known_args()
+    if args.api == None:
+        testing_api_versions = supported_sfdc_api_versions
+    else:
+        testing_api_versions = [args.api]
+
     results = {}
-    for api_version in supported_sfdc_api_versions:
+    for api_version in testing_api_versions:
         os.environ['SFDC_API_VERSION'] = api_version
 
         runner = unittest.TextTestRunner()
