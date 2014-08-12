@@ -32,6 +32,8 @@ import jinja2.ext
 import jinja2htmlcompress
 from jinja2htmlcompress import HTMLCompress
 
+import base64
+
 WSDL_PATH = os.path.join(config.base_path,"lib","wsdl") #this can be overridden by client settings or request parameter
 
 TOOLING_API_EXTENSIONS = ['cls', 'trigger', 'page', 'component']
@@ -149,25 +151,55 @@ def put_project_directory_on_disk(project_name, **kwargs):
             shutil.rmtree(os.path.join(config.connection.workspace,project_name))
     os.makedirs(os.path.join(config.connection.workspace,project_name))
 
+def encode(key, clear):
+    enc = []
+    for i in range(len(clear)):
+        key_c = key[i % len(key)]
+        enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
+        enc.append(enc_c)
+    return base64.urlsafe_b64encode("".join(enc))
+
+def decode(key, enc):
+    dec = []
+    enc = base64.urlsafe_b64decode(enc)
+    for i in range(len(enc)):
+        key_c = key[i % len(key)]
+        dec_c = chr((256 + ord(enc[i]) - ord(key_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)
+
 def put_password_by_key(key, password):
-    if sys.platform == 'linux2':
-        try:
-            gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
-                None, None, None, None, 0, password)
-        except gnomekeyring.CancelledError:
-            raise MMException('Unable to set password')
-    else:
-        keyring.set_password('MavensMate: '+key, key, password)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    if use_keyring:
+        if sys.platform == 'linux2':
+            try:
+                gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
+                    None, None, None, None, 0, password)
+            except gnomekeyring.CancelledError:
+                raise MMException('Unable to set password')
+        else:
+            keyring.set_password('MavensMate: '+key, key, password)
+    else: #not recommend! we only use this for CI
+        encoded = encode(key, password)
+        src = open(os.path.join(config.connection.get_app_settings_directory(),key+'.json'), "wb")
+        src.write(json.dumps({'value':encoded}))
+        src.close()
 
 def get_password_by_key(key):
-    if sys.platform == 'linux2':
-        try:
-            items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
-            return items[0]['password']
-        except gnomekeyring.CancelledError:
-            raise MMException('Unable to retrieve password')
-    else:
-        return keyring.get_password('MavensMate: '+key, key)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    if use_keyring:
+        if sys.platform == 'linux2':
+            try:
+                items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
+                return items[0]['password']
+            except gnomekeyring.CancelledError:
+                raise MMException('Unable to retrieve password')
+        else:
+            return keyring.get_password('MavensMate: '+key, key)
+    else: #not recommend! we only use this for CI
+        file_body = get_file_as_string(os.path.join(config.connection.get_app_settings_directory(),key+'.json'))
+        file_body_json = json.loads(file_body)
+        return decode(str(key), str(file_body_json['value']))
 
 def delete_password_by_key(key):
     try:

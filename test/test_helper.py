@@ -32,6 +32,7 @@ class MavensMateTest(unittest.TestCase):
         is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True
         if is_ci:
             self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
+            self.settings['user']['mm_use_keyring'] = False
         PluginConnection.get_plugin_client_settings = mock.Mock(return_value=self.settings)
 
     def tearDown(self):
