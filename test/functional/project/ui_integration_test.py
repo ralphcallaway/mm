@@ -19,7 +19,7 @@ class ProjectUiIntegrationTest(MavensMateTest):
         
     def test_01_should_not_get_active_session_bc_bad_creds(self): 
         stdin = {
-            "username" : "mm@force.commm",
+            "username" : "mm2@force.commm",
             "password" : "forceee",
             "org_type" : "developer"
         }
@@ -29,7 +29,7 @@ class ProjectUiIntegrationTest(MavensMateTest):
 
     def test_02_should_not_get_active_session_bc_bad_request(self): 
         stdin = {
-            "username" : "mm@force.com"
+            "username" : "mm2@force.com"
         }
         mm_response = self.runCommand('get_active_session', stdin)
         self.assertTrue(mm_response['success'] == False)
@@ -37,7 +37,7 @@ class ProjectUiIntegrationTest(MavensMateTest):
 
     def test_03_should_get_active_session_good_creds(self): 
         stdin = {
-            "username" : "mm@force.com",
+            "username" : "mm2@force.com",
             "password" : "force",
             "org_type" : "developer"
         }

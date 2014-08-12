@@ -77,7 +77,7 @@ def create_project(clz, name="unit test project", package=None):
         package = { "ApexClass" : "*" } 
     stdin = {
         "project_name"  : name,
-        "username"      : "mm@force.com",
+        "username"      : "mm2@force.com",
         "password"      : "force",
         "org_type"      : "developer",
         "action"        : "new",

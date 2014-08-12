@@ -77,7 +77,7 @@ class ProjectCreateTest(MavensMateTest):
 
         stdin = {
             "project_name"  : "existing-project-copy",
-            "username"      : "mm@force.com",
+            "username"      : "mm2@force.com",
             "password"      : "force",
             "org_type"      : "developer",
             "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'),

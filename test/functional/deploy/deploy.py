@@ -19,7 +19,7 @@ class MetadataOperationTest(MavensMateTest):
     def test_01_should_create_new_org_connection(self): 
         test_helper.create_project(self, "unit test deploy project")
         stdin = {
-            "username"      : "mm@force.com",
+            "username"      : "mm2@force.com",
             "password"      : "force",
             "org_type"      : "developer",
             "project_name"  : "unit test deploy project"

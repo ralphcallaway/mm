@@ -39,7 +39,7 @@ class CredentialsTest(MavensMateTest):
     def test_02_should_not_update_project_credentials_bc_bad_creds(self):
         stdin = {
             "project_name" : "unit test project",
-            "username" : "mm@thiswontwork.com",
+            "username" : "mm2@thiswontwork.com",
             "password" : "foobarbat"
         }
         mm_response = self.runCommand('update_credentials', stdin)
@@ -49,7 +49,7 @@ class CredentialsTest(MavensMateTest):
     def test_03_should_not_update_project_credentials_bc_no_username(self):
         stdin = {
             "project_name" : "unit test project",
-            "username" : "mm@thiswontwork.com",
+            "username" : "mm2@thiswontwork.com",
         }
         mm_response = self.runCommand('update_credentials', stdin)
         self.assertTrue(mm_response['success'] == False)
@@ -58,7 +58,7 @@ class CredentialsTest(MavensMateTest):
     def test_04_should_update_project_credentials(self):
         stdin = {
             "project_name" : "unit test project",
-            "username" : "mm@force.com",
+            "username" : "mm2@force.com",
             "password" : "force",
             "org_type" : "developer"
         }
