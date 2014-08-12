@@ -1,6 +1,9 @@
 mm
 ==
 
+[![Build Status](https://travis-ci.org/joeferraro/mm.svg?branch=master)](https://travis-ci.org/joeferraro/mm)
+[![Build Status](https://travis-ci.org/joeferraro/mm.svg?branch=atom)](https://travis-ci.org/joeferraro/mm)
+
 `mm` is the executable that powers MavensMate Force.com IDEs. You can use `mm` to perform every important task relative to developing on the Force.com platform. For example, to compile a project:
 
 ```
