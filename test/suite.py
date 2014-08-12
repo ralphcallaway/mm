@@ -15,7 +15,7 @@ from functional.metadata.compilation_tests import CompilationTests
 
 def suite():
     test_classes = [
-        ApexUnitTestingTest
+        ApexUnitTestingTest,
         ProjectTest, 
         ProjectCreateTest,
         CredentialsTest,
