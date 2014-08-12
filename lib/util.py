@@ -157,6 +157,8 @@ def put_password_by_key(key, password):
         try:
             gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
                 None, None, None, None, 0, password)
+        except NameError:
+            keyring.set_password('MavensMate: '+key, key, password)
         except gnomekeyring.CancelledError:
             raise MMException('Unable to set password')
     else:
@@ -167,6 +169,8 @@ def get_password_by_key(key):
         try:
             items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
             return items[0]['password']
+        except NameError:
+            return keyring.get_password('MavensMate: '+key, key)
         except gnomekeyring.CancelledError:
             raise MMException('Unable to retrieve password')
     else:
