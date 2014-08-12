@@ -1,4 +1,5 @@
 import unittest
+import sys
 
 from functional.project.project_tests import ProjectTest
 from functional.project.project_create_tests import ProjectCreateTest
@@ -14,7 +15,7 @@ from functional.metadata.compilation_tests import CompilationTests
 
 def suite():
     test_classes = [
-        ApexUnitTestingTest, 
+        ApexUnitTestingTest
         ProjectTest, 
         ProjectCreateTest,
         CredentialsTest,
@@ -35,5 +36,8 @@ def suite():
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()
     test_suite = suite()
-    runner.run (test_suite)
+    test_results = runner.run (test_suite)
+    print test_results
+    if len(test_results.errors) > 0 or len(test_results.failures) > 0:
+        sys.exit('Test suite failed')
 
