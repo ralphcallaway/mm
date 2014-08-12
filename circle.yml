@@ -9,5 +9,6 @@ dependencies:
 test:
   override:
     - cd test
+    - ls
     - python suite.py:
         timeout: 1200
