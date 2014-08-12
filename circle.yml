@@ -1,6 +1,11 @@
 machine:
   environment:
       CI: true
+dependencies:
+  pre:
+    # - sudo apt-get install python-keyring
+    # - sudo apt-get install python-gnomekeyring
+    - sudo pip install jinja2 suds keyring markupsafe pyyaml requests mock
 general:
   build_dir: test
 test:
