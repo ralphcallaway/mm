@@ -8,5 +8,6 @@ dependencies:
     - sudo pip install jinja2 suds keyring markupsafe pyyaml requests
 test:
   override:
-    - nosetests test/suite.py:
+    - cd test
+    - python suite.py:
         timeout: 1200
