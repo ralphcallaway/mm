@@ -69,7 +69,8 @@ class MavensMateTest(unittest.TestCase):
         sys.stdout = self.saved_stdout
 
     def getTestApiVersion(self):
-        return os.environ.get('SFDC_API_VERSION', 30.0)
+        test_api_version = os.environ.get('SFDC_API_VERSION', '30.0')
+        return int(float(test_api_version))
 
 def create_project(clz, name="unit test project", package=None):
     if package is None:
