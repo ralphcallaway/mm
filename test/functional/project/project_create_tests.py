@@ -25,65 +25,48 @@ class ProjectCreateTest(MavensMateTest):
             "Report"    : [],
             "Document"  : []
         }
-        stdin = test_helper.create_project("unit test project", package=package)
-        mm_response = self.output.getvalue()
-        sys.stdout = self.saved_stdout
-        print 'test_should_create_new_project ----->'
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue(mm_json_response['body'] == 'Project Retrieved and Created Successfully')
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'])))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'classes')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'pages')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'reports')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'documents')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'documents', 'MavensMate_Documents')))
+        project_name = 'unit test project'
+        mm_response = test_helper.create_project(self, project_name, package=package)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertTrue(mm_response['body'] == 'Project Retrieved and Created Successfully')
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name)))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'classes')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'pages')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'reports')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'documents')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'documents', 'MavensMate_Documents')))
 
     def test_should_except_for_bad_package(self): 
         package = {}
-        stdin = test_helper.create_project("unit test project", package=package)
-        mm_response = self.output.getvalue()
-        sys.stdout = self.saved_stdout
-        print 'test_should_except_for_bad_package ------>'
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == False)
-        self.assertTrue(mm_json_response['body'] == 'Invalid package')
+        mm_response = test_helper.create_project(self, "unit test project", package=package)
+        self.assertTrue(mm_response['success'] == False)
+        self.assertTrue(mm_response['body'] == 'Invalid package')
 
     def test_should_create_new_project_with_all_objects(self): 
         package = {
             "CustomObject" : "*"
         }
-        stdin = test_helper.create_project("unit test project", package=package)
-        mm_response = self.output.getvalue()
-        sys.stdout = self.saved_stdout
-        print 'test_should_create_new_project_with_all_objects ----->'
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue(mm_json_response['body'] == 'Project Retrieved and Created Successfully')
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'])))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'objects')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'objects', 'Account.object')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'objects', 'Opportunity.object')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'objects', 'Lead.object')))
+        project_name = 'unit test project'
+        mm_response = test_helper.create_project(self, project_name, package=package)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertTrue(mm_response['body'] == 'Project Retrieved and Created Successfully')
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name)))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects', 'Account.object')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects', 'Opportunity.object')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects', 'Lead.object')))
 
     def test_should_create_new_project_based_on_package_xml_file(self): 
         package = os.path.join(base_test_directory, 'functional', 'project', 'package.xml')
-        stdin = test_helper.create_project("unit test project", package=package)
-        mm_response = self.output.getvalue()
-        sys.stdout = self.saved_stdout
-        print 'test_should_create_new_project_based_on_package_xml_file ----->'
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue(mm_json_response['body'] == 'Project Retrieved and Created Successfully')
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'])))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'classes')))
+        project_name = 'unit test project'
+        mm_response = test_helper.create_project(self, project_name, package=package)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertTrue(mm_response['body'] == 'Project Retrieved and Created Successfully')
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name)))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'classes')))
 
     def test_should_create_project_from_existing_directory(self): 
         if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-copy")):
@@ -92,7 +75,6 @@ class ProjectCreateTest(MavensMateTest):
         if not os.path.exists(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy')):
             shutil.copytree(os.path.join(base_test_directory, 'functional', 'project', 'existing-project'), os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'))
 
-        commandOut = self.redirectStdOut()
         stdin = {
             "project_name"  : "existing-project-copy",
             "username"      : "mm@force.com",
@@ -103,25 +85,18 @@ class ProjectCreateTest(MavensMateTest):
             "workspace"     : os.path.join(base_test_directory, 'test_workspace'),
             "action"        : "existing"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'new_project_from_existing_directory']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-
-        print 'test_should_create_project_from_existing_directory ----->'
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue(mm_json_response['body'] == 'Project Created Successfully')
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'])))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'classes')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'objects')))
-        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'config')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'config', '.session')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'config', '.settings')))
-        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', stdin['project_name'], 'src', 'package.xml')))
+        project_name = 'existing-project-copy'
+        mm_response = self.runCommand('new_project_from_existing_directory', stdin)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertTrue(mm_response['body'] == 'Project Created Successfully')
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name)))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'classes')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects')))
+        self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'config')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'config', '.session')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'config', '.settings')))
+        self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'package.xml')))
 
 
     def tearDown(self):

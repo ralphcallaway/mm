@@ -220,8 +220,16 @@ class NewApexOverlayCommand(Command):
 
 class DeleteApexOverlayCommand(Command):
     name="delete_apex_overlay"
+    aliases=["delete_apex_checkpoint"]
     def execute(self):
         delete_result = config.sfdc_client.delete_apex_checkpoint(overlay_id=self.params['id'])
+        IndexApexOverlaysCommand(params=self.params).execute()
+        return delete_result
+
+class DeleteAllApexCheckpointsCommand(Command):
+    name="delete_all_apex_checkpoints"
+    def execute(self):
+        delete_result = config.sfdc_client.delete_apex_checkpoints()
         IndexApexOverlaysCommand(params=self.params).execute()
         return delete_result
 

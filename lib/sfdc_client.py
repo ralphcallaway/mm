@@ -492,16 +492,11 @@ class MavensMateClient(object):
 
         payload = json.dumps(payload)
         r = requests.post(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction", data=payload, proxies=self.__get_proxies(), headers=self.get_rest_headers('POST'), verify=False)
-        response = r.json()
-        overlayId = None
         if self.__is_failed_request(r):
+            response = r.json()
+
             if (response[0] is not None) & (response[0]['errorCode'] != 'STORAGE_LIMIT_EXCEEDED'):
                 self.__exception_handler(r)
-            else:
-                overlayId = response['id']
-        else:
-            overlayId = response['id']
-
 
         ##WE ALSO NEED TO CREATE A TRACE FLAG FOR THIS USER
         expiration = util.get_iso_8601_timestamp(30)
@@ -520,10 +515,8 @@ class MavensMateClient(object):
             "Workflow"          : "INFO"
         }
         self.create_trace_flag(payload)
-
-        successRes = util.generate_success_response("Done")
-        successRes['overlay_id'] = overlayId
-        return successRes
+        
+        return util.generate_success_response("Done")
 
     #deletes ALL checkpoints in the org
     def delete_apex_checkpoints(self):
@@ -534,15 +527,14 @@ class MavensMateClient(object):
         qr = util.parse_rest_response(r.text)
         for r in qr['records']:
             self.delete_tooling_entity("ApexExecutionOverlayAction", r["Id"])
-
+        return util.generate_success_response('OK')
+    
     #deletes a single checkpoint
     def delete_apex_checkpoint(self, **kwargs):
         if 'overlay_id' in kwargs:
             r = requests.delete(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction/{0}".format(kwargs['overlay_id']), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
-                response = r.json()
-                if (response[0] is not None) & (response[0]['errorCode'] != 'INVALID_CROSS_REFERENCE_KEY'):
-                    self.__exception_handler(r)
+                self.__exception_handler(r)
             return util.generate_success_response('OK')
         else:
             id = kwargs.get('id', None)

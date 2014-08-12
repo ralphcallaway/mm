@@ -15,9 +15,8 @@ import lib.request as request
 
 class CheckpointTests(MavensMateTest):
  
-    def test_01_new_debug_log(self): 
-        test_helper.create_project("unit test tooling project")
-        commandOut = self.redirectStdOut()
+    def test_01_should_create_new_stack_trace(self): 
+        test_helper.create_project(self, "unit test tooling project")
         stdin = {
             "project_name"      : "unit test tooling project",
             "type"              : "user",
@@ -26,34 +25,19 @@ class CheckpointTests(MavensMateTest):
                 "Visualforce"   : "DEBUG"
             }
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'new_log']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue('id' in mm_json_response and len(mm_json_response['id']) is 18)
+        mm_response = self.runCommand('new_log', stdin)        
+        self.assertEqual(mm_response['success'],True)
+        self.assertTrue('id' in mm_response and len(mm_response['id']) is 18)
 
-    def test_02_new_apex_checkpoint(self): 
-        test_helper.create_project("unit test tooling project")
-        commandOut = self.redirectStdOut()
+    def test_02_should_delete_all_apex_checkpoints(self):
+        stdin = {
+            "project_name"      : "unit test tooling project",
+        }
+        mm_response = self.runCommand('delete_all_apex_checkpoints', stdin)
+        self.assertEqual(mm_response['success'],True)
 
+    def test_03_should_create_new_apex_checkpoint(self): 
         ###CREATE APEX CLASS
-        # stdin = {
-        #     "github_template": {
-        #         "author": "MavensMate", 
-        #         "description": "The default template for an Apex Class", 
-        #         "name": "Default", 
-        #         "file_name": "ApexClass.cls"
-        #     }, 
-        #     "apex_trigger_object_api_name": None, 
-        #     "apex_class_type": None, 
-        #     "api_name": "unittesttoolingapexclass", 
-        #     "project_name": "unit test tooling project", 
-        #     "metadata_type": "ApexClass"
-        # }
         stdin = {
             'project_name' : 'unit test tooling project',
             'metadata_type': 'ApexClass', 
@@ -72,16 +56,17 @@ class CheckpointTests(MavensMateTest):
                 ]
             }
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'new_metadata']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue('id' in mm_json_response and len(mm_json_response['id']) is 18)
 
+        mm_response = self.runCommand('new_metadata', stdin)        
+        
+        if 'success' in mm_response and mm_response['success']:
+            self.assertTrue(mm_response['success'] == True)
+            self.assertTrue('id' in mm_response and len(mm_response['id']) is 18)
+        elif 'success' in mm_response and not mm_response['success']:
+            if 'body' in mm_response and mm_response['body'] == 'This API name is already in use in your org.':
+                # probably by accident, this is ok bc we clean it up at the end
+                pass
+        
         ###CREATE CHECKPOINT
         stdin = {
             "project_name"      : "unit test tooling project",
@@ -92,15 +77,8 @@ class CheckpointTests(MavensMateTest):
             "ActionScriptType"  : "None", 
             "API_Name"          : "unittesttoolingapexclass"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'new_apex_overlay']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue('id' in mm_json_response and len(mm_json_response['id']) is 18)
+        mm_response = self.runCommand('new_apex_overlay', stdin)        
+        self.assertEqual(mm_response['success'],True)
 
         ###DELETE CLASS
         client_settings = util.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
@@ -108,16 +86,8 @@ class CheckpointTests(MavensMateTest):
             "files": [os.path.join(client_settings["mm_workspace"],"unit test tooling project","src","classes","unittesttoolingapexclass.cls")], 
             "project_name": "unit test tooling project"
         }
-
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'delete']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-
+        mm_response = self.runCommand('delete', stdin)        
+        self.assertEqual(mm_response['success'],True)
 
     @classmethod    
     def tearDownClass(self):

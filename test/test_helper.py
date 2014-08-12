@@ -14,21 +14,46 @@ base_test_directory = os.path.dirname(__file__)
 
 class MavensMateTest(unittest.TestCase):
 
+    # redirects standard out to a new target
     def redirectStdOut(self):
         new_target = StringIO()
         sys.stdout = new_target
         return new_target
 
-    def resetStdOut(self, redirect=False):
+    # runs an mm command, prints to command-specific stdout
+    def runCommand(self, command_name_or_argv, stdin, as_json=True, print_before_deserialization=True):
+        commandOut = self.redirectStdOut()
+        request.get_request_payload = mock.Mock(return_value=stdin)
+        if type(command_name_or_argv) is list:
+            sys.argv = command_name_or_argv
+        else:
+            sys.argv = ['mm.py', '-o', command_name_or_argv]
+        MavensMateRequestHandler().execute()
+        mm_response = commandOut.getvalue()
         sys.stdout = self.saved_stdout
-        if redirect:
-            self.redirectStdOut()
+        if print_before_deserialization:
+            if type(command_name_or_argv) is list:
+                print '['+str(command_name_or_argv[2])+'] ------->'
+            else:
+                print '['+str(command_name_or_argv)+'] ------->'
+            print mm_response
+        if as_json:
+            mm_response = util.parse_mm_response(mm_response)
+        return mm_response
 
+    # runs before every test method
     def setUp(self):
+        # self.commandStdOut = StringIO();
+
         self.output = StringIO()
         self.saved_stdout = sys.stdout
         sys.stdout = self.output
+
+        # get settings from test client settings (modeled after ST3 settings)
+        # found in default_client_settings.json and user_client_settings.json
         self.settings = util.get_plugin_client_settings()
+        
+        # set up CI-specific settings
         is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True
         if is_ci:
             self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
@@ -39,10 +64,7 @@ class MavensMateTest(unittest.TestCase):
         self.output.close()
         sys.stdout = self.saved_stdout
 
-    def set_stdin(self, dict):
-        sys.stdin = StringIO(util.dict_to_string(dict))
-
-def create_project(name="unit test project", package=None):
+def create_project(clz, name="unit test project", package=None):
     if package is None:
         package = { "ApexClass" : "*" } 
     stdin = {
@@ -53,65 +75,38 @@ def create_project(name="unit test project", package=None):
         "action"        : "new",
         "package"       : package
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'new_project', '-f', 'json']
-    MavensMateRequestHandler().execute()
-    return stdin
+    return clz.runCommand(['mm.py', '-o', 'new_project', '-f', 'json'], stdin)
 
-def edit_project(name="unit test project", package=None):
+def edit_project(clz, name="unit test project", package=None):
     if package is None:
         package = { "ApexClass" : "*" } 
     stdin = {
         "project_name"  : name,
         "package"       : package
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'edit_project']
-    MavensMateRequestHandler().execute()
-    return stdin
+    return clz.runCommand(['mm.py', '-o', 'edit_project', '-f', 'json'], stdin)
 
-def clean_project(name="unit test project"): 
+
+def clean_project(clz, name="unit test project"): 
     stdin = {
         "project_name"  : name
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'clean_project']
-    MavensMateRequestHandler().execute()
-    return stdin
+    return clz.runCommand(['mm.py', '-o', 'clean_project', '-f', 'json'], stdin)
 
-def compile(name="unit test project", files=[]): 
+def compile(clz, name="unit test project", files=[]): 
     stdin = {
         "project_name"  : name,
         "files"         : files
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'compile']
-    MavensMateRequestHandler().execute()
-    return stdin
-
-def compile_project(name="unit test project"): 
+    return clz.runCommand(['mm.py', '-o', 'compile', '-f', 'json'], stdin)
+    
+def compile_project(clz, name="unit test project"): 
     stdin = {
         "project_name"  : name
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'compile_project']
-    MavensMateRequestHandler().execute()
-    return stdin
-
-def create_apex_metadata(project_name, metadata_type="ApexClass", api_name="unittestapexclass"):
-    # stdin = {
-    #     "github_template": {
-    #         "author"        : "MavensMate", 
-    #         "description"   : "The default template for an Apex Class", 
-    #         "name"          : "Default", 
-    #         "file_name"     : "ApexClass.cls"
-    #     }, 
-    #     "apex_trigger_object_api_name"  : None, 
-    #     "apex_class_type"               : None, 
-    #     "api_name"                      : api_name, 
-    #     "project_name"                  : project_name, 
-    #     "metadata_type"                 : metadata_type
-    # }
+    return clz.runCommand(['mm.py', '-o', 'compile_project', '-f', 'json'], stdin)
+   
+def create_apex_metadata(clz, project_name, metadata_type="ApexClass", api_name="unittestapexclass"):
     stdin = {
         'project_name' : project_name,
         'metadata_type': metadata_type, 
@@ -132,18 +127,11 @@ def create_apex_metadata(project_name, metadata_type="ApexClass", api_name="unit
             ]
         }
     }
-    request.get_request_payload = mock.Mock(return_value=stdin)
-    sys.argv = ['mm.py', '-o', 'new_metadata']
-    MavensMateRequestHandler().execute()
-
-def delete_apex_metadata(project_name, files=[], dirs=[]):
+    return clz.runCommand(['mm.py', '-o', 'new_metadata', '-f', 'json'], stdin)
+   
+def delete_apex_metadata(clz, project_name, files=[], dirs=[]):
    stdin = {
        "files": files, 
        "project_name": project_name
    }
-   request.get_request_payload = mock.Mock(return_value=stdin)
-   sys.argv = ['mm.py', '-o', 'delete']
-   MavensMateRequestHandler().execute()
-
-
-
+   return clz.runCommand(['mm.py', '-o', 'delete', '-f', 'json'], stdin)

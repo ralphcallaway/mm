@@ -15,26 +15,15 @@ import lib.request as request
 
 class ApexUnitTestCoverageTest(MavensMateTest):
         
-    def test_01_get_coverage(self): 
-        test_helper.create_project("unit test project", package={ "ApexClass" : "*" })
-        commandOut = self.redirectStdOut()
+    def test_01_should_get_coverage(self): 
+        test_helper.create_project(self, "unit test project", package={ "ApexClass" : "*" })
         stdin = {
             "project_name"  : "unit test project"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'code_coverage_report']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = test_util.parse_mm_response(mm_response)
+        mm_response = self.runCommand('code_coverage_report', stdin)
         self.assertTrue(mm_json_response['totalSize'] > 0)
         self.assertTrue(mm_json_response['done'] == True)
         self.assertTrue(mm_json_response['entityTypeName'] == "ApexCodeCoverageAggregate")
-
-        
-
-
 
     @classmethod    
     def tearDownClass(self):
