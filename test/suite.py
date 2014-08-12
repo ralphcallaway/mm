@@ -1,10 +1,12 @@
 import unittest
 
 from functional.project.project_tests import ProjectTest
+from functional.project.project_create_tests import ProjectCreateTest
+from functional.project.credentials_tests import CredentialsTest
 from functional.unit_test.async_test_api import ApexUnitTestingTest
 from functional.metadata.create_tests import MetadataOperationTest
-from functional.tooling.checkpoint_tests import CheckpointTests
-from functional.tooling.log_tests import StackTraceAndLogsTest
+from functional.debug.checkpoint_tests import CheckpointTests
+from functional.debug.log_tests import StackTraceAndLogsTest
 from functional.metadata.refresh_tests import MetadataRefreshTest
 from functional.project.ui_integration_test import ProjectUiIntegrationTest
 from functional.metadata.compilation_tests import CompilationTests
@@ -14,6 +16,8 @@ def suite():
     test_classes = [
         ApexUnitTestingTest, 
         ProjectTest, 
+        ProjectCreateTest,
+        CredentialsTest,
         MetadataOperationTest, 
         MetadataRefreshTest, 
         CheckpointTests,

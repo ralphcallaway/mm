@@ -1,4 +1,3 @@
-#TO RUN: joey2 project_operation_tests.py
 import os
 import sys
 import unittest

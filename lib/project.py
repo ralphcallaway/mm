@@ -94,58 +94,57 @@ class MavensMateProject(object):
 
     #used to create a new project in a workspace
     def retrieve_and_write_to_disk(self,action='new'):
-        try:
-            debug('>>>>>> ')
-            debug(os.path.join(config.connection.workspace,self.project_name))
-            if os.path.isdir(os.path.join(config.connection.workspace,self.project_name)) and action == 'new':
-                raise MMException('A project with this name already exists in your workspace. To create a MavensMate project from an existing non-MavensMate Force.com project, open the project directory in your MavensMate-enabled IDE/editor, right click the project name in the sidebar and select "Create MavensMate Project"')
-            
-            if action == 'existing':
-                existing_parent_directory = os.path.dirname(self.directory)
-                existing_is_in_workspace = True
-                if existing_parent_directory != config.connection.workspace:
-                    existing_is_in_workspace = False
-                if os.path.isdir(os.path.join(config.connection.workspace,self.project_name)) and existing_is_in_workspace == False and action == 'existing':
-                    raise MMException("A project with this name already exists in your workspace.")   
+        debug('>>>>>> ')
+        debug(os.path.join(config.connection.workspace,self.project_name))
+        if os.path.isdir(os.path.join(config.connection.workspace,self.project_name)) and action == 'new':
+            raise MMException('A project with this name already exists in your workspace. To create a MavensMate project from an existing non-MavensMate Force.com project, open the project directory in your MavensMate-enabled IDE/editor, right click the project name in the sidebar and select "Create MavensMate Project"')
+        
+        if action == 'existing':
+            existing_parent_directory = os.path.dirname(self.directory)
+            existing_is_in_workspace = True
+            if existing_parent_directory != config.connection.workspace:
+                existing_is_in_workspace = False
+            if os.path.isdir(os.path.join(config.connection.workspace,self.project_name)) and existing_is_in_workspace == False and action == 'existing':
+                raise MMException("A project with this name already exists in your workspace.")   
 
-            self.sfdc_client = MavensMateClient(credentials={"username":self.username,"password":self.password,"org_type":self.org_type,"org_url":self.org_url})             
-            self.id = util.new_mavensmate_id()
-            if action == 'new':
-                project_metadata = self.sfdc_client.retrieve(package=self.package)
-                util.put_project_directory_on_disk(self.project_name, force=True)
-                util.extract_base64_encoded_zip(project_metadata.zipFile, os.path.join(config.connection.workspace,self.project_name))
-                util.rename_directory(os.path.join(config.connection.workspace,self.project_name,"unpackaged"), os.path.join(config.connection.workspace,self.project_name,"src"))
-            elif action == 'existing' and existing_is_in_workspace == False:
-                shutil.move(self.directory, config.connection.workspace)
+        self.sfdc_client = MavensMateClient(credentials={"username":self.username,"password":self.password,"org_type":self.org_type,"org_url":self.org_url})             
+        self.id = util.new_mavensmate_id()
+        if action == 'new':
+            project_metadata = self.sfdc_client.retrieve(package=self.package)
+            debug(project_metadata)
+            debug('<-------->')
+            util.put_project_directory_on_disk(self.project_name, force=True)
+            util.extract_base64_encoded_zip(project_metadata.zipFile, os.path.join(config.connection.workspace,self.project_name))
+            util.rename_directory(os.path.join(config.connection.workspace,self.project_name,"unpackaged"), os.path.join(config.connection.workspace,self.project_name,"src"))
+        elif action == 'existing' and existing_is_in_workspace == False:
+            shutil.move(self.directory, config.connection.workspace)
 
-            self.location = os.path.join(config.connection.workspace,self.project_name)
-            self.__put_project_file()
-            self.__put_project_settings_file()
-            self.__put_base_config()
-            self.__set_sfdc_session()
+        self.location = os.path.join(config.connection.workspace,self.project_name)
+        self.__put_project_file()
+        self.__put_project_settings_file()
+        self.__put_base_config()
+        self.__set_sfdc_session()
 
-            if action != 'new':
-                project_metadata = self.sfdc_client.retrieve(package=os.path.join(config.connection.workspace,self.project_name,"src","package.xml"))
-            
-            self.conflict_manager = ConflictManager(self)
-            self.conflict_manager.init_local_store(project_metadata)
+        if action != 'new':
+            project_metadata = self.sfdc_client.retrieve(package=os.path.join(config.connection.workspace,self.project_name,"src","package.xml"))
+        
+        self.conflict_manager = ConflictManager(self)
+        self.conflict_manager.init_local_store(project_metadata)
 
-            if config.connection.get_plugin_client_setting("mm_mass_index_apex_symbols", False):
-                self.index_apex_symbols() #todo: daemon??
+        if config.connection.get_plugin_client_setting("mm_mass_index_apex_symbols", False):
+            self.index_apex_symbols() #todo: daemon??
 
-            util.put_password_by_key(self.id, self.password)
-            self.sfdc_session = self.__get_sfdc_session() #hacky...need to fix
-            
-            if os.path.exists(os.path.join(config.connection.workspace,self.project_name,"metadata.zip")):
-                os.remove(os.path.join(config.connection.workspace,self.project_name,"metadata.zip"))
+        util.put_password_by_key(self.id, self.password)
+        self.sfdc_session = self.__get_sfdc_session() #hacky...need to fix
+        
+        if os.path.exists(os.path.join(config.connection.workspace,self.project_name,"metadata.zip")):
+            os.remove(os.path.join(config.connection.workspace,self.project_name,"metadata.zip"))
 
-            if action == 'new':
-                return util.generate_success_response("Project Retrieved and Created Successfully")
-            else:
-                return util.generate_success_response("Project Created Successfully")
-        except Exception, e:
-            return util.generate_error_response(e.message)
-
+        if action == 'new':
+            return util.generate_success_response("Project Retrieved and Created Successfully")
+        else:
+            return util.generate_success_response("Project Created Successfully")
+       
     def compile(self, params):
         tmp = util.put_tmp_directory_on_disk()
         shutil.copytree(os.path.join(config.project.location,"src"), os.path.join(tmp,"src"))
@@ -196,10 +195,17 @@ class MavensMateProject(object):
 
     #updates the salesforce.com credentials associated with the project
     def update_credentials(self, params):
-        username = params['username']
-        password = params['password']
-        org_type = params['org_type']
+        username = params.get('username', None)
+        password = params.get('password', None)
+        org_type = params.get('org_type', None)
         org_url  = params.get('org_url', None)
+
+        if username == None or password == None:
+            raise MMException('Please provide username and password')
+
+        if org_type == None:
+            raise MMException('Please provide an org_type (developer, production, sandbox, prerelease)')
+
         self.sfdc_client = MavensMateClient(credentials={"username":username,"password":password,"org_type":org_type,"org_url":org_url}, override_session=True)              
         
         if int(float(util.SFDC_API_VERSION)) >= 27:

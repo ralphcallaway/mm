@@ -17,64 +17,67 @@ class NewProjectCommand(Command):
     def execute(self):
         debug('------> ')
         debug(self.params)
-        try:
-            if 'username' not in self.params or self.params['username'] == '':
-                raise MMException('Please specify a username')
-            if 'password' not in self.params or self.params['password'] == '':
-                raise MMException('Please specify a password')
-            if 'project_name' not in self.params or self.params['project_name'] == '':
-                raise MMException('Please specify a project name')
+        if 'username' not in self.params or self.params['username'] == '':
+            raise MMException('Please specify a username')
+        if 'password' not in self.params or self.params['password'] == '':
+            raise MMException('Please specify a password')
+        if 'project_name' not in self.params or self.params['project_name'] == '':
+            raise MMException('Please specify a project name')
 
-            if ('action' in self.params and self.params['action'] == 'new') or 'action' not in self.params:
-                if 'package' not in self.params or self.params['package'] == []:
-                    self.params['package'] = {
-                        'ApexClass'         : '*',
-                        'ApexComponent'     : '*',
-                        'ApexPage'          : '*',
-                        'ApexTrigger'       : '*',
-                        'StaticResource'    : '*'
-                    }
-                config.project = MavensMateProject(self.params)
-                result = config.project.retrieve_and_write_to_disk()
-            elif 'action' in self.params and self.params['action'] == 'existing':
-                config.project = MavensMateProject(self.params)
-                result = config.project.retrieve_and_write_to_disk('existing')
+        if ('action' in self.params and self.params['action'] == 'new') or 'action' not in self.params:
+            if 'package' not in self.params or self.params['package'] == []:
+                self.params['package'] = {
+                    'ApexClass'         : '*',
+                    'ApexComponent'     : '*',
+                    'ApexPage'          : '*',
+                    'ApexTrigger'       : '*',
+                    'StaticResource'    : '*'
+                }
+            config.project = MavensMateProject(self.params)
+            result = config.project.retrieve_and_write_to_disk()
+        elif 'action' in self.params and self.params['action'] == 'existing':
+            config.project = MavensMateProject(self.params)
+            result = config.project.retrieve_and_write_to_disk('existing')
 
-            if json.loads(result)['success'] == True and config.connection.get_plugin_client_setting('mm_open_project_on_create', True):
-                #opens project based on the client
-                client_location = config.connection.get_plugin_client_setting('mm_plugin_client_location')
-                plugin_app_name = config.connection.get_plugin_client_setting('mm_osx_plugin_client_app_name') 
-                if client_location == None:
-                    client_location = '/Applications'
-                if plugin_app_name == None:
-                    plugin_app_name = 'Sublime Text 3.app'
-                if config.connection.plugin_client == config.connection.PluginClients.SUBLIME_TEXT_2:
-                    if sys.platform == 'darwin':
-                        os.system("'{0}/Sublime Text 2.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
-                elif config.connection.plugin_client == config.connection.PluginClients.SUBLIME_TEXT_3:
-                    if sys.platform == 'darwin':
-                        if os.path.exists(os.path.join('{0}/{1}'.format(client_location, plugin_app_name))):
-                            os.system("'{0}/{1}/Contents/SharedSupport/bin/subl' --project '{2}'".format(client_location,plugin_app_name,config.project.location+"/"+config.project.project_name+".sublime-project"))
-                        elif os.path.exists(os.path.join('{0}/Sublime Text 3.app'.format(client_location))):
-                            os.system("'{0}/Sublime Text 3.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
-                        else:
-                            os.system("'{0}/Sublime Text.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
-                    elif 'linux' in sys.platform:
-                        subl_location = config.connection.get_plugin_client_setting('mm_subl_location', '/usr/local/bin/subl')
-                        os.system("'{0}' --project '{1}'".format(subl_location,os.path.join(config.project.location,config.project.project_name+".sublime-project")))
+        debug('PROJECT CREATE RESULT -->')
+        debug(result)
+        debug(type(result))
+        if type(result) is not dict and type(result) is str:
+           result = json.loads(result) 
+
+        if result['success'] == True and config.connection.get_plugin_client_setting('mm_open_project_on_create', True):
+            #opens project based on the client
+            client_location = config.connection.get_plugin_client_setting('mm_plugin_client_location')
+            plugin_app_name = config.connection.get_plugin_client_setting('mm_osx_plugin_client_app_name') 
+            if client_location == None:
+                client_location = '/Applications'
+            if plugin_app_name == None:
+                plugin_app_name = 'Sublime Text 3.app'
+            if config.connection.plugin_client == config.connection.PluginClients.SUBLIME_TEXT_2:
+                if sys.platform == 'darwin':
+                    os.system("'{0}/Sublime Text 2.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
+            elif config.connection.plugin_client == config.connection.PluginClients.SUBLIME_TEXT_3:
+                if sys.platform == 'darwin':
+                    if os.path.exists(os.path.join('{0}/{1}'.format(client_location, plugin_app_name))):
+                        os.system("'{0}/{1}/Contents/SharedSupport/bin/subl' --project '{2}'".format(client_location,plugin_app_name,config.project.location+"/"+config.project.project_name+".sublime-project"))
+                    elif os.path.exists(os.path.join('{0}/Sublime Text 3.app'.format(client_location))):
+                        os.system("'{0}/Sublime Text 3.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
                     else:
-                        subl_location = config.connection.get_plugin_client_setting('mm_windows_subl_location')
-                        if not os.path.isfile(subl_location) and "x86" not in subl_location:
-                            subl_location = subl_location.replace("Program Files", "Program Files (x86)")
-                        cmd = '"{0}" --project "{1}"'.format(subl_location,os.path.join(config.project.location,config.project.project_name+".sublime-project"))
-                        subprocess.call(cmd)
-                elif config.connection.plugin_client == config.connection.PluginClients.ATOM:
-                    if sys.platform == 'darwin':
-                        os.chdir(config.project.location)
-                        os.system("/usr/local/bin/atom")
-            return result
-        except BaseException, e:
-            return util.generate_error_response(e.message)
+                        os.system("'{0}/Sublime Text.app/Contents/SharedSupport/bin/subl' --project '{1}'".format(client_location,config.project.location+"/"+config.project.project_name+".sublime-project"))
+                elif 'linux' in sys.platform:
+                    subl_location = config.connection.get_plugin_client_setting('mm_subl_location', '/usr/local/bin/subl')
+                    os.system("'{0}' --project '{1}'".format(subl_location,os.path.join(config.project.location,config.project.project_name+".sublime-project")))
+                else:
+                    subl_location = config.connection.get_plugin_client_setting('mm_windows_subl_location')
+                    if not os.path.isfile(subl_location) and "x86" not in subl_location:
+                        subl_location = subl_location.replace("Program Files", "Program Files (x86)")
+                    cmd = '"{0}" --project "{1}"'.format(subl_location,os.path.join(config.project.location,config.project.project_name+".sublime-project"))
+                    subprocess.call(cmd)
+            elif config.connection.plugin_client == config.connection.PluginClients.ATOM:
+                if sys.platform == 'darwin':
+                    os.chdir(config.project.location)
+                    os.system("/usr/local/bin/atom")
+        return result
 
 class EditProjectCommand(Command):
     """
@@ -92,7 +95,7 @@ class EditProjectCommand(Command):
                     pass
                     #TODO
 
-        clean_result = json.loads(config.project.clean(package=package,overwrite_package_xml=True))
+        clean_result = config.project.clean(package=package,overwrite_package_xml=True)
         if clean_result['success'] == True:
             return util.generate_success_response('Project Edited Successfully')
         else:

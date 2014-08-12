@@ -19,6 +19,7 @@ import lib.xmltodict as xmltodict
 import time
 import lib.util as util
 import lib.config as config
+from lib.exceptions import *
 import shutil
 import os
 from operator import itemgetter
@@ -121,6 +122,8 @@ class SforceMetadataClient(SforceBaseClient):
 
         elif 'package' in kwargs and type(kwargs['package']) is dict:
             package = kwargs['package']
+            if package == {}:
+                raise MMException('Invalid package')
             if 'unpackaged' not in package:
                 #{ "ApexClass"    : ["MultiselectControllerTest","MultiselectController"] }
                 type_array = []
@@ -178,12 +181,18 @@ class SforceMetadataClient(SforceBaseClient):
         debug(result)
 
         if result.done == False:
-            if int(float(util.SFDC_API_VERSION)) >= 30:
-                return self._waitForRetrieveRequest(result.id)
-            else:
-                return self._getRetrieveBody(result.id)
+            self._waitForRetrieveRequest(result.id)
+            return self._getRetrieveBody(result.id)
         else:
             return result
+
+        # if result.done == False:
+        #     if int(float(util.SFDC_API_VERSION)) > 30:
+        #         return self._waitForRetrieveRequest(result.id)
+        #     else:
+        #         return self._getRetrieveBody(result.id)
+        # else:
+        #     return result
 
     def deploy(self, params={}, **kwargs):
         if 'debug_categories' in params:
