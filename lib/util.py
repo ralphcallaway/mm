@@ -19,7 +19,10 @@ import plistlib
 import itertools
 from StringIO import StringIO
 if sys.platform == 'linux2':
-    import gnomekeyring
+    try:
+        import gnomekeyring
+    except:
+        import keyring
 else:
     import keyring
 import urllib2
