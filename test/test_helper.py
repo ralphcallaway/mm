@@ -114,14 +114,9 @@ def compile_project(clz, name="unit test project"):
     }
     return clz.runCommand(['mm.py', '-o', 'compile_project', '-f', 'json'], stdin)
    
-def create_apex_metadata(clz, project_name, metadata_type="ApexClass", api_name="unittestapexclass"):
-    stdin = {
-        'project_name' : project_name,
-        'metadata_type': metadata_type, 
-        'apex_trigger_object_api_name' : None, 
-        'apex_class_type' : None, 
-        'params': {'api_name': api_name}, 
-        'github_template': {
+def create_apex_metadata(clz, project_name, metadata_type="ApexClass", api_name="unittestapexclass", template=None, params=None):
+    if template == None:
+        template = {
             'author': 'MavensMate', 
             'name': 'Default', 
             'description': 'The default template for an Apex Class', 
@@ -133,7 +128,16 @@ def create_apex_metadata(clz, project_name, metadata_type="ApexClass", api_name=
                     'description': 'Apex Class API Name'
                 }
             ]
-        }
+        } 
+    if params == None:
+        params = {'api_name': api_name}  
+    stdin = {
+        'project_name' : project_name,
+        'metadata_type': metadata_type, 
+        'apex_trigger_object_api_name' : None, 
+        'apex_class_type' : None, 
+        'params': params, 
+        'github_template': template
     }
     return clz.runCommand(['mm.py', '-o', 'new_metadata', '-f', 'json'], stdin)
    
