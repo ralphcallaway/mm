@@ -145,7 +145,10 @@ class PluginConnection(object):
             raise MMException("Please set mm_workspace to the location where you'd like your mavensmate projects to reside")
         elif not os.path.exists(mm_workspace_path):
             try:
-                os.makedirs(mm_workspace_path)
+                if mm_workspace_path.startswith('~')
+                    os.makedirs(os.path.expanduser(mm_workspace_path))
+                else:
+                    os.makedirs(mm_workspace_path)
             except:
                 raise MMException("Unable to create mm_workspace location")
         return mm_workspace_path

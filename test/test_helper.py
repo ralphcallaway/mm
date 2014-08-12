@@ -29,6 +29,9 @@ class MavensMateTest(unittest.TestCase):
         self.saved_stdout = sys.stdout
         sys.stdout = self.output
         self.settings = util.get_plugin_client_settings()
+        is_ci = os.environ.get('TRAVIS') == 'true' or os.environ.get('TRAVIS') == True
+        if is_ci:
+            self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
         PluginConnection.get_plugin_client_settings = mock.Mock(return_value=self.settings)
 
     def tearDown(self):

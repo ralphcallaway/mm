@@ -39,7 +39,7 @@ WSDL_PATH = os.path.join(config.base_path,"lib","wsdl") #this can be overridden 
 
 TOOLING_API_EXTENSIONS = ['cls', 'trigger', 'page', 'component']
 
-SFDC_API_VERSION = "28.0" #is overridden upon instantiation of mm_connection if plugin specifies mm_api_version
+SFDC_API_VERSION = "30.0" #is overridden upon instantiation of mm_connection if plugin specifies mm_api_version
 
 PRODUCTION_ENDPOINT_SHORT = "https://www.salesforce.com"
 SANDBOX_ENDPOINT_SHORT    = "https://test.salesforce.com"
