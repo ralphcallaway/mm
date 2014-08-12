@@ -6,5 +6,5 @@ before_install:
   - "sudo apt-get install python-gnomekeyring"
   - "cd test"
 install:
-  - "pip install jinja2 suds keyring markupsafe pyyaml requests"
+  - "pip install jinja2 suds keyring markupsafe pyyaml requests mock"
 script: python suite.py
