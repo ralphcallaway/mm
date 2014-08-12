@@ -3,6 +3,7 @@ import lib.util as util
 import json
 import shutil
 import lib.config as config
+import shutil
 from lib.exceptions import *
 from lib.basecommand import Command
 
@@ -51,6 +52,7 @@ class FetchLogsCommand(Command):
         limit   = config.connection.get_plugin_client_setting('mm_number_of_logs_limit', 20)
         id_list = ','.join("'"+item+"'" for item in config.project.get_debug_users())
         log_result = config.sfdc_client.execute_query('Select Id, LogUserId, SystemModstamp From ApexLog Where SystemModstamp >= TODAY and Location != \'HeapDump\' AND LogUserId IN ({0}) order by SystemModstamp desc limit {1}'.format(id_list, str(limit)))
+        config.logger.debug(log_result)
         logs = []
         if 'records' in log_result:
             for r in log_result['records']:
@@ -201,8 +203,12 @@ class NewApexOverlayCommand(Command):
                 "ScopeId"               : "005d0000000xxzsAAA"
             }
         """
+        config.logger.debug('logging self')
+        config.logger.debug(self.params )
         if 'project_name' in self.params:
             self.params.pop('project_name', None)
+        if 'settings' in self.params:
+            self.params.pop('settings', None)
 
         create_result = config.sfdc_client.create_apex_checkpoint(self.params)
         if type(create_result) is list:
@@ -215,8 +221,16 @@ class NewApexOverlayCommand(Command):
 
 class DeleteApexOverlayCommand(Command):
     name="delete_apex_overlay"
+    aliases=["delete_apex_checkpoint"]
     def execute(self):
         delete_result = config.sfdc_client.delete_apex_checkpoint(overlay_id=self.params['id'])
+        IndexApexOverlaysCommand(params=self.params).execute()
+        return delete_result
+
+class DeleteAllApexCheckpointsCommand(Command):
+    name="delete_all_apex_checkpoints"
+    def execute(self):
+        delete_result = config.sfdc_client.delete_apex_checkpoints()
         IndexApexOverlaysCommand(params=self.params).execute()
         return delete_result
 

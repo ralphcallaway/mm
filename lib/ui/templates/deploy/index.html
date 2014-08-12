@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% block yield %}
-<script src="file:///{{ base_path_normal() }}/lib/ui/resources/js/jquery.tablesorter.min.js" type="text/javascript"></script>
+<script src="{{ static_resource_path() }}/lib/ui/resources/js/jquery.tablesorter.min.js" type="text/javascript"></script>
 <style>
 	.deploy_options label, .deploy_options div.divlabel {
 		width:180px;
@@ -544,10 +544,13 @@
 		operation = "index"
 		$.ajax({
 			type: "POST",
-			url: "{{ base_local_server_url() }}/project/index", 
+			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				project_name 		: '{{ name }}',
-				project_location	: $("#STATIC-project-location").val()
+				project_location	: $("#STATIC-project-location").val(),
+				command 			: 'index_metadata'
 			}),
 			beforeSend: function() { showLoading('Updating the metadata index for this project. This operation can take a few minutes in large orgs.<br/><br/>Thanks for being patient! :)'); },
 			complete: function(data, status, xhr){
@@ -651,7 +654,7 @@
 
 			toggleRunningIndicator();
 			$("#btnDeploy").show();
-			notify_sound()
+			notifySound();
 		} else if (operation == "compare") {
 			$(".results_hidden").hide();
 			if (response["success"] === false) {
@@ -693,7 +696,7 @@
 			toggleRunningIndicator();
 			$("#btnDeploy").show();
 			$("#btnCompare").show();
-			notify_sound();
+			notifySound();
 		} else if (operation == "index") {
 			if (response["success"] == false) {
 				show_message(response["body"])
@@ -705,7 +708,7 @@
 				}
 			}
 			resizeProjectWrapper(140);
-			notify_sound();
+			notifySound();
 			hideLoading();
 		}
 	}
@@ -714,7 +717,9 @@
 		operation = "compare"
 		$.ajax({
 			type: "POST",
-			url: "{{ base_local_server_url() }}/project/deploy", 
+			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				destinations 		: get_target_json(),
 			    check_only 			: isValidateOnly(),
@@ -725,7 +730,9 @@
 			    new_deployment_name : $("#new_deployment_name").val(),
 			    debug_categories 	: get_log_levels_json(),
 			    project_location	: $("#STATIC-project-location").val(),
-			    finish 				: false
+			    finish 				: false,
+			    command 			: 'deploy',
+			    ajax_args 			: ['--html']
 			}),
 			beforeSend: function() { toggleRunningIndicator(); $("#btnDeploy").hide(); $("#btnCompare").hide();  },
 			complete: function(data){
@@ -738,7 +745,9 @@
 		operation = "deploy"
 		$.ajax({
 			type: "POST",
-			url: "{{ base_local_server_url() }}/project/deploy", 
+			url: "{{ base_local_server_url() }}/generic/async", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				destinations 		: get_target_json(),
 			    check_only 			: isValidateOnly(),
@@ -749,7 +758,9 @@
 			    new_deployment_name : $("#new_deployment_name").val(),
 			    debug_categories 	: get_log_levels_json(),
 			    project_location	: $("#STATIC-project-location").val(),
-			    finish 				: true
+			    finish 				: true,
+			    command 			: 'deploy',
+			    ajax_args 			: ['--html']
 			}),
 			beforeSend: function() { toggleRunningIndicator(); $("#btnDeploy").hide(); $("#btnCompare").hide();  },
 			complete: function(data){
@@ -765,10 +776,13 @@
 	function listConnections() {
 		$.ajax({
 			type: "GET",
-			url: "{{ base_local_server_url() }}/project/conns/list", 
+			url: "{{ base_local_server_url() }}/generic", 
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
 			data: {
 				 project_name		: '{{name}}',
-				 project_location	: $("#STATIC-project-location").val()
+				 project_location	: $("#STATIC-project-location").val(),
+				 command 			: 'list_connections'
 			},
 			beforeSend: function() { showLoading('Listing connections'); },
 			complete: function(data){
@@ -794,11 +808,12 @@
 			type: "POST",
 			dataType: 'json',
 			contentType: 'application/json; charset=utf-8',
-			url: "{{ base_local_server_url() }}/project/conns/delete", 
+			url: "{{ base_local_server_url() }}/generic", 
 			data: JSON.stringify({
 				project_name		: '{{name}}',
 				id 					: id,
-				project_location	: $("#STATIC-project-location").val()
+				project_location	: $("#STATIC-project-location").val(),
+				command 			: 'delete_connection'
 			}),
 			beforeSend: function() { showLoading('Removing connection'); },
 			complete: function(data){
@@ -824,13 +839,14 @@
 			type: "POST",
 			dataType: 'json',
 			contentType: 'application/json; charset=utf-8',
-			url: "{{ base_local_server_url() }}/project/conns/new", 
+			url: "{{ base_local_server_url() }}/generic", 
 			data: JSON.stringify({
 				username 		 : $("#connection_un").val(), 
 				password 		 : $("#connection_pw").val(), 
 				org_type 		 : $("#org_type").val(),
 				project_name 	 : '{{name}}',
-				project_location : $("#STATIC-project-location").val()
+				project_location : $("#STATIC-project-location").val(),
+				command 		 : 'new_connection'
 			}),
 			beforeSend: function() { showLoading('Adding connection'); },
 			complete: function(data){

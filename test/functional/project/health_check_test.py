@@ -25,8 +25,7 @@ class ProjectHealthCheckTests(MavensMateTest):
                 "ApexTrigger"   : "*",
                 "ApexPage"      : "*"
             }
-            test_helper.create_project(project_name, package)
-        commandOut = self.redirectStdOut()
+            test_helper.create_project(self, project_name, package)
         stdin = {
             "project_name"      : project_name,
             "type"              : "user",
@@ -35,15 +34,8 @@ class ProjectHealthCheckTests(MavensMateTest):
                 "Visualforce"   : "INFO"
             }
         }
-        util.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'project_health_check']
-        mm.main()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        #mm_json_response = util.parse_mm_response(mm_response)
+        mm_response = self.runCommand('project_health_check', stdin)
         
-   
     @classmethod    
     def tearDownClass(self):
         # if os.path.exists(os.path.join(base_test_directory,"test_workspace",project_name)):
