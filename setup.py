@@ -12,10 +12,19 @@ def read(*parts):
 with open('requirements.txt') as f:
     install_requires = f.read().splitlines()
 
+def get_data_files(*dirs):
+    results = []
+    for src_dir in dirs:
+        for root,dirs,files in os.walk(src_dir):
+            results.append((root, map(lambda f:root + "/" + f, files)))
+    return results
+
 setup(
     name='mm',
     version='0.0.1',
-    package_dir = {'': 'lib'},
+    packages=find_packages(),
+    py_modules = ['mm'],
+    data_files = get_data_files("bin"),
     install_requires=install_requires,
     entry_points={
         'console_scripts':
@@ -25,7 +34,7 @@ setup(
     author='@joeferraro',
     author_email='info@mavensmate.com',
     description='CLI for MavensMate',
-    license='Apache v2',
+    license='GNU v2',
     keywords='mavensmate salesforce salesorce1 force.com ide cli',
     url='http://mavensmate.com/',
     test_suite='test',
