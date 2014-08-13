@@ -17,52 +17,33 @@ base_test_directory = test_helper.base_test_directory
 
 class ProjectUiIntegrationTest(MavensMateTest):
         
-    def test_01_get_active_session_bad_creds(self): 
-        commandOut = self.redirectStdOut()
+    def test_01_should_not_get_active_session_bc_bad_creds(self): 
         stdin = {
-            "username" : "mm@force.commm",
+            "username" : "mm2@force.commm",
             "password" : "forceee",
             "org_type" : "developer"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'get_active_session']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == False)
-        self.assertTrue(mm_json_response['body'] == "Server raised fault: 'INVALID_LOGIN: Invalid username, password, security token; or user locked out.'")
+        mm_response = self.runCommand('get_active_session', stdin)
+        self.assertTrue(mm_response['success'] == False)
+        self.assertTrue(mm_response['body'] == "Server raised fault: 'INVALID_LOGIN: Invalid username, password, security token; or user locked out.'")
 
-    def test_02_get_active_session_bad_request(self): 
-        commandOut = self.redirectStdOut()
+    def test_02_should_not_get_active_session_bc_bad_request(self): 
         stdin = {
-            "username" : "mm@force.com"
+            "username" : "mm2@force.com"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'get_active_session']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == False)
-        self.assertTrue(mm_json_response['body'] == "Please enter a Salesforce.com password")
+        mm_response = self.runCommand('get_active_session', stdin)
+        self.assertTrue(mm_response['success'] == False)
+        self.assertTrue(mm_response['body'] == "Please enter a Salesforce.com password")
 
-    def test_03_get_active_session_good_creds(self): 
-        commandOut = self.redirectStdOut()
+    def test_03_should_get_active_session_good_creds(self): 
         stdin = {
-            "username" : "mm@force.com",
+            "username" : "mm2@force.com",
             "password" : "force",
             "org_type" : "developer"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'get_active_session']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        mm_json_response = util.parse_mm_response(mm_response)
-        print mm_json_response
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertTrue(len(mm_json_response['user_id']) is 18)
+        mm_response = self.runCommand('get_active_session', stdin)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertTrue(len(mm_response['user_id']) is 18)
 
     @classmethod    
     def tearDownClass(self):

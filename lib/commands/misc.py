@@ -19,6 +19,9 @@ class GetActiveSessionCommand(Command):
         if 'org_type' in self.params and self.params['org_type'] == "custom" and "org_url" in self.params and self.params["org_url"] == "":
             raise MMException('Please specify the org url')    
 
+        config.logger.debug('=================>')
+        config.logger.debug(self.params)
+
         client = MavensMateClient(credentials={
             "username" : self.params['username'],
             "password" : self.params['password'],

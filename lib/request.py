@@ -31,10 +31,12 @@ class MavensMateRequestHandler():
 
     def __set_operation(self):
         if self.payload != None and 'operation' in self.payload:
+            self.args.operation = self.payload['operation']
             self.operation = self.payload['operation']
         elif self.args.operation != None:
             self.operation = self.args.operation
         elif self.unknown_args != [] and self.unknown_args[0]:
+            self.args.operation = self.unknown_args[0]
             self.operation = self.unknown_args[0]
         if self.operation == None:
             raise MMException('Unsupported operation')
@@ -44,7 +46,9 @@ class MavensMateRequestHandler():
             each operation requested represents a session
             the session holds information about the plugin running it
             and establishes a project object
-        """        
+        """    
+        if self.payload != None and type(self.payload) is dict and 'settings' in self.payload:
+            config.plugin_client_settings = self.payload['settings']
         config.connection = PluginConnection(
             client=self.args.client or 'SUBLIME_TEXT_3',
             ui=self.args.ui_switch,
@@ -67,12 +71,12 @@ class MavensMateRequestHandler():
             #example: mm -o new_project --ui
             if self.args.ui_switch == True:
                 config.logger.debug('UI operation requested, attempting to launch MavensMate UI')
-                tmp_html_file = util.generate_ui(self.operation,self.payload)
+                tmp_html_file = util.generate_ui(self.operation,self.payload,self.args)
                 if config.connection.plugin_client == 'ATOM': #returning location of html file here so we can open the page inside an atom panel
-                    return tmp_html_file
+                    self.__printr(util.generate_success_response(tmp_html_file))
                 else:
                     util.launch_ui(tmp_html_file)
-                self.__printr(util.generate_success_response('UI Generated Successfully'))
+                    self.__printr(util.generate_success_response('UI Generated Successfully'))
             
             #non-ui command
             else:        
@@ -155,6 +159,7 @@ def parse_args():
     parser.add_argument('-o', '--operation', help='The requested operation') #name of the operation being requested
     parser.add_argument('-c', '--client', help='The plugin client being used') #name of the plugin client ("SUBLIME_TEXT_2", "SUBLIME_TEXT_3", "TEXTMATE", "NOTEPAD_PLUS_PLUS", "BB_EDIT", etc.)
     parser.add_argument('-f', '--format', default='json', help='The response format') #json, plain
+    parser.add_argument('-uid', help='Unique identifier for the UI (to be used in conjunction with --ui)')
     parser.add_argument('--ui', action='store_true', default=False, 
         dest='ui_switch', help='Launch the default UI for the operation')
     parser.add_argument('--quiet', action='store_true', default=False, 
@@ -166,6 +171,7 @@ def parse_args():
     args, unknown = parser.parse_known_args()
     return args, unknown
 
+#reads piped (via STDIN) request payload
 def get_request_payload():
     try:
         if sys.stdin.isatty():

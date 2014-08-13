@@ -19,7 +19,7 @@ class TestClientOperations(unittest.TestCase):
     # FYI: overriding this constructor is apparently not recommended, so we should find a better way to init test data
     def __init__(self, *args, **kwargs): 
         super(TestClientOperations, self).__init__(*args, **kwargs) 
-        self.username = 'mm@force.com'
+        self.username = 'mm2@force.com'
         self.password = 'force'
         self.org_type = 'developer' 
         self.client = MavensMateClient(credentials={

@@ -1,6 +1,19 @@
 mm
 ==
 
+##### master
+
+[![Build Status](https://circleci.com/gh/joeferraro/mm.svg?style=shield&circle-token=0c3bafbd41995299906a7fc2a42205fcb8203509)](https://circleci.com/gh/joeferraro/mm)
+
+##### atom
+
+[![Build Status](https://circleci.com/gh/joeferraro/mm/tree/atom.svg?style=shield&circle-token=0c3bafbd41995299906a7fc2a42205fcb8203509)](https://circleci.com/gh/joeferraro/mm)
+
+##### dev
+
+[![Build Status](https://circleci.com/gh/joeferraro/mm/tree/dev.svg?style=shield&circle-token=0c3bafbd41995299906a7fc2a42205fcb8203509)](https://circleci.com/gh/joeferraro/mm)
+
+
 `mm` is the executable that powers MavensMate Force.com IDEs. You can use `mm` to perform every important task relative to developing on the Force.com platform. For example, to compile a project:
 
 ```

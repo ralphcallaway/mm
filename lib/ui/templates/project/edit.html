@@ -120,7 +120,7 @@
 
 {% block buttons %}					
 	<input type="button" id="btnSubmit" class="btn btn-info btn-embossed" value="Update Project"  onclick="updateProject();">
-	<button type="reset" class="btn btn-embossed" onclick="window.close();">Cancel</button>
+	<button type="reset" class="btn btn-embossed" onclick="closeWindow();">Cancel</button>
 {% endblock %}  
 
 {% block body_js %}
@@ -133,7 +133,9 @@
 			operation = "update_creds"
 			$.ajax({
 				type: "POST",
-				url: "{{ base_local_server_url() }}/project/creds", 
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ base_local_server_url() }}/generic", 
 				data: JSON.stringify({
 					username 			: $("#un").val(),
 			    	password 			: $("#pw").val(),
@@ -142,7 +144,8 @@
 			    	defer_connection 	: true,
 			    	project_name 		: '{{ name }}',
 			    	org_url 			: $("#custom-url").val(), 
-			    	project_location	: $("#STATIC-project-location").val()
+			    	project_location	: $("#STATIC-project-location").val(),
+			    	command 			: "update_credentials"
 				}),
 				beforeSend: function() { showLoading('Updating project credentials'); },
 				complete: function(data){
@@ -163,11 +166,14 @@
 			operation = "update_subscription"
 			$.ajax({
 				type: "POST",
-				url: "{{ base_local_server_url() }}/project/subscription", 
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ base_local_server_url() }}/generic", 
 				data: JSON.stringify({
 			    	project_name 		: '{{ name }}',
 			    	project_location	: $("#STATIC-project-location").val(),
-			    	subscription 		: $("#subscription").val()
+			    	subscription 		: $("#subscription").val(),
+			    	command 			: "update_subscription"
 				}),
 				beforeSend: function() { showLoading('Updating project subscription'); },
 				complete: function(data){
@@ -190,11 +196,14 @@
 			operation = "update"
 			$.ajax({
 				type: "POST",
-				url: "{{ base_local_server_url() }}/project/edit", 
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ base_local_server_url() }}/generic/async", 
 				data: JSON.stringify({
 					package 			: get_tree(),
 					project_name 		: '{{ name }}',
-					project_location	: $("#STATIC-project-location").val()
+					project_location	: $("#STATIC-project-location").val(),
+					command 			: 'edit_project'
 				}),
 				beforeSend: function() { showLoading('Updating project'); },
 				complete: function(data){
@@ -208,10 +217,13 @@
 			operation = "index"
 			$.ajax({
 				type: "POST",
-				url: "{{ base_local_server_url() }}/project/index", 
+				dataType: 'json',
+				contentType: 'application/json; charset=utf-8',
+				url: "{{ base_local_server_url() }}/generic/async", 
 				data: JSON.stringify({
 					project_name 		: '{{ name }}',
-					project_location	: $("#STATIC-project-location").val()
+					project_location	: $("#STATIC-project-location").val(),
+					command 			: 'index_metadata'
 				}),
 				beforeSend: function() { showLoading('Updating the metadata index for this project. This operation can take a few minutes in large orgs.<br/><br/>Thanks for being patient! :)'); },
 				complete: function(data, status, xhr){
@@ -231,7 +243,7 @@
 						$("#tree").dynatree("getTree").reload();
 					}
 				}
-				notify_sound()
+				notifySound()
 				hideLoading();
 			} else if (operation == "update") {
 				if (response["success"] == false) {
@@ -239,7 +251,7 @@
 				} else {
 					show_message("Project updated successfully.", "success", true)
 				}
-				notify_sound()
+				notifySound()
 				hideLoading();
 			}
 			resizeProjectWrapper()

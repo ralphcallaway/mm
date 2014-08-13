@@ -3,7 +3,7 @@ import json
 import re
 import config
 import shutil
-import tempfile 
+import tempfile
 import string
 import random
 import base64
@@ -32,11 +32,13 @@ import jinja2.ext
 import jinja2htmlcompress
 from jinja2htmlcompress import HTMLCompress
 
+import base64
+
 WSDL_PATH = os.path.join(config.base_path,"lib","wsdl") #this can be overridden by client settings or request parameter
 
 TOOLING_API_EXTENSIONS = ['cls', 'trigger', 'page', 'component']
 
-SFDC_API_VERSION = "28.0" #is overridden upon instantiation of mm_connection if plugin specifies mm_api_version
+SFDC_API_VERSION = "30.0" #is overridden upon instantiation of mm_connection if plugin specifies mm_api_version
 
 PRODUCTION_ENDPOINT_SHORT = "https://www.salesforce.com"
 SANDBOX_ENDPOINT_SHORT    = "https://test.salesforce.com"
@@ -132,9 +134,9 @@ def get_sfdc_endpoint(url):
     return endpoint
 
 def get_sfdc_endpoint_by_type(type):
-    if type in ENDPOINTS: 
-        return ENDPOINTS[type] 
-    else: 
+    if type in ENDPOINTS:
+        return ENDPOINTS[type]
+    else:
         return ""
 
 def is_directory_empty(path):
@@ -149,25 +151,55 @@ def put_project_directory_on_disk(project_name, **kwargs):
             shutil.rmtree(os.path.join(config.connection.workspace,project_name))
     os.makedirs(os.path.join(config.connection.workspace,project_name))
 
+def encode(key, clear):
+    enc = []
+    for i in range(len(clear)):
+        key_c = key[i % len(key)]
+        enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
+        enc.append(enc_c)
+    return base64.urlsafe_b64encode("".join(enc))
+
+def decode(key, enc):
+    dec = []
+    enc = base64.urlsafe_b64decode(enc)
+    for i in range(len(enc)):
+        key_c = key[i % len(key)]
+        dec_c = chr((256 + ord(enc[i]) - ord(key_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)
+
 def put_password_by_key(key, password):
-    if sys.platform == 'linux2':
-        try:
-            gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
-                None, None, None, None, 0, password)
-        except gnomekeyring.CancelledError:
-            raise MMException('Unable to set password')
-    else:
-        keyring.set_password('MavensMate: '+key, key, password)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    if use_keyring:
+        if sys.platform == 'linux2':
+            try:
+                gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
+                    None, None, None, None, 0, password)
+            except gnomekeyring.CancelledError:
+                raise MMException('Unable to set password')
+        else:
+            keyring.set_password('MavensMate: '+key, key, password)
+    else: #not recommend! we only use this for CI
+        encoded = encode(key, password)
+        src = open(os.path.join(config.connection.get_app_settings_directory(),key+'.json'), "wb")
+        src.write(json.dumps({'value':encoded}))
+        src.close()
 
 def get_password_by_key(key):
-    if sys.platform == 'linux2':
-        try:
-            items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
-            return items[0]['password']
-        except gnomekeyring.CancelledError:
-            raise MMException('Unable to retrieve password')
-    else:
-        return keyring.get_password('MavensMate: '+key, key)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    if use_keyring:
+        if sys.platform == 'linux2':
+            try:
+                items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
+                return items[0]['password']
+            except gnomekeyring.CancelledError:
+                raise MMException('Unable to retrieve password')
+        else:
+            return keyring.get_password('MavensMate: '+key, key)
+    else: #not recommend! we only use this for CI
+        file_body = get_file_as_string(os.path.join(config.connection.get_app_settings_directory(),key+'.json'))
+        file_body_json = json.loads(file_body)
+        return decode(str(key), str(file_body_json['value']))
 
 def delete_password_by_key(key):
     try:
@@ -340,7 +372,7 @@ def get_empty_package_xml_contents():
 
 def get_default_metadata_data():
     return parse_json_from_file(config.base_path + "/lib/sforce/metadata/default_metadata.json")
-    
+
 def get_child_metadata_data():
     return parse_json_from_file(config.base_path + "/lib/sforce/metadata/default_child_metadata.json")
 
@@ -351,7 +383,7 @@ def get_meta_type_by_suffix(suffix):
         data = get_default_metadata_data()
         if '.' in suffix:
             suffix = suffix.replace('.','')
-        for item in data["metadataObjects"]: 
+        for item in data["metadataObjects"]:
             if 'suffix' in item and item['suffix'] == suffix:
                 return item
         if config.describe_data != None:
@@ -359,7 +391,7 @@ def get_meta_type_by_suffix(suffix):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'suffix' in item and item['suffix'] == suffix:
                     return item
     except:
@@ -369,7 +401,7 @@ def get_meta_type_by_dir(dir_name):
     parent_data = get_default_metadata_data()
     child_data = get_child_metadata_data()
     data = parent_data['metadataObjects'] + child_data
-    for item in data: 
+    for item in data:
         if 'directoryName' in item and item['directoryName'].lower() == dir_name.lower():
             return item
         elif 'tagName' in item and item['tagName'].lower() == dir_name.lower():
@@ -384,7 +416,7 @@ def get_meta_type_by_dir(dir_name):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'directoryName' in item and item['directoryName'].lower() == dir_name.lower():
                     return item
                 elif 'tagName' in item and item['tagName'].lower() == dir_name.lower():
@@ -395,10 +427,10 @@ def get_meta_type_by_dir(dir_name):
 def get_meta_type_by_name(name):
     data = get_default_metadata_data()
     child_data = get_child_metadata_data()
-    for item in data["metadataObjects"]: 
+    for item in data["metadataObjects"]:
         if 'xmlName' in item and item['xmlName'] == name:
-            return item 
-    for item in child_data: 
+            return item
+    for item in child_data:
         if 'xmlName' in item and item['xmlName'] == name:
             return item
     '''
@@ -411,7 +443,7 @@ def get_meta_type_by_name(name):
         if config.project != None and os.path.isfile(os.path.join(config.project.location,'config','.describe')):
             project_org_describe = parse_json_from_file(os.path.join(config.project.location,'config','.describe'))
         if project_org_describe != None and 'metadataObjects' in project_org_describe:
-            for item in project_org_describe["metadataObjects"]: 
+            for item in project_org_describe["metadataObjects"]:
                 if 'xmlName' in item and item['xmlName'] == name:
                     return item
     except:
@@ -430,14 +462,14 @@ def put_skeleton_files_on_disk(metadata_type, where, github_template=None, param
     try:
         if template_location == 'remote':
             if 'linux' in sys.platform:
-                template_body = os.popen("wget https://raw.github.com/{0}/{1}/{2} -q -O -".format(template_source, metadata_type, file_name)).read()
+                template_body = os.popen("wget https://raw.githubusercontent.com/{0}/{1}/{2} -q -O -".format(template_source, metadata_type, file_name)).read()
             else:
-                template_body = urllib2.urlopen("https://raw.github.com/{0}/{1}/{2}".format(template_source, metadata_type, file_name)).read()
+                template_body = urllib2.urlopen("https://raw.githubusercontent.com/{0}/{1}/{2}".format(template_source, metadata_type, file_name)).read()
         else:
             template_body = get_file_as_string(os.path.join(template_source,metadata_type,file_name))
     except:
         template_body = get_file_as_string(os.path.join(config.base_path,"lib","templates","github-local",metadata_type,file_name))
-    
+
     template = env.from_string(template_body)
     file_body = template.render(params)
     metadata_type = get_meta_type_by_name(metadata_type)
@@ -469,15 +501,19 @@ def platform():
     else:
         return 'osx'
 
-def base_path_normal():
-    if sys.platform == 'win32':
-        return config.base_path.replace('\\', '/')
+def static_resource_path():
+    if config.connection.plugin_client.lower() == 'atom':
+        return 'https://rawgit.com/joeferraro/mm/atom' #TODO: switch to master for v1
     else:
-        return config.base_path
+        if sys.platform == 'win32':
+            return 'file:///'+config.base_path.replace('\\', '/')
+        else:
+            return 'file:///'+config.base_path
 
-def generate_ui(operation,params={}):
+def generate_ui(operation,params={},args={}):
     template_path = config.base_path + "/lib/ui/templates"
     env = Environment(loader=FileSystemLoader(template_path),trim_blocks=True)
+    env.globals['uid']                      = args.uid
     env.globals['platform']                 = platform
     env.globals['play_sounds']              = play_sounds
     env.globals['project_settings']         = project_settings
@@ -486,19 +522,17 @@ def generate_ui(operation,params={}):
     env.globals['base_local_server_url']    = base_local_server_url
     env.globals['operation']                = operation
     env.globals['project_location']         = config.project.location
-    env.globals['base_path_normal']         = base_path_normal
+    env.globals['static_resource_path']     = static_resource_path
+    env.globals['client']                   = config.connection.plugin_client
+
     temp = tempfile.NamedTemporaryFile(delete=False, prefix="mm", suffix=".html")
     if operation == 'new_project':
         template = env.get_template('/project/new.html')
         file_body = template.render(
             user_action='new',
             workspace=config.connection.workspace,
-            client=config.connection.plugin_client,
             workspaces=config.connection.get_workspaces()
             ).encode('UTF-8')
-    elif operation == 'checkout_project':
-        template = env.get_template('/project/new.html')
-        file_body = template.render(user_action='checkout',workspace=config.connection.workspace,client=config.connection.plugin_client).encode('UTF-8')
     elif operation == 'upgrade_project':
         template = env.get_template('/project/upgrade.html')
         creds = config.project.get_creds()
@@ -508,7 +542,6 @@ def generate_ui(operation,params={}):
         file_body = template.render(
             name=config.project.project_name,
             project_location=config.project.location,
-            client=config.connection.plugin_client,
             username=creds['username'],
             org_type=creds['org_type'],
             org_url=org_url,
@@ -527,15 +560,14 @@ def generate_ui(operation,params={}):
             org_type=creds['org_type'],
             org_url=org_url,
             has_indexed_metadata=config.project.is_metadata_indexed,
-            project_location=config.project.location,
-            client=config.connection.plugin_client
+            project_location=config.project.location
         ).encode('UTF-8')
     elif operation == 'unit_test':
         if int(float(SFDC_API_VERSION)) < 29 or config.connection.get_plugin_client_setting("mm_use_legacy_test_ui", False):
             template = env.get_template('/unit_test/index28.html')
         else:
             template = env.get_template('/unit_test/index.html')
-            
+
         istest = re.compile(r"@istest", re.I)
         testmethod = re.compile(r"testmethod", re.I)
 
@@ -555,10 +587,10 @@ def generate_ui(operation,params={}):
         else:
             selected = []
         file_body = template.render(
-            name=config.project.project_name,
-            classes=apex_classes,
-            selected=selected,
-            client=config.connection.plugin_client).encode('UTF-8')
+                name=config.project.project_name,
+                classes=apex_classes,
+                selected=selected
+            ).encode('UTF-8')
     elif operation == 'deploy':
         compare = config.connection.get_plugin_client_setting("mm_compare_before_deployment", True)
         template = env.get_template('/deploy/index.html')
@@ -569,41 +601,61 @@ def generate_ui(operation,params={}):
             connections=config.project.get_org_connections(),
             operation=operation,
             compare=compare,
-            deployments=config.project.get_deployments(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            deployments=config.project.get_deployments()
+        ).encode('UTF-8')
     elif operation == 'execute_apex':
         template = env.get_template('/execute_apex/index.html')
         file_body = template.render(
             name=config.project.project_name,
-            project_location=config.project.location,
-            client=config.connection.plugin_client).encode('UTF-8')
+            project_location=config.project.location
+        ).encode('UTF-8')
     elif operation == 'new_project_from_existing_directory':
         project_name = os.path.basename(params['directory'])
         template = env.get_template('/project/new_from_existing.html')
         file_body = template.render(
             project_name=project_name,
             directory=params['directory'],
-            workspaces=config.connection.get_workspaces(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            workspaces=config.connection.get_workspaces()
+        ).encode('UTF-8')
     elif operation == 'debug_log':
         template = env.get_template('/debug_log/index.html')
         file_body = template.render(
             project_name=config.project.project_name,
             users=config.project.get_org_users_list(),
             user_id=config.sfdc_client.user_id,
-            apex_items=config.sfdc_client.get_apex_classes_and_triggers(),
-            #logs=config.project.get_org_logs(),
-            client=config.connection.plugin_client).encode('UTF-8')
+            apex_items=config.sfdc_client.get_apex_classes_and_triggers()
+        ).encode('UTF-8')
     elif operation == 'github':
         template = env.get_template('/github/index.html')
-        file_body = template.render(
-            client=config.connection.plugin_client).encode('UTF-8')
+        file_body = template.render().encode('UTF-8')
     elif operation == 'project_health_check':
         template = env.get_template('/project/health_check.html')
         file_body = template.render(
-            client=config.connection.plugin_client,
             name=config.project.project_name
-            ).encode('UTF-8')
+        ).encode('UTF-8')
+    elif operation == 'new_metadata':
+        template_source = config.connection.get_plugin_client_setting('mm_template_source', 'joeferraro/MavensMate-Templates/master')
+        template_location = config.connection.get_plugin_client_setting('mm_template_location', 'remote')
+        try:
+            if template_location == 'remote':
+                if 'linux' in sys.platform:
+                    template_package = os.popen("wget https://raw.github.com/{0}/package.json -q -O -".format(template_source)).read()
+                else:
+                    template_package = urllib2.urlopen("https://raw.github.com/{0}/package.json".format(template_source)).read()
+            else:
+                template_package = get_file_as_string(os.path.join(template_source,'package.json'))
+        except:
+            template_package = get_file_as_string(os.path.join(config.base_path,"lib","templates","github-local","package.json"))
+
+        metadata_type = params['metadata_type']
+        template_package_json = json.loads(template_package)
+
+        template = env.get_template('/metadata/new.html')
+        file_body = template.render(
+            name=config.project.project_name,
+            template_list=template_package_json[metadata_type],
+            templates=json.dumps(template_package_json[metadata_type])
+        ).encode('UTF-8')
     else:
         raise MMException('Unsupported UI Command')
     temp.write(file_body)
@@ -623,18 +675,18 @@ def calculate_coverage(result, id_to_name_map):
         elif r["ApexClassOrTriggerId"].startswith('01p'):
             r["ApexClassOrTrigger"] = "ApexClass"
         r["ApexClassOrTriggerName"] = id_to_name_map[r["ApexClassOrTriggerId"]]
-        key = r["ApexClassOrTrigger"]+r["ApexClassOrTriggerName"] 
+        key = r["ApexClassOrTrigger"]+r["ApexClassOrTriggerName"]
         if key not in coverage:
             coverage[key] = r #ApexClass01pxyz123 : { coverage }
         else:
             existing_covered_lines = coverage[key]["Coverage"]["coveredLines"]
             this_class_covered_lines = r["Coverage"]["coveredLines"]
-            new_covered_lines = list(set(existing_covered_lines) | set(this_class_covered_lines))  
+            new_covered_lines = list(set(existing_covered_lines) | set(this_class_covered_lines))
             coverage[key]["Coverage"]["coveredLines"] = new_covered_lines
 
             existing_uncovered_lines = coverage[key]["Coverage"]["uncoveredLines"]
             this_class_uncovered_lines = r["Coverage"]["uncoveredLines"]
-            new_covered_lines = list(set(existing_uncovered_lines) | set(this_class_uncovered_lines))  
+            new_covered_lines = list(set(existing_uncovered_lines) | set(this_class_uncovered_lines))
             coverage[key]["Coverage"]["uncoveredLines"] = new_covered_lines
 
             new_uncovered = []
@@ -673,6 +725,8 @@ def generate_html_response(operation, obj, params=None):
         config.logger.debug(json.dumps(result, sort_keys=True,indent=4))
         html = template.render(result=result,results_normal={},args=params)
     elif operation == 'deploy':
+        config.logger.debug('\n\n\n\n\n ------> GENERATING HTML RESPONSE FOR DPELOYYYYY\n\n\n\n\n\n')
+
         template = env.get_template('/deploy/result.html')
         deploy_results = []
         for result in obj:
@@ -688,11 +742,11 @@ def generate_html_response(operation, obj, params=None):
                     if m['success'] == False:
                         result['success'] = False
                         break
-            if 'runTestResult' in result and 'codeCoverage' in result['runTestResult']:
-                result['parsedTestResults'] = process_unit_test_result(result['runTestResult'])
-                deploy_results.append(result)
-            else:
-                deploy_results.append(result)
+                if 'runTestResult' in result and 'codeCoverage' in result['runTestResult']:
+                    result['parsedTestResults'] = process_unit_test_result(result['runTestResult'])
+                    deploy_results.append(result)
+                else:
+                    deploy_results.append(result)
         config.logger.debug(obj)
         config.logger.debug(deploy_results)
         html = template.render(deploy_results=deploy_results,args=params)
@@ -785,7 +839,7 @@ def launch_ui(tmp_html_file_location):
             threading.Thread(target=b).start()
         elif 'darwin' in sys.platform:
             webbrowser.open("{0}{1}".format("file:///",tmp_html_file_location))
-        else: 
+        else:
             webbrowser.get('windows-default').open("{0}{1}".format("file:///",tmp_html_file_location))
     else:
         os.system("open -n '"+config.base_path+"/bin/MavensMateWindowServer.app' --args -url '"+tmp_html_file_location+"'")
@@ -806,7 +860,7 @@ def generate_success_response(message, type="text"):
         "body_type" : type,
         "body"      : message
     }
-    return json.dumps(res)
+    return res
 
 def generate_request_for_action_response(message, operation, actions=[], **kwargs):
     res = {
@@ -924,7 +978,7 @@ def lower_keys(x):
 
 #prepares the unit test result for processing by the jinja template
 def process_unit_test_result(result):
-    
+
     config.logger.debug('>>>> RUN TEST RESULT')
     config.logger.debug(result)
 
@@ -941,7 +995,7 @@ def process_unit_test_result(result):
             if 'numLocations' in coverage_result and 'numLocationsNotCovered' in coverage_result:
                 locations = int(float(coverage_result['numLocations']))
                 locations_not_covered = int(float(coverage_result['numLocationsNotCovered']))
-                percent_covered = 0 
+                percent_covered = 0
                 if locations > 0:
                     percent_covered = int(round(100 * ((float(locations) - float(locations_not_covered)) / locations)))
                 coverage_result['percentCovered'] = percent_covered
@@ -972,7 +1026,7 @@ def process_unit_test_result(result):
             result['codeCoverageWarnings'] = [result['codeCoverageWarnings']]
         for warning in result['codeCoverageWarnings']:
             if 'name' in warning and type(warning['name']) is not str and type(warning['name']) is not unicode:
-               warning['name'] = None 
+               warning['name'] = None
 
     results_normal = {}
     #{"foo"=>[{:name = "foobar"}{:name = "something else"}], "bar"=>[]}
@@ -989,13 +1043,13 @@ def process_unit_test_result(result):
                 }
             else:
                 pass_fail[success['name']]['pass'] += 1
-            if success['name'] not in results_normal: #key isn't there yet, put it in        
+            if success['name'] not in results_normal: #key isn't there yet, put it in
                 results_normal[success['name']] = [success]
             else: #key is there, let's add metadata to it
                 arr = results_normal[success['name']] #get the existing array
                 arr.append(success) #add the new piece of metadata
                 results_normal[success['name']] = arr #replace the key
-    
+
     if 'failures' in result:
         # for single results we don't get a list back
         if type(result['failures']) is not list:
@@ -1008,7 +1062,7 @@ def process_unit_test_result(result):
                 }
             else:
                 pass_fail[failure['name']]['fail'] += 1
-            if failure['name'] not in results_normal: #key isn't there yet, put it in        
+            if failure['name'] not in results_normal: #key isn't there yet, put it in
                 results_normal[failure['name']] = [failure]
             else: #key is there, let's add metadata to it
                 arr = results_normal[failure['name']] #get the existing array
@@ -1040,13 +1094,13 @@ def get_metadata_hash(selected_files=[]):
         if '-meta.xml' in f:
             continue
         name, ext = os.path.splitext(f)
-        ext_no_period = ext.replace(".", "")   
+        ext_no_period = ext.replace(".", "")
         if os.path.basename(f).count('.') > 1: #fix for weird metadata types like approvalprocess
             base_name_no_ext = os.path.basename(f).split(".")[0]+"."+os.path.basename(f).split(".")[1]
         else:
             base_name_no_ext = os.path.basename(f).split(".")[0]
         try:
-            metadata_definition = get_meta_type_by_suffix(ext_no_period)      
+            metadata_definition = get_meta_type_by_suffix(ext_no_period)
             meta_type = metadata_definition["xmlName"]
         except:
             if sys.platform == "win32":
@@ -1054,10 +1108,10 @@ def get_metadata_hash(selected_files=[]):
             else:
                 dir_parts = f.split("/")
             if 'documents' in dir_parts:
-                metadata_definition = get_meta_type_by_name("Document") 
+                metadata_definition = get_meta_type_by_name("Document")
                 meta_type = metadata_definition["xmlName"]
 
-        if meta_type not in meta_hash: #key isn't there yet, put it in        
+        if meta_type not in meta_hash: #key isn't there yet, put it in
             if metadata_definition['inFolder']:
                 arr = f.split("/")
                 if arr[len(arr)-2] != metadata_definition['directoryName']:
@@ -1076,12 +1130,12 @@ def get_metadata_hash(selected_files=[]):
                     meta_array.append(base_name_no_ext) #add the new piece of metadata
             else:
                 meta_array.append(base_name_no_ext) #file name with no extension
-            
+
             meta_hash[meta_type] = meta_array #replace the key
-        
+
     return meta_hash
- 
-def parse_deploy_result(res):  
+
+def parse_deploy_result(res):
     return_result = {
         "id"        : res["id"],
         "success"   : res["success"]
@@ -1090,11 +1144,11 @@ def parse_deploy_result(res):
     retrieve_result = {}
     run_test_result = {}
 
-   
+
     if 'runTestResult' in res and type(res['runTestResult']) is not list:
         return_result['runTestResult'] = [res['runTestResult']]
     else:
-        return_result['runTestResult'] = res['runTestResult']    
+        return_result['runTestResult'] = res['runTestResult']
     return return_result
 
 def parse_deploy_messages(res):
@@ -1144,7 +1198,7 @@ def parse_run_test_result(res):
         successes = [res['runTestResult']['successes']]
     else:
         successes = res['runTestResult']['successes']
-    
+
     for c in code_coverage:
         code_coverage_return.append({
             "changed"       : m["changed"],
@@ -1170,4 +1224,3 @@ def grouper(n, iterable, fillvalue=None):
 def list_grouper(n, iterable):
     args = [iter(iterable)] * n
     return ([e for e in t if e != None] for t in itertools.izip_longest(*args))
-     

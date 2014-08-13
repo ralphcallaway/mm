@@ -17,32 +17,22 @@ project_name = "unit test metadata refresh project"
 
 class MetadataRefreshTest(MavensMateTest):
     
-    def test_01_refresh_apex_class(self): 
+    def test_01_should_refresh_apex_class(self): 
         apex_class_name =  "unittestapexclass"
         files = [os.path.join(test_helper.base_test_directory,"test_workspace",project_name,"src","classes",apex_class_name+".cls")]
 
-        test_helper.create_project(project_name)
-        test_helper.create_apex_metadata(project_name, "ApexClass", apex_class_name)
-
-        commandOut = self.redirectStdOut()
+        test_helper.create_project(self, project_name)
+        test_helper.create_apex_metadata(self, project_name, "ApexClass", apex_class_name)
 
         stdin = {
             "project_name"  : project_name, 
             "directories"   : [], 
             "files"         : files
         }
-
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'refresh']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
-        self.assertEqual("Refresh Completed Successfully",mm_json_response['body'])
-
-        test_helper.delete_apex_metadata(project_name, files=files)
+        mm_response = self.runCommand('refresh', stdin)
+        self.assertTrue(mm_response['success'] == True)
+        self.assertEqual("Refresh Completed Successfully",mm_response['body'])
+        test_helper.delete_apex_metadata(self, project_name, files=files)
 
     @classmethod    
     def tearDownClass(self):

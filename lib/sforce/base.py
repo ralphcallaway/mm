@@ -1,6 +1,6 @@
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the (LGPL) GNU Lesser General Public License as
-# published by the Free Software Foundation; either version 3 of the 
+# published by the Free Software Foundation; either version 3 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -71,7 +71,7 @@ class SforceBaseClient(object):
   def __init__(self, wsdl, cacheDuration = 0, **kwargs):
     '''
     Connect to Salesforce
-   
+
     'wsdl' : Location of WSDL
     'cacheDuration' : Duration of HTTP GET cache in seconds, or 0 for no cache
     'proxy' : Dict of pair of 'protocol' and 'location'
@@ -128,7 +128,7 @@ class SforceBaseClient(object):
 
     if 'apiVersion' in kwargs:
       if type(kwargs['apiVersion']) == str:
-        api_version = float(kwargs['apiVersion']) 
+        api_version = float(kwargs['apiVersion'])
       else:
         api_version = kwargs['apiVersion']
       self._apiVersion = api_version
@@ -143,7 +143,7 @@ class SforceBaseClient(object):
 
     if kwargs.has_key('environment') and 'sandbox' in kwargs['environment']:
       self._setEndpoint("https://test.salesforce.com/services/Soap/u/"+str(util.SFDC_API_VERSION))
-    
+
 
     self._sforce.set_options(headers = headers)
 
@@ -211,10 +211,10 @@ Salesforce will use HTTPS.')
   def _marshallSObjects(self, sObjects, tag = 'sObjects'):
     '''
     Marshall generic sObjects into a list of SAX elements
-  
+
     This code is going away ASAP
 
-    tag param is for nested objects (e.g. MergeRequest) where 
+    tag param is for nested objects (e.g. MergeRequest) where
     key: object must be in <key/>, not <sObjects/>
     '''
     if not isinstance(sObjects, (tuple, list)):
@@ -234,7 +234,7 @@ Salesforce will use HTTPS.')
 
         # This is here to avoid 'duplicate values' error when setting a field in fieldsToNull
         # Even a tag like <FieldName/> will trigger it
-        if v == None: 
+        if v == None:
           # not going to win any awards for variable-naming scheme here
           tmp = Element(k)
           tmp.set('xsi:nil', 'true')
@@ -249,7 +249,7 @@ Salesforce will use HTTPS.')
 
       li.append(el)
     return li
- 
+
   def _setEndpoint(self, location):
     '''
     Set the endpoint after when Salesforce returns the URL after successful login()
@@ -269,7 +269,7 @@ Salesforce will use HTTPS.')
     '''
     # All calls, including utility calls, set the session header
     headers = {'SessionHeader': self._sessionHeader}
-    
+
     if 'debug_categories' in kwargs:
       #ERROR, WARN, INFO, DEBUG, FINE, FINER, FINEST
       #Db, Workflow, Validation, Callout, Apex Code, Apex Profiling, All
@@ -462,28 +462,28 @@ Salesforce will use HTTPS.')
   def invalidateSessions(self, sessionIds):
     '''
     Invalidate a Salesforce session
-  
+
     This should be used with extreme caution, for the following (undocumented) reason:
     All API connections for a given user share a single session ID
     This will call logout() WHICH LOGS OUT THAT USER FROM EVERY CONCURRENT SESSION
-  
+
     return invalidateSessionsResult
     '''
     self._setHeaders('invalidateSessions')
     return self._handleResultTyping(self._sforce.service.invalidateSessions(sessionIds))
- 
+
   def login(self, username, password, token):
     '''
     Login to Salesforce.com and starts a client session.
-  
+
     Unlike other toolkits, token is a separate parameter, because
     Salesforce doesn't explicitly tell you to append it when it gives
     you a login error.  Folks that are new to the API may not know this.
-  
+
     'username' : Username
     'password' : Password
     'token' : Token
-  
+
     return LoginResult
     '''
     self._setHeaders('login')
@@ -510,11 +510,11 @@ Salesforce will use HTTPS.')
   def logout(self):
     '''
     Logout from Salesforce.com
-  
+
     This should be used with extreme caution, for the following (undocumented) reason:
     All API connections for a given user share a single session ID
     Calling logout() LOGS OUT THAT USER FROM EVERY CONCURRENT SESSION
-  
+
     return LogoutResult
     '''
     self._setHeaders('logout')
@@ -534,7 +534,7 @@ Salesforce will use HTTPS.')
     '''
     self._setHeaders('queryAll')
     return self._sforce.service.queryAll(queryString)
-  
+
   def queryMore(self, queryLocator):
     '''
     Retrieves the next batch of objects from a query.
@@ -585,8 +585,9 @@ Salesforce will use HTTPS.')
 
   def getUserInfo(self):
     self._setHeaders('getUserInfo')
-    param = self._sforce.factory.create('ns1:getUserInfo')
-    return self._sforce.service.getUserInfo(param)
+    #param = self._sforce.factory.create('ns1:getUserInfo')
+    #return self._sforce.service.getUserInfo(param)
+    return self._sforce.service.getUserInfo()
 
   def resetPassword(self, userId):
     '''
@@ -641,27 +642,27 @@ Salesforce will use HTTPS.')
   def setUserTerritoryDeleteHeader(self, header):
     self._userTerritoryDeleteHeader = header
 
-class WellBehavedHttpTransport(SudsHttpTransport): 
-    """HttpTransport which properly obeys the ``*_proxy`` environment variables.""" 
+class WellBehavedHttpTransport(SudsHttpTransport):
+    """HttpTransport which properly obeys the ``*_proxy`` environment variables."""
 
-    def u2handlers(self): 
-        """Return a list of specific handlers to add. 
+    def u2handlers(self):
+        """Return a list of specific handlers to add.
 
-        The urllib2 logic regarding ``build_opener(*handlers)`` is: 
+        The urllib2 logic regarding ``build_opener(*handlers)`` is:
 
-        - It has a list of default handlers to use 
+        - It has a list of default handlers to use
 
-        - If a subclass or an instance of one of those default handlers is given 
-            in ``*handlers``, it overrides the default one. 
+        - If a subclass or an instance of one of those default handlers is given
+            in ``*handlers``, it overrides the default one.
 
-        Suds uses a custom {'protocol': 'proxy'} mapping in self.proxy, and adds 
-        a ProxyHandler(self.proxy) to that list of handlers. 
-        This overrides the default behaviour of urllib2, which would otherwise 
-        use the system configuration (environment variables on Linux, System 
-        Configuration on Mac OS, ...) to determine which proxies to use for 
-        the current protocol, and when not to use a proxy (no_proxy). 
+        Suds uses a custom {'protocol': 'proxy'} mapping in self.proxy, and adds
+        a ProxyHandler(self.proxy) to that list of handlers.
+        This overrides the default behaviour of urllib2, which would otherwise
+        use the system configuration (environment variables on Linux, System
+        Configuration on Mac OS, ...) to determine which proxies to use for
+        the current protocol, and when not to use a proxy (no_proxy).
 
-        Thus, passing an empty list will use the default ProxyHandler which 
-        behaves correctly. 
-        """ 
+        Thus, passing an empty list will use the default ProxyHandler which
+        behaves correctly.
+        """
         return []

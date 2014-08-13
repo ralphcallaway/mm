@@ -16,26 +16,18 @@ import lib.util as mmutil
 
 class MetadataOperationTest(MavensMateTest):
     
-    def test_01_new_org_connection(self): 
-        test_helper.create_project("unit test deploy project")
-        commandOut = self.redirectStdOut()
+    def test_01_should_create_new_org_connection(self): 
+        test_helper.create_project(self, "unit test deploy project")
         stdin = {
-            "username"      : "mm@force.com",
+            "username"      : "mm2@force.com",
             "password"      : "force",
             "org_type"      : "developer",
             "project_name"  : "unit test deploy project"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'new_connection']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = test_util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
+        mm_response = self.runCommand('new_connection', stdin)        
+        self.assertTrue(mm_response['success'] == True)
 
-    def test_02_deploy(self): 
-        commandOut = self.redirectStdOut()
+    def test_02_should_deploy_to_server(self): 
         client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         org_connections = test_util.parse_json_from_file(os.path.join(client_settings["mm_workspace"],"unit test deploy project","config",".org_connections"))
         stdin = {
@@ -55,31 +47,18 @@ class MetadataOperationTest(MavensMateTest):
             },
             "debug_categories"  :   ""
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'deploy', '--html']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = test_util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
+        mm_response = self.runCommand(['mm.py', '-o', 'deploy', '--html'], stdin)        
+        self.assertTrue(mm_response['success'] == True)
 
-    def test_03_delete_org_connection(self): 
-        commandOut = self.redirectStdOut()
+    def test_03_should_delete_org_connection(self): 
         client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         org_connections = test_util.parse_json_from_file(os.path.join(client_settings["mm_workspace"],"unit test deploy project","config",".org_connections"))
         stdin = {
             "id"            : org_connections[0]["id"],
             "project_name"  : "unit test deploy project"
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'delete_connection']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = test_util.parse_mm_response(mm_response)
-        self.assertTrue(mm_json_response['success'] == True)
+        mm_response = self.runCommand('delete_connection', stdin)        
+        self.assertTrue(mm_response['success'] == True)
 
 
     @classmethod    
