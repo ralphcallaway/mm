@@ -1,4 +1,3 @@
-
 .DS_Store
 
 build/build_settings.json
@@ -14,6 +13,10 @@ build_settings.json
 copy_to_st_package.py
 
 dist/*
+
+*.egg
+
+*.egg-info
 
 freeze_dev_osx.py
 
