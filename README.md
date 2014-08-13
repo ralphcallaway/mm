@@ -9,12 +9,9 @@ mm
 
 [![Build Status](https://circleci.com/gh/joeferraro/mm/tree/atom.svg?style=shield&circle-token=0c3bafbd41995299906a7fc2a42205fcb8203509)](https://circleci.com/gh/joeferraro/mm)
 
-##### dev
+### Overview
 
-[![Build Status](https://circleci.com/gh/joeferraro/mm/tree/dev.svg?style=shield&circle-token=0c3bafbd41995299906a7fc2a42205fcb8203509)](https://circleci.com/gh/joeferraro/mm)
-
-
-`mm` is the executable that powers MavensMate Force.com IDEs. You can use `mm` to perform every important task relative to developing on the Force.com platform. For example, to compile a project:
+`mm` is an executable that powers MavensMate Force.com IDEs. You can use `mm` to perform every important task relative to developing on the Salesforce1 platform. For example, to compile a project:
 
 ```
 $ mm compile_project
@@ -30,6 +27,26 @@ In order to provide context to your operation, pipe json to `mm` via STDIN. For 
 
 ```
 $ mm compile_project <<< '{ "project_name" : "myproject" }'
+```
+
+### Installation
+
+#### pip
+
+```
+$ pip install mm
+```
+
+#### easy_install
+
+```
+$ easy_install mm
+```
+
+#### Manual
+
+```
+$ git clone https://github.com/joeferraro/mm.git
 ```
 
 ### Command Line Arguments
