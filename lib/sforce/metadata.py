@@ -19,6 +19,7 @@ import lib.xmltodict as xmltodict
 import time
 import lib.util as util
 import lib.config as config
+from lib.exceptions import *
 import shutil
 import os
 from operator import itemgetter
@@ -121,6 +122,8 @@ class SforceMetadataClient(SforceBaseClient):
 
         elif 'package' in kwargs and type(kwargs['package']) is dict:
             package = kwargs['package']
+            if package == {}:
+                raise MMException('Invalid package')
             if 'unpackaged' not in package:
                 #{ "ApexClass"    : ["MultiselectControllerTest","MultiselectController"] }
                 type_array = []
@@ -173,11 +176,23 @@ class SforceMetadataClient(SforceBaseClient):
             debug('---request payload---')
             debug(request_payload)
         result = self._handleResultTyping(self._sforce.service.retrieve(request_payload))
+        
+        debug('result of retrieve: \n\n')
+        debug(result)
+
         if result.done == False:
             self._waitForRetrieveRequest(result.id)
             return self._getRetrieveBody(result.id)
         else:
             return result
+
+        # if result.done == False:
+        #     if int(float(util.SFDC_API_VERSION)) > 30:
+        #         return self._waitForRetrieveRequest(result.id)
+        #     else:
+        #         return self._getRetrieveBody(result.id)
+        # else:
+        #     return result
 
     def deploy(self, params={}, **kwargs):
         if 'debug_categories' in params:
@@ -458,8 +473,16 @@ class SforceMetadataClient(SforceBaseClient):
         checkStatusResponse = None
         while finished == False:
             time.sleep(1)
-            checkStatusResponse = self._sforce.service.checkStatus(id)
-            finished = checkStatusResponse[0].done    
+            if int(float(util.SFDC_API_VERSION)) <= 30:
+                checkStatusResponse = self._sforce.service.checkStatus(id, True)
+                finished = checkStatusResponse[0].done
+                if finished:
+                    return None
+            else:
+                checkStatusResponse = self._sforce.service.checkRetrieveStatus(id)                
+                finished = checkStatusResponse.success
+                if finished:
+                    return checkStatusResponse
 
     def _waitForRequest(self, id):
         finished = False

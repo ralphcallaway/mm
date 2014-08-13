@@ -55,16 +55,20 @@ class MavensMateClient(object):
             self.metadata_server_url    = self.credentials['metadata_server_url']   if 'metadata_server_url' in self.credentials else None
             self.server_url             = self.credentials['server_url']            if 'server_url' in self.credentials else None
             self.org_type               = self.credentials['org_type']              if 'org_type' in self.credentials else 'production'
-            
+
             if 'org_url' in self.credentials and self.credentials['org_url'] != None and self.credentials['org_url'] != '':
                 self.endpoint = util.get_soap_url_from_custom_url(self.credentials["org_url"])
             elif self.override_session == False and 'endpoint' in self.credentials and self.credentials['endpoint'] != None:
-                self.endpoint = self.credentials['endpoint']    
+                self.endpoint = self.credentials['endpoint']
             else:
-                self.endpoint = util.get_sfdc_endpoint_by_type(self.org_type) 
+                self.endpoint = util.get_sfdc_endpoint_by_type(self.org_type)
+
+        debug(self.org_type)
+        debug('endpont is ::: ')
+        debug(self.endpoint)
 
         #we do this to prevent an unnecessary "login" call
-        #if the getUserInfo call fails, we catch it and reset our class variables 
+        #if the getUserInfo call fails, we catch it and reset our class variables
         if self.override_session == False and self.sid != None and self.user_id != None and self.metadata_server_url != None and self.endpoint != None and self.server_url != None:
             self.pclient = self.__get_partner_client()
             self.pclient._setEndpoint(self.server_url)
@@ -88,12 +92,12 @@ class MavensMateClient(object):
         elif self.server_url == None:
             self.pclient = self.__get_partner_client()
             self.login()
-            self.reset_creds = True  
+            self.reset_creds = True
 
         #if the cached creds didnt work & username/password/endpoint are not provided, get them from keyring
         if self.sid == None or self.override_session == True:
             self.pclient = self.__get_partner_client()
-            self.login()   
+            self.login()
             self.reset_creds = True
 
     def login(self):
@@ -206,7 +210,7 @@ class MavensMateClient(object):
     def get_org_namespace(self):
         if self.mclient == None:
             self.mclient = self.__get_metadata_client()
-        return self.mclient.getOrgNamespace() 
+        return self.mclient.getOrgNamespace()
 
     def does_metadata_exist(self, **kwargs):
         if self.pclient == None:
@@ -296,7 +300,7 @@ class MavensMateClient(object):
                 content_entity_id = config.api_name_to_id_dict[file_name]
             else:
                 content_entity_id = self.get_apex_entity_id_by_name(object_type=metadata_type, name=file_name)
-            
+
             # create new component if needed
             if content_entity_id == None:
                 payload['Name']                 = file_name
@@ -347,8 +351,8 @@ class MavensMateClient(object):
 
                 # reset payload
                 payload = {}
-            
-            # create/update member 
+
+            # create/update member
             #payload['LastSyncDate']         = TODO
             payload['Body']                 = open(file_path, 'r').read()
             payload['MetadataContainerId']  = container_id
@@ -358,7 +362,7 @@ class MavensMateClient(object):
             config.logger.debug(payload)
             r = requests.post(self.get_tooling_url()+"/sobjects/"+tooling_type, data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
             response = util.parse_rest_response(r.text)
-            
+
             #if the member already exists, patch it (TODO: cache member ids and go right to patch, handle exception)
             if type(response) is list and 'errorCode' in response[0]:
                 debug('----> post to tooling member failed')
@@ -377,7 +381,7 @@ class MavensMateClient(object):
                         query_result = util.parse_rest_response(r.text)
                         if query_result["size"] == 1 and 'records' in query_result and 'Id' in query_result['records'][0]:
                             dup_id = query_result['records'][0]['Id']
-                    
+
                     payload = json.loads(payload)
                     payload.pop("MetadataContainerId", None)
                     payload.pop("ContentEntityId", None)
@@ -410,7 +414,10 @@ class MavensMateClient(object):
         finished = False
         while finished == False:
             time.sleep(1)
-            query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
+            if int(float(util.SFDC_API_VERSION)) >= 31:
+                query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, DeployDetails, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
+            else:
+                query_string = "Select Id, MetadataContainerId, MetadataContainerMemberId, State, IsCheckOnly, CompilerErrors, ErrorMsg FROM ContainerAsyncRequest WHERE Id='"+response["id"]+"'"
             r = requests.get(self.get_tooling_url()+"/query/", params={'q':query_string}, headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
                 self.__exception_handler(r)
@@ -425,9 +432,7 @@ class MavensMateClient(object):
         #     #delete member
         #     r = requests.delete(self.get_tooling_url()+"/sobjects/{0}/{1}".format(tooling_type, member_id), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
         #     r.raise_for_status()
-        debug('down here!')
-        debug(response)
-        return response   
+        return response
 
     def get_metadata_container_id(self):
         query_string = "Select Id from MetadataContainer Where Name = 'MavensMate-"+self.user_id+"'"
@@ -459,7 +464,7 @@ class MavensMateClient(object):
         r = requests.post(self.get_tooling_url()+"/sobjects/MetadataContainer", data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
         if self.__is_failed_request(r):
             self.__exception_handler(r)
-        return util.parse_rest_response(r.text)            
+        return util.parse_rest_response(r.text)
 
     #deletes ALL checkpoints in the org
     def delete_mavensmate_metadatacontainers_for_this_user(self):
@@ -486,7 +491,7 @@ class MavensMateClient(object):
             self.__exception_handler(r)
         return r.text
 
-    def get_apex_checkpoints(self, **kwargs):        
+    def get_apex_checkpoints(self, **kwargs):
         if 'file_path' in kwargs:
             id = kwargs.get('id', None)
             file_path = kwargs.get('file_path', None)
@@ -510,21 +515,24 @@ class MavensMateClient(object):
             return util.parse_rest_response(r.text)
 
     #creates a checkpoint at a certain line on an apex class/trigger
-    def create_apex_checkpoint(self, payload):        
+    def create_apex_checkpoint(self, payload):
         if 'ScopeId' not in payload:
             payload['ScopeId'] = self.user_id
         if 'API_Name' in payload:
             payload['ExecutableEntityId'] = self.get_apex_entity_id_by_name(object_type=payload['Object_Type'], name=payload['API_Name'])
             payload.pop('Object_Type', None)
             payload.pop('API_Name', None)
-        
+
         payload.pop('workspace', None)
 
         payload = json.dumps(payload)
         r = requests.post(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction", data=payload, proxies=self.__get_proxies(), headers=self.get_rest_headers('POST'), verify=False)
         if self.__is_failed_request(r):
-            self.__exception_handler(r)
-        
+            response = r.json()
+
+            if (response[0] is not None) & (response[0]['errorCode'] != 'STORAGE_LIMIT_EXCEEDED'):
+                self.__exception_handler(r)
+
         ##WE ALSO NEED TO CREATE A TRACE FLAG FOR THIS USER
         expiration = util.get_iso_8601_timestamp(30)
 
@@ -542,7 +550,7 @@ class MavensMateClient(object):
             "Workflow"          : "INFO"
         }
         self.create_trace_flag(payload)
-
+        
         return util.generate_success_response("Done")
 
     #deletes ALL checkpoints in the org
@@ -554,7 +562,8 @@ class MavensMateClient(object):
         qr = util.parse_rest_response(r.text)
         for r in qr['records']:
             self.delete_tooling_entity("ApexExecutionOverlayAction", r["Id"])
-
+        return util.generate_success_response('OK')
+    
     #deletes a single checkpoint
     def delete_apex_checkpoint(self, **kwargs):
         if 'overlay_id' in kwargs:
@@ -571,7 +580,7 @@ class MavensMateClient(object):
                 api_name = util.get_file_name_no_extension(file_path)
                 mtype = util.get_meta_type_by_suffix(ext)
                 id = self.get_apex_entity_id_by_name(object_type=mtype['xmlName'], name=api_name)
-            
+
             query_string = "Select Id from ApexExecutionOverlayAction Where ExecutableEntityId = '{0}' AND Line = {1}".format(id, line_number)
             r = requests.get(self.get_tooling_url()+"/query/", params={'q':query_string}, headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
@@ -580,7 +589,9 @@ class MavensMateClient(object):
             overlay_id = query_result['records'][0]['Id']
             r = requests.delete(self.get_tooling_url()+"/sobjects/ApexExecutionOverlayAction/{0}".format(overlay_id), headers=self.get_rest_headers(), proxies=self.__get_proxies(), verify=False)
             if self.__is_failed_request(r):
-                self.__exception_handler(r)
+                response = r.json()
+                if (response[0] is not None) & (response[0]['errorCode'] != 'INVALID_CROSS_REFERENCE_KEY'):
+                    self.__exception_handler(r)
             return util.generate_success_response('OK')
 
     ########################
@@ -658,7 +669,7 @@ class MavensMateClient(object):
 
     ###########
     #TESTING
-    ###########    
+    ###########
 
     def run_async_apex_tests(self, params, dump_to_json=False, all_tests=False):
         if all_tests:
@@ -678,7 +689,7 @@ class MavensMateClient(object):
         debug(classes)
         downloaded_log_ids = []
         class_name_result = self.get_apex_entity_id_by_name(object_type="ApexClass",class_or_trigger_names=classes)
-        
+
         #submit ApexTestQueueItems for each class
         for c in class_name_result:
             if c.Id == None: continue
@@ -700,7 +711,7 @@ class MavensMateClient(object):
             else:
                 debug('Failed to submit ApexTestQueueItem')
                 debug(c)
-        
+
         debug(parent_job_ids)
         all_jobs_finished = False
         while all_jobs_finished == False:
@@ -736,7 +747,7 @@ class MavensMateClient(object):
                             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H %M %S')
                         file_name = cname+"-"+st+".log"
                         file_path = os.path.join(config.connection.workspace,config.project.project_name,"debug","tests",cname,file_name)
-                        
+
                         if all_tests and not config.connection.get_plugin_client_setting('mm_download_logs_during_run_all_tests', False):
                             continue
                         else:
@@ -747,11 +758,11 @@ class MavensMateClient(object):
                                 src.close()
                             except:
                                 debug('Failed to download debug log with id: '+r["ApexLogId"])
-                            downloaded_log_ids.append(r["ApexLogId"]) 
+                            downloaded_log_ids.append(r["ApexLogId"])
                 responses.append(parent_response)
             except Exception, e:
                 responses.append({"job_id":job_id,"success":False})
-    
+
         if dump_to_json:
             return json.dumps(responses)
         else:
@@ -787,7 +798,7 @@ class MavensMateClient(object):
 
         ids = []
         test_class_ids = []
-        
+
         if len(classes) > 0:
             for result in class_name_result:
                 ids.append(result.Id)
@@ -807,7 +818,7 @@ class MavensMateClient(object):
 
         id_string = "','".join(ids)
         id_string = "'"+id_string+"'"
-        
+
         if test_classes != []:
             query = "SELECT NumLinesCovered, NumLinesUncovered, Coverage, ApexClassOrTriggerId FROM ApexCodeCoverage WHERE ApexClassOrTriggerId IN ({0}) AND ApexTestClassId IN ({1})".format(id_string, test_class_id_string)
         else:
@@ -842,7 +853,7 @@ class MavensMateClient(object):
     def get_org_wide_test_coverage(self):
         query = "SELECT PercentCovered FROM ApexOrgWideCoverage"
         return self.tooling_query(query)["records"][0]
-         
+
     ###########
     #DEBUG LOGS
     ###########
@@ -881,14 +892,14 @@ class MavensMateClient(object):
             self.__exception_handler(r)
         return r.text
 
-    
+
 
     #############
     #SYMBOL TABLE
     #############
 
     #pass a list of apex class/trigger ids and return the symbol tables
-    def get_symbol_table(self, ids=[]):        
+    def get_symbol_table(self, ids=[]):
         id_string = "','".join(ids)
         id_string = "'"+id_string+"'"
         query_string = "Select ContentEntityId, ContentEntity.Name, SymbolTable From ApexClassMember Where ContentEntityId IN (" + id_string + ")"
@@ -899,7 +910,7 @@ class MavensMateClient(object):
         return util.parse_rest_response(r.text)
 
     #pass a list of apex class/trigger ids and return the symbol tables
-    def get_symbol_tables_by_class_name(self, names=[]):        
+    def get_symbol_tables_by_class_name(self, names=[]):
         name_string = "','".join(names)
         name_string = "'"+name_string+"'"
         query_string = "Select NamespacePrefix, SymbolTable, Name From ApexClass Where Name IN (" + name_string + ") AND NamespacePrefix = '"+self.get_org_namespace()+"'"
@@ -910,7 +921,7 @@ class MavensMateClient(object):
         return util.parse_rest_response(r.text)
 
     #pass a list of apex class/trigger ids and return the symbol tables
-    def get_symbol_tables_by_class_id(self, ids=[]):        
+    def get_symbol_tables_by_class_id(self, ids=[]):
         id_string = "','".join(ids)
         id_string = "'"+id_string+"'"
         query_string = "Select NamespacePrefix, SymbolTable, Name From ApexClass Where Id IN (" + id_string + ") AND NamespacePrefix = '"+self.get_org_namespace()+"'"
@@ -996,13 +1007,15 @@ class MavensMateClient(object):
             else:
                 return urllib.getproxies()
         except:
-            return urllib.getproxies()             
+            return urllib.getproxies()
 
     def __get_partner_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'partner-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'partner.xml')
         try:
@@ -1012,18 +1025,20 @@ class MavensMateClient(object):
             pass
 
         return SforcePartnerClient(
-            wsdl_location, 
-            apiVersion=util.SFDC_API_VERSION, 
-            environment=self.org_type, 
-            sid=self.sid, 
-            metadata_server_url=self.metadata_server_url, 
+            wsdl_location,
+            apiVersion=util.SFDC_API_VERSION,
+            environment=self.org_type,
+            sid=self.sid,
+            metadata_server_url=self.metadata_server_url,
             server_url=self.endpoint)
 
     def __get_metadata_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'metadata-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'metadata.xml')
 
@@ -1034,18 +1049,20 @@ class MavensMateClient(object):
            pass
 
         return SforceMetadataClient(
-            wsdl_location, 
-            apiVersion=util.SFDC_API_VERSION, 
-            environment=self.org_type, 
-            sid=self.sid, 
-            url=self.metadata_server_url, 
+            wsdl_location,
+            apiVersion=util.SFDC_API_VERSION,
+            environment=self.org_type,
+            sid=self.sid,
+            url=self.metadata_server_url,
             server_url=self.endpoint)
 
     def __get_apex_client(self):
         if int(float(util.SFDC_API_VERSION)) == 29:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex-29.xml')
-        elif int(float(util.SFDC_API_VERSION)) >= 30:
+        elif int(float(util.SFDC_API_VERSION)) == 30:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex-30.xml')
+        elif int(float(util.SFDC_API_VERSION)) >= 31:
+            wsdl_location = os.path.join(util.WSDL_PATH, 'apex-31.xml')
         else:
             wsdl_location = os.path.join(util.WSDL_PATH, 'apex.xml')
 
@@ -1056,11 +1073,11 @@ class MavensMateClient(object):
             pass
 
         return SforceApexClient(
-            wsdl_location, 
-            apiVersion=util.SFDC_API_VERSION, 
-            environment=self.org_type, 
-            sid=self.sid, 
-            metadata_server_url=self.metadata_server_url, 
+            wsdl_location,
+            apiVersion=util.SFDC_API_VERSION,
+            environment=self.org_type,
+            sid=self.sid,
+            metadata_server_url=self.metadata_server_url,
             server_url=self.endpoint)
 
     def __get_tooling_client(self):
@@ -1078,11 +1095,11 @@ class MavensMateClient(object):
             pass
 
         return SforceToolingClient(
-            wsdl_location, 
-            apiVersion=util.SFDC_API_VERSION, 
-            environment=self.org_type, 
-            sid=self.sid, 
-            metadata_server_url=self.metadata_server_url, 
+            wsdl_location,
+            apiVersion=util.SFDC_API_VERSION,
+            environment=self.org_type,
+            sid=self.sid,
+            metadata_server_url=self.metadata_server_url,
             server_url=self.endpoint)
 
     def __exception_handler(self, result, name=""):

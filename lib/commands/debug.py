@@ -2,6 +2,7 @@ import os.path
 import lib.util as util
 import json
 import lib.config as config
+import shutil
 from lib.exceptions import *
 from lib.basecommand import Command
 
@@ -50,6 +51,7 @@ class FetchLogsCommand(Command):
         limit   = config.connection.get_plugin_client_setting('mm_number_of_logs_limit', 20)
         id_list = ','.join("'"+item+"'" for item in config.project.get_debug_users())
         log_result = config.sfdc_client.execute_query('Select Id, LogUserId, SystemModstamp From ApexLog Where SystemModstamp >= TODAY and Location != \'HeapDump\' AND LogUserId IN ({0}) order by SystemModstamp desc limit {1}'.format(id_list, str(limit)))
+        config.logger.debug(log_result)
         logs = []
         if 'records' in log_result:
             for r in log_result['records']:
@@ -73,11 +75,11 @@ class FetchLogsCommand(Command):
                 file_name = modstamp+"-"+log["userid"]+".log"
                 src = open(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name), "w")
                 src.write(log["log"])
-                src.close() 
+                src.close()
         else:
             config.logger.debug("No logs to download")
 
-        return util.generate_success_response(str(number_of_logs)+' Logs successfully downloaded') 
+        return util.generate_success_response(str(number_of_logs)+' Logs successfully downloaded')
 
 class NewTraceFlagCommand(Command):
     aliases=["new_log"]
@@ -116,7 +118,7 @@ class NewTraceFlagCommand(Command):
                 request[c['category']] = c['level']
             else:
                 request[c] = self.params['debug_categories'][c]
-        
+
         request['ExpirationDate'] = util.get_iso_8601_timestamp(int(float(self.params.get('expiration', 30))))
 
         config.logger.debug(self.params['debug_categories'])
@@ -147,7 +149,7 @@ class IndexApexOverlaysCommand(Command):
     def execute(self):
         result = config.sfdc_client.get_apex_checkpoints()
         if 'records' not in result or len(result['records']) == 0:
-            project.put_overlays_file('[]')
+            config.project.put_overlays_file('[]')
             return util.generate_success_response('Could Not Find Any Apex Execution Overlays')
         else:
             id_to_name_map = {}
@@ -163,7 +165,7 @@ class IndexApexOverlaysCommand(Command):
 
             class_filter = ' or '.join(class_ids)
             trigger_filter = ' or '.join(trigger_ids)
-            
+
             if len(class_ids) > 0:
                 soql = 'Select Id, Name From ApexClass WHERE '+class_filter
                 class_result = config.sfdc_client.execute_query(soql)
@@ -200,8 +202,12 @@ class NewApexOverlayCommand(Command):
                 "ScopeId"               : "005d0000000xxzsAAA"
             }
         """
+        config.logger.debug('logging self')
+        config.logger.debug(self.params )
         if 'project_name' in self.params:
             self.params.pop('project_name', None)
+        if 'settings' in self.params:
+            self.params.pop('settings', None)
 
         create_result = config.sfdc_client.create_apex_checkpoint(self.params)
         if type(create_result) is list:
@@ -214,11 +220,19 @@ class NewApexOverlayCommand(Command):
 
 class DeleteApexOverlayCommand(Command):
     name="delete_apex_overlay"
+    aliases=["delete_apex_checkpoint"]
     def execute(self):
         delete_result = config.sfdc_client.delete_apex_checkpoint(overlay_id=self.params['id'])
         IndexApexOverlaysCommand(params=self.params).execute()
         return delete_result
-  
+
+class DeleteAllApexCheckpointsCommand(Command):
+    name="delete_all_apex_checkpoints"
+    def execute(self):
+        delete_result = config.sfdc_client.delete_apex_checkpoints()
+        IndexApexOverlaysCommand(params=self.params).execute()
+        return delete_result
+
 class FetchCheckpointsCommand(Command):
     def execute(self):
         number_of_checkpoints = 0
@@ -256,8 +270,8 @@ class FetchCheckpointsCommand(Command):
                     file_path = os.path.join(config.project.location,"debug","checkpoints",r['HeapDump']['className'],str(r['Line']),file_name)
                     src = open(file_path, "w")
                     src.write(json.dumps(r,sort_keys=True,indent=4))
-                    src.close() 
+                    src.close()
         else:
             config.logger.debug("No checkpoints to download")
-    
-        return util.generate_success_response(str(number_of_checkpoints)+' Checkpoints successfully downloaded') 
+
+        return util.generate_success_response(str(number_of_checkpoints)+' Checkpoints successfully downloaded')

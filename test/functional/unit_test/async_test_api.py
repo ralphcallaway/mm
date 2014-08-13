@@ -14,22 +14,15 @@ import lib.request as request
 
 class ApexUnitTestingTest(MavensMateTest):
         
-    def test_01_run_tests_async(self): 
-        test_helper.create_project("unit test project", package={ "ApexClass" : ["CompileAndTest"] })
-        commandOut = self.redirectStdOut()
+    def test_01_should_run_tests_async(self): 
+        test_helper.create_project(self, "unit test project", package={ "ApexClass" : ["CompileAndTest"] })
         stdin = {
             "project_name"  : "unit test project",
             "classes"       : ["CompileAndTest"]
         }
-        request.get_request_payload = mock.Mock(return_value=stdin)
-        sys.argv = ['mm.py', '-o', 'test_async']
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
-        sys.stdout = self.saved_stdout
-        print mm_response
-        mm_json_response = test_util.parse_mm_response(mm_response)
-        self.assertTrue(len(mm_json_response) == 1)
-        self.assertTrue(mm_json_response[0]['Status'] == 'Completed')
+        mm_response = self.runCommand('test_async', stdin)
+        self.assertTrue(len(mm_response) == 1)
+        self.assertTrue(mm_response[0]['Status'] == 'Completed')
 
     @classmethod    
     def tearDownClass(self):
