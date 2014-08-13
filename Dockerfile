@@ -6,4 +6,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python python-dev python-p
 ADD . /mm
 RUN pip install jinja2 suds keyring markupsafe pyyaml requests mock
 
-ENTRYPOINT ["mm"]
+ENTRYPOINT ["python mm.py"]
+
+CMD ["--help"]
