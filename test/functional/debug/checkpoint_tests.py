@@ -80,6 +80,13 @@ class CheckpointTests(MavensMateTest):
         mm_response = self.runCommand('new_apex_overlay', stdin)        
         self.assertEqual(mm_response['success'],True)
 
+    def test_04_should_fetch_checkpoint(self): 
+        stdin = {
+            "project_name"      : "unit test tooling project",
+        }
+        mm_response = self.runCommand('fetch_checkpoints', stdin)
+        self.assertEqual(mm_response['success'],True)  
+
         ###DELETE CLASS
         client_settings = util.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         stdin = {
@@ -87,7 +94,7 @@ class CheckpointTests(MavensMateTest):
             "project_name": "unit test tooling project"
         }
         mm_response = self.runCommand('delete', stdin)        
-        self.assertEqual(mm_response['success'],True)
+        self.assertEqual(mm_response['success'],True)  
 
     @classmethod    
     def tearDownClass(self):
