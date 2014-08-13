@@ -30,12 +30,12 @@ setup(
         'console_scripts':
             ['mm = mm:main']
     },
+    url='https://github.com/joeferraro/mm',
     include_package_data=True,
     author='@joeferraro',
     author_email='info@mavensmate.com',
     description='CLI for MavensMate',
     license='GNU v2',
     keywords='mavensmate salesforce salesorce1 force.com ide cli',
-    url='http://mavensmate.com/',
     test_suite='test',
 )
