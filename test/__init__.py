@@ -2,6 +2,8 @@ import unittest
 import sys
 import os
 import argparse
+import shutil
+import lib.test_helper as test_helper
 
 from functional.project.project_tests import ProjectTest
 from functional.project.project_create_tests import ProjectCreateTest
@@ -37,7 +39,13 @@ def suite():
                 suite.addTest(unit_test_class(method))
     return suite
 
+def cleanup_workspaces():
+    if os.path.exists(os.path.join(test_helper.base_test_directory,"test_workspace")):
+        shutil.rmtree(os.path.join(test_helper.base_test_directory,"test_workspace"))
+
 def main():
+    cleanup_workspaces()
+    
     supported_sfdc_api_versions = ['31.0', '30.0', '29.0']
     testing_api_versions = []
 
