@@ -13,6 +13,7 @@ from functional.debug.log_tests import StackTraceAndLogsTest
 from functional.metadata.refresh_tests import MetadataRefreshTest
 from functional.project.ui_integration_test import ProjectUiIntegrationTest
 from functional.metadata.compilation_tests import CompilationTests
+from functional.deploy.deploy_tests import DeployOperationTest
 
 # to run a specific test method in one of the test suite classes:
 #     $ python -m unittest project_tests.ProjectTest.test_01_should_create_new_project
@@ -28,7 +29,8 @@ def suite():
         CheckpointTests,
         StackTraceAndLogsTest,
         ProjectUiIntegrationTest,
-        CompilationTests
+        CompilationTests,
+        DeployOperationTest
     ]
     suite = unittest.TestSuite()
     for unit_test_class in test_classes:

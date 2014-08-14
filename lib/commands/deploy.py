@@ -150,7 +150,7 @@ class DeloyToServerCommand(Command):
 
             if self.args.respond_with_html == True:
                 html = util.generate_html_response('deploy_compare', final_compare_result, self.params)
-                response = json.loads(util.generate_success_response(html, "html"))
+                response = util.generate_success_response(html, "html") # returns json
                 response['compare_success'] = True
                 # if deployment to one org fails, the entire deploy was not successful
                 # for result in final_compare_result:
@@ -227,7 +227,7 @@ class DeloyToServerCommand(Command):
                 
         if self.args.respond_with_html == True:
             html = util.generate_html_response(self.args.operation, deploy_results, self.params)
-            response = json.loads(util.generate_success_response(html, "html"))
+            response = util.generate_success_response(html, "html") # returns json
             response['deploy_success'] = True
             # if deployment to one org fails, the entire deploy was not successful
             for result in deploy_results:

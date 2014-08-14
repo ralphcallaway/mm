@@ -14,7 +14,7 @@ from lib.request import MavensMateRequestHandler
 import lib.request as request
 import lib.util as mmutil
 
-class MetadataOperationTest(MavensMateTest):
+class DeployOperationTest(MavensMateTest):
     
     def test_01_should_create_new_org_connection(self): 
         test_helper.create_project(self, "unit test deploy project")
@@ -27,9 +27,9 @@ class MetadataOperationTest(MavensMateTest):
         mm_response = self.runCommand('new_connection', stdin)        
         self.assertTrue(mm_response['success'] == True)
 
+    # dependent on test 1 completing for org connections to be present
     def test_02_should_deploy_to_server(self): 
-        client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
-        org_connections = test_util.parse_json_from_file(os.path.join(client_settings["mm_workspace"],"unit test deploy project","config",".org_connections"))
+        org_connections = test_util.parse_json_from_file(os.path.join(self.settings['user']['mm_workspace'],"unit test deploy project","config",".org_connections"))
         stdin = {
             "project_name"      :   "unit test deploy project",
             "destinations"      :   [
@@ -50,9 +50,9 @@ class MetadataOperationTest(MavensMateTest):
         mm_response = self.runCommand(['mm.py', '-o', 'deploy', '--html'], stdin)        
         self.assertTrue(mm_response['success'] == True)
 
+    # dependent on test 1 completing for org connections to be present
     def test_03_should_delete_org_connection(self): 
-        client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
-        org_connections = test_util.parse_json_from_file(os.path.join(client_settings["mm_workspace"],"unit test deploy project","config",".org_connections"))
+        org_connections = test_util.parse_json_from_file(os.path.join(self.settings['user']["mm_workspace"],"unit test deploy project","config",".org_connections"))
         stdin = {
             "id"            : org_connections[0]["id"],
             "project_name"  : "unit test deploy project"
