@@ -57,11 +57,9 @@ class MavensMateTest(unittest.TestCase):
         api_version = os.environ.get('SFDC_API_VERSION', 30.0)
         self.settings['user']['mm_api_version'] = api_version
         
-        # set up CI-specific settings
-        is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True
-        if is_ci:
-            self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
-            self.settings['user']['mm_use_keyring'] = False
+        self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
+        self.settings['user']['mm_log_location'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
+        self.settings['user']['mm_use_keyring'] = False
         PluginConnection.get_plugin_client_settings = mock.Mock(return_value=self.settings)
 
     def tearDown(self):
