@@ -12,6 +12,7 @@ general:
     only:
       - master
       - atom
+      - pip
 test:
   override:
     - python suite.py:
