@@ -14,7 +14,7 @@ from lib.request import MavensMateRequestHandler
 import lib.request as request
 import lib.util as mmutil
 
-class MetadataOperationTest(MavensMateTest):
+class DeployOperationTest(MavensMateTest):
     
     def test_01_should_create_new_org_connection(self): 
         test_helper.create_project(self, "unit test deploy project")
