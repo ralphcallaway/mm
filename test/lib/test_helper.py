@@ -33,9 +33,9 @@ class MavensMateTest(unittest.TestCase):
         sys.stdout = self.saved_stdout
         if print_before_deserialization:
             if type(command_name_or_argv) is list:
-                print '['+str(command_name_or_argv[2])+'] ------->'
+                print '\n\n['+str(command_name_or_argv[2])+'] ------->\n'
             else:
-                print '['+str(command_name_or_argv)+'] ------->'
+                print '\n\n['+str(command_name_or_argv)+'] ------->\n'
             print mm_response
         if as_json:
             mm_response = util.parse_mm_response(mm_response)
@@ -58,9 +58,9 @@ class MavensMateTest(unittest.TestCase):
         self.settings['user']['mm_api_version'] = api_version
         
         # set up CI-specific settings
-        is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True or os.environ.get('MM_TESTING') == True or os.environ.get('MM_TESTING')  == 'true'
+        is_ci = os.environ.get('CI') == 'true' or os.environ.get('CI') == True or os.environ.get('MM_TESTING') == True or os.environ.get('MM_TESTING') == 'true'
         if is_ci:
-            self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(__file__), 'test_workspace')
+            self.settings['user']['mm_workspace'] = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'test_workspace')
             self.settings['user']['mm_use_keyring'] = False
         PluginConnection.get_plugin_client_settings = mock.Mock(return_value=self.settings)
 

@@ -8,7 +8,7 @@ base_test_directory = os.path.dirname(os.path.dirname(os.path.dirname(__file__))
 
 class ProjectCreateTest(MavensMateTest):
         
-    def test_should_create_new_project(self): 
+    def test_01_should_create_new_project(self): 
         package = {
             "ApexClass" : "*",
             "ApexPage"  : "*",
@@ -27,13 +27,13 @@ class ProjectCreateTest(MavensMateTest):
         self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'documents')))
         self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'documents', 'MavensMate_Documents')))
 
-    def test_should_except_for_bad_package(self): 
+    def test_02_should_except_for_bad_package(self): 
         package = {}
         mm_response = test_helper.create_project(self, "unit test project", package=package)
         self.assertTrue(mm_response['success'] == False)
         self.assertTrue(mm_response['body'] == 'Invalid package')
 
-    def test_should_create_new_project_with_all_objects(self): 
+    def test_03_should_create_new_project_with_all_objects(self): 
         package = {
             "CustomObject" : "*"
         }
@@ -48,7 +48,7 @@ class ProjectCreateTest(MavensMateTest):
         self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects', 'Opportunity.object')))
         self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'objects', 'Lead.object')))
 
-    def test_should_create_new_project_based_on_package_xml_file(self): 
+    def test_04_should_create_new_project_based_on_package_xml_file(self): 
         package = os.path.join(base_test_directory, 'functional', 'project', 'package.xml')
         project_name = 'unit test project'
         mm_response = test_helper.create_project(self, project_name, package=package)
@@ -58,7 +58,7 @@ class ProjectCreateTest(MavensMateTest):
         self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src')))
         self.assertTrue(os.path.exists(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'classes')))
 
-    def test_should_create_project_from_existing_directory(self): 
+    def test_05_should_create_project_from_existing_directory(self): 
         if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-copy")):
             shutil.rmtree(os.path.join(base_test_directory,"functional","project","existing-project-copy"))
 
