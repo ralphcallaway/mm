@@ -18,10 +18,6 @@ import traceback
 import plistlib
 import itertools
 from StringIO import StringIO
-if sys.platform == 'linux2':
-    import gnomekeyring
-else:
-    import keyring
 import urllib2
 import webbrowser
 from operator import itemgetter
@@ -172,6 +168,10 @@ def put_password_by_key(key, password):
     use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
     if use_keyring:
         if sys.platform == 'linux2':
+            import gnomekeyring
+        else:
+            import keyring
+        if sys.platform == 'linux2':
             try:
                 gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
                     None, None, None, None, 0, password)
@@ -188,6 +188,10 @@ def put_password_by_key(key, password):
 def get_password_by_key(key):
     use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
     if use_keyring:
+        if sys.platform == 'linux2':
+            import gnomekeyring
+        else:
+            import keyring
         if sys.platform == 'linux2':
             try:
                 items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
