@@ -7,7 +7,6 @@ dependencies:
     - sudo apt-get install python-gnomekeyring
     - sudo pip install jinja2 suds keyring markupsafe pyyaml requests mock
 general:
-  build_dir: test
   branches:
     only:
       - master
