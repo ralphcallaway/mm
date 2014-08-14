@@ -15,5 +15,5 @@ general:
       - pip
 test:
   override:
-    - python suite.py:
+    - python test --api=31.0:
         timeout: 1200
