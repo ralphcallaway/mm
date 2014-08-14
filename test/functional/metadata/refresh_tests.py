@@ -1,16 +1,8 @@
 import os
-import sys
 import unittest
-import mock
 import shutil
-sys.path.append('../')
-sys.path.append('../../')
-sys.path.append('../../../')
-import test_util as util
-from lib.request import MavensMateRequestHandler
-import test_helper
-from test_helper import MavensMateTest
-import lib.request as request
+import test.lib.test_helper as test_helper
+from test.lib.test_helper import MavensMateTest
 
 base_test_directory = os.path.dirname(os.path.dirname(__file__))
 project_name = "unit test metadata refresh project"

@@ -1,6 +1,10 @@
-include bin/*/**
-include lib/wsdl/*
-include lib/ui/resources/bootstrap/*/**
-include lib/ui/*/**
-include lib/sforce/*/**
-include lib/config/*/**
+include LICENSE
+include requirements.txt
+include mm/wsdl/*
+include mm/ui/templates/*/**
+include mm/ui/resources/*/**
+include mm/ui/resources/bootstrap/**/*
+include mm/sforce/*/**
+include mm/config/*
+include mm/bin/MavensMateWindowServer.app/Contents/Resources/mm-2.icns
+include mm/bin/MavensMateWindowServer.app/Contents/Resources/MavensMateWindowServer.icns

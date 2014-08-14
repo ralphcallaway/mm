@@ -3,16 +3,10 @@
 # joey2 -m unittest project_tests.TestProjectCreate.test_create_project_via_package_xml_file
 # joey2 -m unittest project_tests.TestProjectCreate.test_create_project_via_package_dict
 
-import sys
 import os
 import unittest
-import shutil
-
-sys.path.append('../')
-import lib.config as config
-import lib.util as util
-import test_helper as helper
-from lib.mm_client import MavensMateClient
+import test.lib.test_helper as helper
+from mm.sfdc_client import MavensMateClient
 
 class TestClientOperations(unittest.TestCase):
 

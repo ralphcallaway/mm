@@ -1,18 +1,9 @@
 #TO RUN: joey2 project_operation_tests.py
 import os
-import sys
 import unittest
-import mock
 import shutil
-sys.path.append('../')
-sys.path.append('../../')
-sys.path.append('../../../')
-import test_util as test_util
-import test_helper
-from test_helper import MavensMateTest
-from lib.request import MavensMateRequestHandler
-import lib.request as request
-import lib.util as mmutil
+import test.lib.test_helper as test_helper
+from test.lib.test_helper import MavensMateTest
 
 class CompilationTests(MavensMateTest):
     

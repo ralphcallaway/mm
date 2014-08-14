@@ -1,17 +1,10 @@
 #TO RUN: joey2 project_operation_tests.py
 import os
-import sys
 import unittest
-import mock
 import shutil
-sys.path.append('../')
-sys.path.append('../../')
-sys.path.append('../../../')
-import test_util as util
-from lib.request import MavensMateRequestHandler
-import test_helper
-from test_helper import MavensMateTest
-import lib.request as request
+import test.lib.test_util as util
+import test.lib.test_helper as test_helper
+from test.lib.test_helper import MavensMateTest
 
 class CheckpointTests(MavensMateTest):
  
@@ -88,7 +81,7 @@ class CheckpointTests(MavensMateTest):
         self.assertEqual(mm_response['success'],True)  
 
         ###DELETE CLASS
-        client_settings = util.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
+        client_settings = util.parse_json_from_file(os.path.join(test_helper.base_test_directory,"lib","user_client_settings.json"))
         stdin = {
             "files": [os.path.join(client_settings["mm_workspace"],"unit test tooling project","src","classes","unittesttoolingapexclass.cls")], 
             "project_name": "unit test tooling project"

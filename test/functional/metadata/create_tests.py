@@ -1,18 +1,9 @@
 #TO RUN: joey2 project_operation_tests.py
 import os
-import sys
 import unittest
-import mock
 import shutil
-sys.path.append('../')
-sys.path.append('../../')
-sys.path.append('../../../')
-import test_util as test_util
-import test_helper
-from test_helper import MavensMateTest
-from lib.request import MavensMateRequestHandler
-import lib.request as request
-import lib.util as mmutil
+import test.lib.test_helper as test_helper
+from test.lib.test_helper import MavensMateTest
 
 class MetadataOperationTest(MavensMateTest):
     
@@ -42,7 +33,6 @@ class MetadataOperationTest(MavensMateTest):
 
     def test_02_should_compile_apex_class(self): 
         test_helper.create_project(self, "unit test metadata project")
-        client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         stdin = {
             "project_name": "unit test metadata project", 
             "files": [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")] 
@@ -52,7 +42,6 @@ class MetadataOperationTest(MavensMateTest):
         self.assertTrue(mm_response['ErrorMsg'] == None)
 
     def test_03_should_delete_apex_class(self): 
-        client_settings = mmutil.parse_json_from_file(os.path.join(test_helper.base_test_directory, "user_client_settings.json"))
         stdin = {
             "files": [os.path.join(test_helper.base_test_directory,"test_workspace","unit test metadata project","src","classes","unittestapexclass.cls")], 
             "project_name": "unit test metadata project"

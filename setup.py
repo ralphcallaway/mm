@@ -1,5 +1,7 @@
 import re
+import stat
 import os
+import sys
 import codecs
 
 from setuptools import setup, find_packages
@@ -9,23 +11,26 @@ def read(*parts):
     with codecs.open(path, encoding='utf-8') as fobj:
         return fobj.read()
 
-with open('requirements.txt') as f:
-    install_requires = f.read().splitlines()
+# with open('requirements.txt') as f:
+#     install_requires = f.read().splitlines()
 
 def get_data_files(*dirs):
     results = []
     for src_dir in dirs:
         for root,dirs,files in os.walk(src_dir):
-            results.append((root, map(lambda f:root + "/" + f, files)))
+            res = (root, map(lambda f:root + "/" + f, files))
+            results.append(res)
+    # print results
     return results
+
+tests_require = ['pytest', 'virtualenv>=1.10', 'scripttest>=1.3', 'mock']
 
 setup(
     name='mm',
-    version='0.0.1',
-    packages=find_packages(),
-    py_modules = ['mm'],
-    data_files = get_data_files("bin"),
-    install_requires=install_requires,
+    version='0.2.1',
+    packages=find_packages(exclude=["test*","build","dist"]),
+    data_files = get_data_files("mm/bin"),
+    install_requires=['Jinja2==2.6', 'suds==0.4', 'keyring==1.6.1', 'MarkupSafe==0.18', 'PyYAML==3.10', 'requests==1.1.0'],
     entry_points={
         'console_scripts':
             ['mm = mm:main']
@@ -37,5 +42,10 @@ setup(
     description='CLI for MavensMate',
     license='GNU v2',
     keywords='mavensmate salesforce salesorce1 force.com ide cli',
-    test_suite='test',
+    test_suite='test'
 )
+
+if 'darwin' in sys.platform:
+    #make MavensMateWindowServer executable
+    st = os.stat('mm/bin/MavensMateWindowServer.app/Contents/MacOS/MavensMateWindowServer')
+    os.chmod('mm/bin/MavensMateWindowServer.app/Contents/MacOS/MavensMateWindowServer', st.st_mode | stat.S_IEXEC)
