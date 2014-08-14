@@ -16,16 +16,16 @@ class ProjectUiIntegrationTest(MavensMateTest):
             "org_type" : "developer"
         }
         mm_response = self.runCommand('get_active_session', stdin)
-        self.assertTrue(mm_response['success'] == False)
-        self.assertTrue(mm_response['body'] == "Server raised fault: 'INVALID_LOGIN: Invalid username, password, security token; or user locked out.'")
+        self.assertEqual(mm_response['success'], False)
+        self.assertEqual(mm_response['body'], "Server raised fault: 'INVALID_LOGIN: Invalid username, password, security token; or user locked out.'")
 
     def test_02_should_not_get_active_session_bc_bad_request(self): 
         stdin = {
             "username" : "mm2@force.com"
         }
         mm_response = self.runCommand('get_active_session', stdin)
-        self.assertTrue(mm_response['success'] == False)
-        self.assertTrue(mm_response['body'] == "Please enter a Salesforce.com password")
+        self.assertEqual(mm_response['success'], False)
+        self.assertEqual(mm_response['body'], "Please enter a Salesforce.com password")
 
     def test_03_should_get_active_session_good_creds(self): 
         stdin = {
@@ -34,8 +34,8 @@ class ProjectUiIntegrationTest(MavensMateTest):
             "org_type" : "developer"
         }
         mm_response = self.runCommand('get_active_session', stdin)
-        self.assertTrue(mm_response['success'] == True)
-        self.assertTrue(len(mm_response['user_id']) is 18)
+        self.assertEqual(mm_response['success'], True)
+        self.assertEqual(len(mm_response['user_id']), 18)
 
     @classmethod    
     def tearDownClass(self):
