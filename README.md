@@ -47,6 +47,8 @@ $ easy_install mm
 
 ```
 $ git clone https://github.com/joeferraro/mm.git
+$ cd mm
+$ python setup.py install
 ```
 
 ### Command Line Arguments
