@@ -27,7 +27,7 @@ tests_require = ['pytest', 'virtualenv>=1.10', 'scripttest>=1.3', 'mock']
 
 setup(
     name='mm',
-    version='0.2.1',
+    version='0.1.8',
     packages=find_packages(exclude=["test*","build","dist"]),
     data_files = get_data_files("mm/bin"),
     install_requires=['Jinja2==2.6', 'suds==0.4', 'keyring==1.6.1', 'MarkupSafe==0.18', 'PyYAML==3.10', 'requests==1.1.0'],
