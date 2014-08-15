@@ -12,5 +12,4 @@ general:
   #     - pip
 test:
   override:
-    - python test --api=31.0:
-        timeout: 1200
+    - python test --api=31.0
