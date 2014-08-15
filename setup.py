@@ -30,7 +30,7 @@ setup(
     version='0.1.8',
     packages=find_packages(exclude=["test*","build","dist"]),
     data_files = get_data_files("mm/bin"),
-    install_requires=['Jinja2==2.6', 'suds==0.4', 'keyring==1.6.1', 'MarkupSafe==0.18', 'PyYAML==3.10', 'requests==1.1.0'],
+    install_requires=['Jinja2==2.3.1', 'suds==0.4', 'keyring==2.1.1', 'MarkupSafe==0.18', 'requests==2.3.0'],
     entry_points={
         'console_scripts':
             ['mm = mm:main']

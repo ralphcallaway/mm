@@ -3,7 +3,6 @@ import sys
 import traceback
 import json
 import os
-import yaml
 import mm.util as util
 import mm.config as config
 import shutil
@@ -892,16 +891,9 @@ class MavensMateProject(object):
 
 
     def __get_settings(self):
-        #returns settings for this project (handles legacy yaml format)
+        #returns settings for this project
         try:
-            if os.path.isfile(os.path.join(self.location,"config","settings.yaml")):
-                f = open(os.path.join(self.location,"config","settings.yaml"))
-                settings = yaml.safe_load(f)
-                f.close()
-                if settings == None:
-                    raise MMException('Unable to read settings file for this project.')
-                return settings
-            elif os.path.isfile(os.path.join(self.location,"config",".settings")):
+            if os.path.isfile(os.path.join(self.location,"config",".settings")):
                 settings = util.parse_json_from_file(os.path.join(self.location,"config",".settings"))
                 if settings == None:
                     raise MMException('Unable to read settings file for this project.')
@@ -1188,20 +1180,10 @@ class MavensMateProject(object):
             return ["{0}".format(self.sfdc_client.user_id)]
         return users
 
-    #returns the cached session information (handles yaml [legacy] & json)
+    #returns the cached session information
     def __get_sfdc_session(self):
-        session = None
         try:
-            try:
-                session = util.parse_json_from_file(os.path.join(self.location,"config",".session"))
-            except:
-                try:
-                    f = open(os.path.join(self.location,"config",".session"))
-                    session = yaml.safe_load(f)
-                    f.close()
-                except:
-                    pass
-            return session
+            return util.parse_json_from_file(os.path.join(self.location,"config",".session"))
         except:
             return None
 
