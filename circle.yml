@@ -5,11 +5,11 @@ dependencies:
   pre:
     - sudo pip install jinja2 suds keyring markupsafe pyyaml requests mock
 general:
-  branches:
-    only:
-      - master
-      - atom
-      - pip
+  # branches:
+  #   only:
+  #     - master
+  #     - atom
+  #     - pip
 test:
   override:
     - python test --api=31.0:
