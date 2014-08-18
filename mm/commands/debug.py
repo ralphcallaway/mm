@@ -3,7 +3,6 @@ import mm.util as util
 import json
 import shutil
 import mm.config as config
-import shutil
 from mm.exceptions import *
 from mm.basecommand import Command
 

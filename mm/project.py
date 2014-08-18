@@ -125,6 +125,9 @@ class MavensMateProject(object):
         self.__set_sfdc_session()
 
         if action != 'new':
+            # this is user trying to create a project from existing directory
+            if not os.path.isfile(os.path.join(config.connection.workspace,self.project_name,"src","package.xml")):
+                raise MMException('Could not find package.xml in project src directory.')
             project_metadata = self.sfdc_client.retrieve(package=os.path.join(config.connection.workspace,self.project_name,"src","package.xml"))
         
         self.conflict_manager = ConflictManager(self)

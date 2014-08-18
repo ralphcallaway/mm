@@ -88,7 +88,27 @@ class ProjectCreateTest(MavensMateTest):
         self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'config', '.settings')))
         self.assertTrue(os.path.isfile(os.path.join(base_test_directory, 'test_workspace', project_name, 'src', 'package.xml')))
 
+    def test_06_should_try_to_create_project_from_invalid_directory(self): 
+        if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy")):
+            shutil.rmtree(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy"))
 
+        if not os.path.exists(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy')):
+            shutil.copytree(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid'), os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'))
+
+        stdin = {
+            "project_name"  : "existing-project-copy",
+            "username"      : "mm2@force.com",
+            "password"      : "force",
+            "org_type"      : "developer",
+            "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'),
+            "action"        : "new",
+            "workspace"     : os.path.join(base_test_directory, 'test_workspace'),
+            "action"        : "existing"
+        }
+        mm_response = self.runCommand('new_project_from_existing_directory', stdin)
+        self.assertEquals(mm_response['success'], False)
+        self.assertTrue('Could not find package.xml in project src directory' in mm_response['body'])
+        
     def tearDown(self):
         super(ProjectCreateTest, self).tearDown()
         if os.path.exists(os.path.join(base_test_directory,"test_workspace","unit test project")):
