@@ -101,6 +101,8 @@ def main():
         print test_results
         if len(test_results.errors) > 0 or len(test_results.failures) > 0:
             results[api_version] = 'failed'
+        else:
+            results[api_version] = 'passed'
 
     print '==========> AGGREGATE TEST RESULTS'
     print results
