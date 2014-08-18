@@ -78,7 +78,7 @@ class DeployTest(MavensMateTest):
         }
         mm_response = self.runCommand(['mm.py', '-o', 'deploy'], stdin)        
         self.assertTrue('thiswontwork@foo.com' in mm_response)
-        self.assertEquals(False, mm_response['success'])
+        self.assertEquals(False, mm_response['thiswontwork@foo.com']['success'])
         result = test_helper.delete_apex_metadata(self, "unit test deploy project", [os.path.join(test_helper.base_test_directory,"test_workspace","unit test deploy project","src","classes","test_deployapexclass.cls")])
 
     # dependent on test 1 completing for org connections to be present
