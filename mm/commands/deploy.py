@@ -56,10 +56,13 @@ class DeloyToServerCommand(Command):
             destination_dict = {}
 
             for cr in compare_results:
-                cr_dict = {}
-                for fpfp in cr.fileProperties:
-                    cr_dict[fpfp.fileName] = fpfp
-                destination_dict[cr.username] = cr_dict
+                if 'success' in cr and cr['success'] == False:
+                    destination_dict[cr['username']] = cr
+                else:
+                    cr_dict = {}
+                    for fpfp in cr.fileProperties:
+                        cr_dict[fpfp.fileName] = fpfp
+                    destination_dict[cr.username] = cr_dict
 
             debug('destination_dict')
             debug(destination_dict)    
@@ -72,85 +75,48 @@ class DeloyToServerCommand(Command):
                 if 'package.xml' in file_name:
                     continue; 
                 for username, username_value in destination_dict.iteritems():
-                    destination_retrieve_details = destination_dict[username]
-                    
-                    if 'package.xml' in file_name:
-                        continue
-
-                    short_file_name = file_name.split('/')[-1]
-                    mtype = util.get_meta_type_by_suffix(short_file_name.split('.')[-1])
-   
-                    if file_name not in destination_retrieve_details:
-                        final_compare_result[username][file_name] = {
-                            'name' : short_file_name,
-                            'type' : mtype['xmlName'],
-                            'action': 'insert',
-                            'message' : 'Create'
-                        }
+                    if 'success' in username_value and username_value['success'] == False:
+                        final_compare_result[username] = username_value
                     else:
-                        destination_file_detail = destination_retrieve_details[file_name]
-                        source_file_detail = source_dict[file_name]
-                        if source_file_detail.lastModifiedDate >= destination_file_detail.lastModifiedDate:
-                            final_compare_result[username][file_name] = {
+                        destination_retrieve_details = destination_dict[username]
+                        
+                        if 'package.xml' in file_name:
+                            continue
+
+                        short_file_name = file_name.split('/')[-1]
+                        mtype = util.get_meta_type_by_suffix(short_file_name.split('.')[-1])
+       
+                        if file_name not in destination_retrieve_details:
+                            final_compare_result[username][short_file_name] = {
                                 'name' : short_file_name,
                                 'type' : mtype['xmlName'],
-                                'action' : 'update',
-                                'message' : 'You will overwrite this file'
+                                'action': 'insert',
+                                'message' : 'Create'
                             }
                         else:
-                            final_compare_result[username][file_name] = {
-                                'name' : short_file_name,
-                                'type' : mtype['xmlName'],
-                                'action' : 'update_conflict',
-                                'message' : 'Destination file is newer than source file'
-                            }
+                            destination_file_detail = destination_retrieve_details[file_name]
+                            source_file_detail = source_dict[file_name]
+                            if source_file_detail.lastModifiedDate >= destination_file_detail.lastModifiedDate:
+                                final_compare_result[username][file_name] = {
+                                    'name' : short_file_name,
+                                    'type' : mtype['xmlName'],
+                                    'action' : 'update',
+                                    'message' : 'You will overwrite this file'
+                                }
+                            else:
+                                final_compare_result[username][file_name] = {
+                                    'name' : short_file_name,
+                                    'type' : mtype['xmlName'],
+                                    'action' : 'update_conflict',
+                                    'message' : 'Destination file is newer than source file'
+                                }
             
-
-
-            # final_compare_result = {}
-            # for d in destinations:
-            #     final_compare_result[d['username']] = {}
-
-            # for username, username_value in destination_dict.iteritems():
-            #     #destination_dict = destination_dict[username]
-            #     for file_name, file_details in username_value.iteritems():
-            #         if 'package.xml' in file_name:
-            #             continue;
-
-            #         short_file_name = file_name.split('/')[-1]
-            #         mtype = util.get_meta_type_by_suffix(short_file_name.split('.')[-1])
-
-            #         if file_name not in source_dict:
-            #             final_compare_result[username][file_name] = {
-            #                 'name' : short_file_name,
-            #                 'type' : mtype['xmlName'],
-            #                 'action': 'insert',
-            #                 'message' : 'Create'
-            #             }
-            #         else:
-            #             destination_file_detail = username_value[file_name]
-            #             source_file_detail = source_dict[file_name]
-            #             if source_file_detail.lastModifiedDate >= destination_file_detail.lastModifiedDate:
-            #                 final_compare_result[username][file_name] = {
-            #                     'name' : short_file_name,
-            #                     'type' : mtype['xmlName'],
-            #                     'action' : 'update',
-            #                     'message' : 'You will overwrite this file'
-            #                 }
-            #             else:
-            #                 final_compare_result[username][file_name] = {
-            #                     'name' : short_file_name,
-            #                     'type' : mtype['xmlName'],
-            #                     'action' : 'update_conflict',
-            #                     'message' : 'Destination file is newer than source file'
-            #                 }
-
             debug('final_compare_result')
             debug(final_compare_result) 
 
             if self.args.respond_with_html == True:
                 html = util.generate_html_response('deploy_compare', final_compare_result, self.params)
-                response = json.loads(util.generate_success_response(html, "html"))
+                response = util.generate_success_response(html, "html") # returns json
                 response['compare_success'] = True
                 # if deployment to one org fails, the entire deploy was not successful
                 # for result in final_compare_result:
@@ -220,6 +186,7 @@ class DeloyToServerCommand(Command):
             thread = DeploymentHandler(config.project, destination, self.params, deploy_metadata)
             threads.append(thread)
             thread.start()  
+        
         deploy_results = []
         for thread in threads:
             thread.join()  
@@ -227,7 +194,7 @@ class DeloyToServerCommand(Command):
                 
         if self.args.respond_with_html == True:
             html = util.generate_html_response(self.args.operation, deploy_results, self.params)
-            response = json.loads(util.generate_success_response(html, "html"))
+            response = util.generate_success_response(html, "html") # returns json
             response['deploy_success'] = True
             # if deployment to one org fails, the entire deploy was not successful
             for result in deploy_results:
@@ -342,8 +309,11 @@ class CompareHandler(threading.Thread):
             debug(retrieve_result)
             self.result = retrieve_result
         except BaseException, e:
+            debug('caught exception during compare --->')
+            debug(e.message)
             result = util.generate_error_response(e.message, False)
             result['username'] = self.destination['username']
+            debug(result)
             self.result = result
 
 class DeploymentHandler(threading.Thread):

@@ -16,6 +16,7 @@ from functional.debug.log_tests import StackTraceAndLogsTest
 from functional.metadata.refresh_tests import MetadataRefreshTest
 from functional.project.ui_integration_tests import ProjectUiIntegrationTest
 from functional.metadata.compilation_tests import CompilationTests
+from functional.deploy.deploy_tests import DeployTest
 
 # ALL TEST COMMANDS SHOULD BE RUN FROM PROJECT ROOT
 #
@@ -39,7 +40,8 @@ def suite(clz=None,tst=None):
         CheckpointTests,
         StackTraceAndLogsTest,
         ProjectUiIntegrationTest,
-        CompilationTests
+        CompilationTests,
+        DeployTest
     ]
     suite = unittest.TestSuite()
     for unit_test_class in test_classes:
