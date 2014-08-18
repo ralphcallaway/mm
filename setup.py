@@ -1,8 +1,8 @@
 import re
-import stat
 import os
 import sys
 import codecs
+import stat
 
 from setuptools import setup, find_packages
 
@@ -30,7 +30,7 @@ setup(
     version='0.1.8',
     packages=find_packages(exclude=["test*","build","dist"]),
     data_files = get_data_files("mm/bin"),
-    install_requires=['Jinja2==2.3.1', 'suds==0.4', 'keyring==2.1.1', 'MarkupSafe==0.18', 'requests==2.3.0'],
+    install_requires=['Jinja2', 'suds==0.4', 'keyring', 'MarkupSafe==0.18', 'requests'],
     entry_points={
         'console_scripts':
             ['mm = mm:main']
