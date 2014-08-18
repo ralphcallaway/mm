@@ -5,6 +5,7 @@ import unittest
 import mock
 from StringIO import StringIO
 import test_util as util
+import json
 
 import mm.request as request
 from mm.request import MavensMateRequestHandler
@@ -36,6 +37,10 @@ class MavensMateTest(unittest.TestCase):
                 print '\n\n['+str(command_name_or_argv[2])+'] ------->\n'
             else:
                 print '\n\n['+str(command_name_or_argv)+'] ------->\n'
+
+            print '\n[STDIN] -->\n'
+            print json.dumps(stdin)
+            print '\n[STDOUT] -->\n'
             print mm_response
         if as_json:
             mm_response = util.parse_mm_response(mm_response)
