@@ -375,10 +375,10 @@ def get_empty_package_xml_contents():
     return template.render(sfdc_api_version=SFDC_API_VERSION)
 
 def get_default_metadata_data():
-    return parse_json_from_file(config.base_path + "/mm/sforce/metadata/default_metadata.json")
+    return parse_json_from_file(config.base_path + "/"+config.support_dir+"/sforce/metadata/default_metadata.json")
 
 def get_child_metadata_data():
-    return parse_json_from_file(config.base_path + "/mm/sforce/metadata/default_child_metadata.json")
+    return parse_json_from_file(config.base_path + "/"+config.support_dir+"/sforce/metadata/default_child_metadata.json")
 
 def get_meta_type_by_suffix(suffix):
     try:
@@ -515,7 +515,7 @@ def static_resource_path():
             return 'file:///'+config.base_path
 
 def generate_ui(operation,params={},args={}):
-    template_path = config.base_path + "/mm/ui/templates"
+    template_path = config.base_path + "/"+config.support_dir+"/ui/templates"
     env = Environment(loader=FileSystemLoader(template_path),trim_blocks=True)
     env.globals['uid']                      = args.uid
     env.globals['platform']                 = platform
@@ -528,6 +528,7 @@ def generate_ui(operation,params={},args={}):
     env.globals['project_location']         = config.project.location
     env.globals['static_resource_path']     = static_resource_path
     env.globals['client']                   = config.connection.plugin_client
+    env.globals['support_dir']              = config.support_dir
 
     temp = tempfile.NamedTemporaryFile(delete=False, prefix="mm", suffix=".html")
     if operation == 'new_project':
@@ -706,11 +707,13 @@ def calculate_coverage(result, id_to_name_map):
     return return_coverage
 
 def generate_html_response(operation, obj, params=None):
-    template_path = config.base_path + "/mm/ui/templates"
+    template_path = config.base_path + "/"+config.support_dir+"/ui/templates"
     env = Environment(loader=FileSystemLoader(template_path),trim_blocks=True,extensions=['jinja2.ext.loopcontrols', jinja2htmlcompress.HTMLCompress])
     env.globals['get_file_lines'] = get_file_lines
     env.globals['htmlize'] = htmlize
     env.globals['does_file_exist'] = does_file_exist
+    env.globals['support_dir'] = config.support_dir
+
     if operation == 'test_legacy':
         template = env.get_template('/unit_test/result.html')
         config.logger.debug(json.dumps(obj, sort_keys=True,indent=4))
@@ -846,7 +849,7 @@ def launch_ui(tmp_html_file_location):
         else:
             webbrowser.get('windows-default').open("{0}{1}".format("file:///",tmp_html_file_location))
     else:
-        os.system("open -n '"+config.base_path+"/mm/bin/MavensMateWindowServer.app' --args -url '"+tmp_html_file_location+"'")
+        os.system("open -n '"+config.base_path+"/"+config.support_dir+"/bin/MavensMateWindowServer.app' --args -url '"+tmp_html_file_location+"'")
     time.sleep(1)
     #threading.Thread(target=remove_tmp_html_file, args=(tmp_html_file_location,)).start()
 

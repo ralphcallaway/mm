@@ -184,7 +184,7 @@ class PluginConnection(object):
                 file_name = 'st3'
             elif 'BRACKETS' in self.plugin_client:
                 file_name = 'brackets'
-            settings['default'] = util.parse_json_from_file(config.base_path + "/mm/config/"+file_name+".json")
+            settings['default'] = util.parse_json_from_file(config.base_path + "/"+config.support_dir+"/config/"+file_name+".json")
 
             if config.plugin_client_settings != None:
                 settings['user'] = config.plugin_client_settings

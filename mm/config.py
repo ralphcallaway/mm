@@ -44,8 +44,16 @@ def __get_is_frozen():
         return True
     else:
         return False
+
+def __get_support_directory():
+    if hasattr(sys, 'frozen'):
+        return 'lib'
+    else:
+        return 'mm'
+
 frozen = __get_is_frozen()
 base_path = __get_base_path()
+support_dir = __get_support_directory()
 
 plugin_client_settings = None
 connection = None
