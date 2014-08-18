@@ -99,6 +99,10 @@ class MavensMateProject(object):
             raise MMException('A project with this name already exists in your workspace. To create a MavensMate project from an existing non-MavensMate Force.com project, open the project directory in your MavensMate-enabled IDE/editor, right click the project name in the sidebar and select "Create MavensMate Project"')
         
         if action == 'existing':
+            if not os.path.isdir(os.path.join(self.directory,"src")):
+                raise MMException('Could not find "src" directory in project root.')
+            if not os.path.isfile(os.path.join(self.directory,"src","package.xml")):
+                raise MMException('Could not find package.xml in project src directory.')
             existing_parent_directory = os.path.dirname(self.directory)
             existing_is_in_workspace = True
             if existing_parent_directory != config.connection.workspace:
@@ -125,9 +129,6 @@ class MavensMateProject(object):
         self.__set_sfdc_session()
 
         if action != 'new':
-            # this is user trying to create a project from existing directory
-            if not os.path.isfile(os.path.join(config.connection.workspace,self.project_name,"src","package.xml")):
-                raise MMException('Could not find package.xml in project src directory.')
             project_metadata = self.sfdc_client.retrieve(package=os.path.join(config.connection.workspace,self.project_name,"src","package.xml"))
         
         self.conflict_manager = ConflictManager(self)

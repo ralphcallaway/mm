@@ -92,22 +92,22 @@ class ProjectCreateTest(MavensMateTest):
         if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy")):
             shutil.rmtree(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy"))
 
-        if not os.path.exists(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy')):
-            shutil.copytree(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid'), os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'))
+        if not os.path.exists(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid-copy')):
+            shutil.copytree(os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid'), os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid-copy'))
 
         stdin = {
-            "project_name"  : "existing-project-copy",
+            "project_name"  : "existing-project-invalid-copy",
             "username"      : "mm2@force.com",
             "password"      : "force",
             "org_type"      : "developer",
-            "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'),
+            "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid-copy'),
             "action"        : "new",
             "workspace"     : os.path.join(base_test_directory, 'test_workspace'),
             "action"        : "existing"
         }
         mm_response = self.runCommand('new_project_from_existing_directory', stdin)
-        self.assertEquals(mm_response['success'], False)
-        self.assertTrue('Could not find package.xml in project src directory' in mm_response['body'])
+        self.assertEquals(False, mm_response['success'])
+        self.assertEquals('Could not find package.xml in project src directory.', mm_response['body'])
         
     def tearDown(self):
         super(ProjectCreateTest, self).tearDown()
@@ -122,8 +122,14 @@ class ProjectCreateTest(MavensMateTest):
         if os.path.exists(os.path.join(base_test_directory,"test_workspace","existing-project-copy")):
             shutil.rmtree(os.path.join(base_test_directory,"test_workspace","existing-project-copy"))
 
+        if os.path.exists(os.path.join(base_test_directory,"test_workspace","existing-project-invalid-copy")):
+            shutil.rmtree(os.path.join(base_test_directory,"test_workspace","existing-project-invalid-copy"))
+
         if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-copy")):
             shutil.rmtree(os.path.join(base_test_directory,"functional","project","existing-project-copy"))
+
+        if os.path.exists(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy")):
+            shutil.rmtree(os.path.join(base_test_directory,"functional","project","existing-project-invalid-copy"))
 
 if __name__ == '__main__':
     if os.path.exists(os.path.join(base_test_directory,"test_workspace","unit test project")):
