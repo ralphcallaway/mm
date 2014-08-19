@@ -30,7 +30,7 @@ from jinja2htmlcompress import HTMLCompress
 
 import base64
 
-WSDL_PATH = os.path.join(config.base_path,"mm","wsdl") #this can be overridden by client settings or request parameter
+WSDL_PATH = os.path.join(config.base_path,config.support_dir,"wsdl") #this can be overridden by client settings or request parameter
 
 TOOLING_API_EXTENSIONS = ['cls', 'trigger', 'page', 'component']
 
@@ -57,7 +57,7 @@ URL_TO_ENDPOINT_TYPE = {
     PRERELEASE_ENDPOINT : "prerelease"
 }
 
-template_path = os.path.join(config.base_path,"mm","templates")
+template_path = os.path.join(config.base_path,config.support_dir,"templates")
 
 env = Environment(loader=FileSystemLoader(template_path),trim_blocks=True)
 
@@ -472,7 +472,7 @@ def put_skeleton_files_on_disk(metadata_type, where, github_template=None, param
         else:
             template_body = get_file_as_string(os.path.join(template_source,metadata_type,file_name))
     except:
-        template_body = get_file_as_string(os.path.join(config.base_path,"mm","templates","github-local",metadata_type,file_name))
+        template_body = get_file_as_string(os.path.join(config.base_path,config.support_dir,"templates","github-local",metadata_type,file_name))
 
     template = env.from_string(template_body)
     file_body = template.render(params)
@@ -650,7 +650,7 @@ def generate_ui(operation,params={},args={}):
             else:
                 template_package = get_file_as_string(os.path.join(template_source,'package.json'))
         except:
-            template_package = get_file_as_string(os.path.join(config.base_path,"mm","templates","github-local","package.json"))
+            template_package = get_file_as_string(os.path.join(config.base_path,config.support_dir,"templates","github-local","package.json"))
 
         metadata_type = params['metadata_type']
         template_package_json = json.loads(template_package)
