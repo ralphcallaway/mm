@@ -31,11 +31,17 @@ $ mm compile_project <<< '{ "project_name" : "myproject" }'
 
 ### Installation
 
+`mm` is a Python 2.7 package that can be installed and run traditionally (via Python) or optionally run as an executable, frozen by PyInstaller (osx-only, currently). If you do not have Python installed, you'll need to do so: [https://www.python.org/downloads/](https://www.python.org/downloads/).
+
 #### pip
+
+`pip` is the best way to install `mm`. To install `pip`: [http://pip.readthedocs.org/en/latest/installing.html](http://pip.readthedocs.org/en/latest/installing.html). Then run:
 
 ```
 $ pip install mm
 ```
+
+This will create an executable called `mm` (or `mm.exe` in Windows).
 
 #### easy_install
 
@@ -47,7 +53,12 @@ $ easy_install mm
 
 ```
 $ git clone https://github.com/joeferraro/mm.git
+$ python setup.py install
 ```
+
+### Running mm Commands
+
+In order to run `mm` commands, it should be located on your path. For Linux/Unix users, this should be fairly straightforward. For Windows users: [http://stackoverflow.com/a/6318188/429814](http://stackoverflow.com/a/6318188/429814)
 
 ### Command Line Arguments
 
