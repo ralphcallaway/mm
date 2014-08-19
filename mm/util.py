@@ -165,7 +165,7 @@ def decode(key, enc):
     return "".join(dec)
 
 def put_password_by_key(key, password):
-    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
     if use_keyring:
         if sys.platform == 'linux2':
             import gnomekeyring
@@ -186,7 +186,7 @@ def put_password_by_key(key, password):
         src.close()
 
 def get_password_by_key(key):
-    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', False)
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
     if use_keyring:
         if sys.platform == 'linux2':
             import gnomekeyring
@@ -201,16 +201,26 @@ def get_password_by_key(key):
         else:
             return keyring.get_password('MavensMate: '+key, key)
     else: #not recommend! we only use this for CI
-        file_body = get_file_as_string(os.path.join(config.connection.get_app_settings_directory(),key+'.json'))
-        file_body_json = json.loads(file_body)
-        return decode(str(key), str(file_body_json['value']))
+        try:
+            file_body = get_file_as_string(os.path.join(config.connection.get_app_settings_directory(),key+'.json'))
+            file_body_json = json.loads(file_body)
+            return decode(str(key), str(file_body_json['value']))
+        except:
+            raise MMException('You have elected not to use keyring (mm_use_keyring = false), however, MavensMate is unable to load your local creds file.')
 
 def delete_password_by_key(key):
-    try:
-        return keyring.delete_password('MavensMate: '+key, key)
-    except:
-        #TODO: this has not been implemented in keyring yet :-(
-        pass
+    use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
+    if use_keyring:
+        if sys.platform == 'linux2':
+            import gnomekeyring
+        else:
+            import keyring
+        try:
+            return keyring.delete_password('MavensMate: '+key, key)
+        except:
+            #TODO: this has not been implemented in keyring yet :-(
+            pass
+
 
 def get_file_extension(path):
     return os.path.splitext(path)[1]
