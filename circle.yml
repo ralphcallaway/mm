@@ -12,4 +12,4 @@ general:
   #     - pip
 test:
   override:
-    - python test
+    - python test --api=31.0
