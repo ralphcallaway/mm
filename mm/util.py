@@ -1129,26 +1129,20 @@ def get_metadata_hash(selected_files=[]):
                 meta_type = metadata_definition["xmlName"]
 
         if meta_type not in meta_hash: #key isn't there yet, put it in
-            if metadata_definition['inFolder']:
-                arr = f.split("/")
-                if arr[len(arr)-2] != metadata_definition['directoryName']:
-                    meta_hash[meta_type] = [arr[len(arr)-2]+"/"+base_name_no_ext] #file name with no extension
-                else:
-                    meta_hash[meta_type] = [base_name_no_ext]
+            meta_hash[meta_type] = [];        
+            
+        #key is there, let's add metadata to it
+        meta_array = meta_hash[meta_type] #get the existing array
+        if metadata_definition['inFolder']:
+            arr = f.split("\\") if sys.platform == "win32" else f.split("/")
+            if arr[-2] != metadata_definition['directoryName']:
+                meta_array.append(arr[-2]+"/"+base_name_no_ext) #file name with no extension
             else:
-                meta_hash[meta_type] = [base_name_no_ext]
-        else: #key is there, let's add metadata to it
-            meta_array = meta_hash[meta_type] #get the existing array
-            if metadata_definition['inFolder']:
-                arr = f.split("/")
-                if arr[len(arr)-2] != metadata_definition['directoryName']:
-                    meta_array.append(arr[len(arr)-2]+"/"+base_name_no_ext) #file name with no extension
-                else:
-                    meta_array.append(base_name_no_ext) #add the new piece of metadata
-            else:
-                meta_array.append(base_name_no_ext) #file name with no extension
-
-            meta_hash[meta_type] = meta_array #replace the key
+                meta_array.append(base_name_no_ext) #add the new piece of metadata
+        else:
+            meta_array.append(base_name_no_ext) #file name with no extension
+        
+        meta_hash[meta_type] = meta_array #replace the key
 
     return meta_hash
 
