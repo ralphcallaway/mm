@@ -4,10 +4,11 @@ python:
 script: 
   - "echo Hi world!"
 before_deploy:
+  - cd ..
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
   - tar -xzvf PyInstaller-2.1.tar.gz
   - ls
-  - python PyInstaller-2.1/pyinstaller.py mm.spec
+  - python PyInstaller-2.1/pyinstaller.py mm/mm.spec
   - tar -zcvf mm-linux.tar.gz /dist/mm
   - ls 
 deploy:
