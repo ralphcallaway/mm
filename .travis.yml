@@ -10,7 +10,7 @@ before_deploy:
   - ls
   - python PyInstaller-2.1/pyinstaller.py mm/mm.spec
   - ls
-  - tar -zcvf mm-linux.tar.gz -C dist
+  - tar -zcvf mm-linux.tar.gz -C dist/mm .
   - ls 
 deploy:
   provider: releases
