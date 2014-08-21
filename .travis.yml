@@ -9,7 +9,8 @@ before_deploy:
   - tar -xzvf PyInstaller-2.1.tar.gz
   - ls
   - python PyInstaller-2.1/pyinstaller.py mm/mm.spec
-  - tar -zcvf mm-linux.tar.gz /dist/mm
+  - ls
+  - tar -zcvf mm-linux.tar.gz dist/mm
   - ls 
 deploy:
   provider: releases
