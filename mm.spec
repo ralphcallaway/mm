@@ -3,6 +3,7 @@ import os
 import encodings
 
 current_dir = (os.path.dirname(__file__))
+current_dir = '/home/travis/build/joeferraro/mm'
 
 a = Analysis([os.path.join(current_dir,'mm.py')],
              hiddenimports=['encodings','jinja2.ext'],
