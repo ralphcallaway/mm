@@ -5,7 +5,7 @@ script:
   - "echo Hi world!"
 before_deploy:
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
-  - tar -xjvf PyInstaller-2.1.tar.gz
+  - tar -xzvf PyInstaller-2.1.tar.gz
   - ls
   - "git clone -q --branch=master https://github.com/joeferraro/mm.git"
   - ls
