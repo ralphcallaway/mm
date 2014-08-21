@@ -11,7 +11,7 @@ before_deploy:
   - ls
   - python pyinstaller/pyinstaller.py mm/mm.spec
   - tar -zcvf mm-linux.tar.gz /dist/mm
-  - ls
+  - ls 
 deploy:
   provider: releases
   api-key: "a41b873cd065adfcfa07dc0f3cef6c0e0ec6d9a3"
