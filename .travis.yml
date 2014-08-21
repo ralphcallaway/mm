@@ -7,8 +7,6 @@ before_deploy:
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
   - tar -xzvf PyInstaller-2.1.tar.gz
   - ls
-  - "git clone -q --branch=master https://github.com/joeferraro/mm.git"
-  - ls
   - python pyinstaller/pyinstaller.py mm/mm.spec
   - tar -zcvf mm-linux.tar.gz /dist/mm
   - ls 
