@@ -67,9 +67,9 @@ class ProjectCreateTest(MavensMateTest):
 
         stdin = {
             "project_name"  : "existing-project-copy",
-            "username"      : "mm2@force.com",
-            "password"      : "force",
-            "org_type"      : "developer",
+            "username"      : test_helper.get_creds()['username'],
+            "password"      : test_helper.get_creds()['password'],
+            "org_type"      : test_helper.get_creds()['org_type'],
             "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-copy'),
             "action"        : "new",
             "workspace"     : os.path.join(base_test_directory, 'test_workspace'),
@@ -97,9 +97,9 @@ class ProjectCreateTest(MavensMateTest):
 
         stdin = {
             "project_name"  : "existing-project-invalid-copy",
-            "username"      : "mm2@force.com",
-            "password"      : "force",
-            "org_type"      : "developer",
+            "username"      : test_helper.get_creds()['username'],
+            "password"      : test_helper.get_creds()['password'],
+            "org_type"      : test_helper.get_creds()['org_type'],
             "directory"     : os.path.join(base_test_directory, 'functional', 'project', 'existing-project-invalid-copy'),
             "action"        : "new",
             "workspace"     : os.path.join(base_test_directory, 'test_workspace'),

@@ -48,9 +48,9 @@ class CredentialsTest(MavensMateTest):
     def test_04_should_update_project_credentials(self):
         stdin = {
             "project_name" : "unit test project",
-            "username" : "mm2@force.com",
-            "password" : "force",
-            "org_type" : "developer"
+            "username" : test_helper.get_creds()['username'],
+            "password" : test_helper.get_creds()['password'],
+            "org_type" : test_helper.get_creds()['org_type']
         }
         mm_response = self.runCommand('update_credentials', stdin)
         self.assertTrue(mm_response['success'] == True)
