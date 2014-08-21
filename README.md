@@ -75,13 +75,13 @@ In order to run `mm` commands, it should be located on your path. For Linux/Unix
 ##### Longhand
 
 ```
-$ mm -o new_project -c SUBLIME_TEXT <<< '{"settings":{"mm_workspace":"some/location"}, "username":"foo@bar.com", "password":"foo", "org_type":"developer", "package": "ApexClass":"*"}'
+$ mm -o new_project -c SUBLIME_TEXT <<< '{"settings":{"mm_workspace":"some/location"}, "project_name" : "mycoolproject", "username":"foo@bar.com", "password":"foo", "org_type":"developer", "package": {"ApexClass":"*"}}'
 ```
 
 ##### Shorthand
 
 ```
-$ mm new_project <<< '{"settings":{"mm_workspace":"some/location"}, "username":"foo@bar.com", "password":"foo", "org_type":"developer", "package": "ApexClass":"*"}'
+$ mm new_project <<< '{"settings":{"mm_workspace":"some/location"}, "project_name" : "mycoolproject", "username":"foo@bar.com", "password":"foo", "org_type":"developer", "package": {"ApexClass":"*"}}'
 ```
 
 ### Command Line Arguments
