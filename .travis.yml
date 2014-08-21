@@ -1,6 +1,8 @@
 language: python
 python:
   - "2.7"
+script: 
+  - "echo Hi world!"
 before_deploy:
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
   - tar -xjvf PyInstaller-2.1.tar.gz
