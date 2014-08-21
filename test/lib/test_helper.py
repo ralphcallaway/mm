@@ -27,7 +27,6 @@ class MavensMateTest(unittest.TestCase):
     # runs an mm command, prints to command-specific stdout
     def runCommand(self, command_name_or_argv, stdin, as_json=True, print_before_deserialization=True, **kwargs):
         test_type = os.getenv('MM_TEST_TYPE', 'functional')
-        print test_type
         commandOut = self.redirectStdOut()
         request.get_request_payload = mock.Mock(return_value=stdin)
         if type(command_name_or_argv) is list:
