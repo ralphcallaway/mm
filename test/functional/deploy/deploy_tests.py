@@ -12,9 +12,9 @@ class DeployTest(MavensMateTest):
     def test_01_should_create_new_org_connection(self): 
         test_helper.create_project(self, "unit test deploy project")
         stdin = {
-            "username"      : "mm2@force.com",
-            "password"      : "force",
-            "org_type"      : "developer",
+            "username"      : test_helper.get_creds()['username'],
+            "password"      : test_helper.get_creds()['password'],
+            "org_type"      : test_helper.get_creds()['org_type'],
             "project_name"  : "unit test deploy project"
         }
         mm_response = self.runCommand('new_connection', stdin)        
@@ -53,8 +53,8 @@ class DeployTest(MavensMateTest):
             "debug_categories"  :   ""
         }
         mm_response = self.runCommand(['mm.py', '-o', 'deploy'], stdin)        
-        self.assertTrue('mm2@force.com' in mm_response)
-        self.assertTrue('unpackaged/classes/test_deployapexclass.cls' in mm_response['mm2@force.com'])
+        self.assertTrue(test_helper.get_creds()['username'] in mm_response)
+        self.assertTrue('unpackaged/classes/test_deployapexclass.cls' in mm_response[test_helper.get_creds()['username']])
 
     # dependent on test 1 completing for org connections to be present
     def test_04_should_attempt_deploy_to_bad_org_connection(self): 

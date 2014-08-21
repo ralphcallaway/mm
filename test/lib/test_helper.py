@@ -77,14 +77,21 @@ class MavensMateTest(unittest.TestCase):
         test_api_version = os.environ.get('SFDC_API_VERSION', '30.0')
         return int(float(test_api_version))
 
+def get_creds():
+    return {
+        'username': os.getenv('SFDC_USERNAME', 'mm@force.com'),
+        'password': os.getenv('SFDC_PASSWORD', 'force'),
+        'org_type': os.getenv('SFDC_ORG_TYPE', 'developer'),
+    }
+
 def create_project(clz, name="unit test project", package=None):
     if package is None:
         package = { "ApexClass" : "*" } 
     stdin = {
         "project_name"  : name,
-        "username"      : "mm2@force.com",
-        "password"      : "force",
-        "org_type"      : "developer",
+        "username"      : get_creds()['username'],
+        "password"      : get_creds()['password'],
+        "org_type"      : get_creds()['org_type'],
         "action"        : "new",
         "package"       : package
     }
