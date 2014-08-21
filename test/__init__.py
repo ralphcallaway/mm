@@ -6,18 +6,6 @@ import shutil
 import lib.test_helper as test_helper
 import inspect
 
-from functional.project.project_tests import ProjectTest
-from functional.project.project_create_tests import ProjectCreateTest
-from functional.project.credentials_tests import CredentialsTest
-from functional.unit_test.async_unit_test_api_tests import ApexUnitTestingTest
-from functional.metadata.create_tests import MetadataOperationTest
-from functional.debug.checkpoint_tests import CheckpointTests
-from functional.debug.log_tests import StackTraceAndLogsTest
-from functional.metadata.refresh_tests import MetadataRefreshTest
-from functional.project.ui_integration_tests import ProjectUiIntegrationTest
-from functional.metadata.compilation_tests import CompilationTests
-from functional.deploy.deploy_tests import DeployTest
-
 # ALL TEST COMMANDS SHOULD BE RUN FROM PROJECT ROOT
 #
 # to run test suite:
@@ -30,19 +18,40 @@ from functional.deploy.deploy_tests import DeployTest
 #   $ python test ProjectTest.test_01_should_create_new_project
 
 def suite(clz=None,tst=None):
-    test_classes = [
-        ApexUnitTestingTest,
-        ProjectTest, 
-        ProjectCreateTest,
-        CredentialsTest,
-        MetadataOperationTest,
-        MetadataRefreshTest,
-        CheckpointTests,
-        StackTraceAndLogsTest,
-        ProjectUiIntegrationTest,
-        CompilationTests,
-        DeployTest
-    ]
+    
+    if os.getenv('MM_TEST_TYPE', 'functional') == 'functional':
+        from functional.project.project_tests import ProjectTest
+        from functional.project.project_create_tests import ProjectCreateTest
+        from functional.project.credentials_tests import CredentialsTest
+        from functional.unit_test.async_unit_test_api_tests import ApexUnitTestingTest
+        from functional.metadata.create_tests import MetadataOperationTest
+        from functional.debug.checkpoint_tests import CheckpointTests
+        from functional.debug.log_tests import StackTraceAndLogsTest
+        from functional.metadata.refresh_tests import MetadataRefreshTest
+        from functional.project.ui_integration_tests import ProjectUiIntegrationTest
+        from functional.metadata.compilation_tests import CompilationTests
+        from functional.deploy.deploy_tests import DeployTest
+
+        test_classes = [
+            ApexUnitTestingTest,
+            ProjectTest, 
+            ProjectCreateTest,
+            CredentialsTest,
+            MetadataOperationTest,
+            MetadataRefreshTest,
+            CheckpointTests,
+            StackTraceAndLogsTest,
+            ProjectUiIntegrationTest,
+            CompilationTests,
+            DeployTest
+        ]
+    else:
+        from unit.project.project_create_tests import ProjectCreateTest
+        
+        test_classes = [
+            ProjectCreateTest
+        ]
+
     suite = unittest.TestSuite()
     for unit_test_class in test_classes:
         # print unit_test_class.__module__
@@ -75,7 +84,13 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--api', help='Salesforce.com API version') # run tests for specific version
+    parser.add_argument('--unit', action='store_true', default=False, help='Whether this test should be run using fixtures')
     args, unknown_args = parser.parse_known_args()
+
+    if args.unit == None or args.unit == False:
+        os.environ['MM_TEST_TYPE'] = 'functional'
+    else:
+        os.environ['MM_TEST_TYPE'] = 'unit'
 
     clz = None
     tst = None

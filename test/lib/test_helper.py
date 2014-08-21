@@ -3,13 +3,16 @@ import os.path
 import sys
 import unittest
 import mock
+from mock import patch
 from StringIO import StringIO
 import test_util as util
 import json
 
 import mm.request as request
+from mm.sfdc_client import MavensMateClient
 from mm.request import MavensMateRequestHandler
 from mm.connection import PluginConnection
+import mm.util as mmutil
 
 base_test_directory = os.path.dirname(os.path.dirname(__file__))
 
@@ -22,16 +25,27 @@ class MavensMateTest(unittest.TestCase):
         return new_target
 
     # runs an mm command, prints to command-specific stdout
-    def runCommand(self, command_name_or_argv, stdin, as_json=True, print_before_deserialization=True):
+    def runCommand(self, command_name_or_argv, stdin, as_json=True, print_before_deserialization=True, **kwargs):
+        test_type = os.getenv('MM_TEST_TYPE', 'functional')
+        print test_type
         commandOut = self.redirectStdOut()
         request.get_request_payload = mock.Mock(return_value=stdin)
         if type(command_name_or_argv) is list:
             sys.argv = command_name_or_argv
         else:
             sys.argv = ['mm.py', '-o', command_name_or_argv]
-        MavensMateRequestHandler().execute()
-        mm_response = commandOut.getvalue()
+        
+        if test_type == 'functional':
+            MavensMateRequestHandler().execute()
+            mm_response = commandOut.getvalue()
+        elif test_type == 'unit':
+            with patch.object(MavensMateClient, kwargs.get('sfdc_client_function')) as mock_method:
+                mock_method.return_value = kwargs.get('sfdc_client_function_response')
+                MavensMateRequestHandler().execute()
+                mm_response = commandOut.getvalue()
+
         sys.stdout = self.saved_stdout
+
         if print_before_deserialization:
             if type(command_name_or_argv) is list:
                 print '\n\n['+str(command_name_or_argv[2])+'] ------->\n'
@@ -84,7 +98,17 @@ def get_creds():
         'org_type': os.getenv('SFDC_ORG_TYPE', 'developer'),
     }
 
-def create_project(clz, name="unit test project", package=None):
+def get_fixture_response(command_name_or_argv):
+    if type(command_name_or_argv) is list:
+        command_name = command_name_or_argv[2]
+    else:
+        command_name = command_name_or_argv 
+    try:
+        return util.parse_json_file(os.path.join(base_test_directory,'lib','fixtures',command_name+'.json'))
+    except:
+        return mmutil.generate_error_response('Could not find test fixture response for command: '+command_name)
+
+def create_project(clz, name="unit test project", package=None, **kwargs):
     if package is None:
         package = { "ApexClass" : "*" } 
     stdin = {
@@ -95,7 +119,7 @@ def create_project(clz, name="unit test project", package=None):
         "action"        : "new",
         "package"       : package
     }
-    return clz.runCommand(['mm.py', '-o', 'new_project', '-f', 'json'], stdin)
+    return clz.runCommand(['mm.py', '-o', 'new_project', '-f', 'json'], stdin, **kwargs)
 
 def edit_project(clz, name="unit test project", package=None):
     if package is None:
