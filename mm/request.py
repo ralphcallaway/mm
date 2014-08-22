@@ -121,7 +121,10 @@ class MavensMateRequestHandler():
                     if hasattr(response, 'message') and response.message != None and response.message != '':
                         json_res = {"body":response.message,"success":False,"stack_trace":util.format_exception()}
                     else:
-                        json_res = {"body":str(response),"success":False,"stack_trace":util.format_exception()}
+                        body = str(response)
+                        if 'urlopen error [Errno 8] nodename nor servname provided, or not known' in body:
+                            body = 'No internet connection'
+                        json_res = {"body":body,"success":False,"stack_trace":util.format_exception()}
                     try:
                         response = json.dumps(json_res)
                         print response
