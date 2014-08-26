@@ -47,9 +47,11 @@ def suite(clz=None,tst=None):
         ]
     else:
         from unit.project.project_create_tests import ProjectCreateTest
-        
+        from unit.login.login_tests import LoginUnitTest
+
         test_classes = [
-            ProjectCreateTest
+            ProjectCreateTest,
+            LoginUnitTest
         ]
 
     suite = unittest.TestSuite()

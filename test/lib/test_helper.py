@@ -9,7 +9,6 @@ import test_util as util
 import json
 
 import mm.request as request
-from mm.sfdc_client import MavensMateClient
 from mm.request import MavensMateRequestHandler
 from mm.connection import PluginConnection
 import mm.util as mmutil
@@ -26,7 +25,6 @@ class MavensMateTest(unittest.TestCase):
 
     # runs an mm command, prints to command-specific stdout
     def runCommand(self, command_name_or_argv, stdin, as_json=True, print_before_deserialization=True, **kwargs):
-        test_type = os.getenv('MM_TEST_TYPE', 'functional')
         commandOut = self.redirectStdOut()
         request.get_request_payload = mock.Mock(return_value=stdin)
         if type(command_name_or_argv) is list:
@@ -34,14 +32,8 @@ class MavensMateTest(unittest.TestCase):
         else:
             sys.argv = ['mm.py', '-o', command_name_or_argv]
         
-        if test_type == 'functional':
-            MavensMateRequestHandler().execute()
-            mm_response = commandOut.getvalue()
-        elif test_type == 'unit':
-            with patch.object(MavensMateClient, kwargs.get('sfdc_client_function')) as mock_method:
-                mock_method.return_value = kwargs.get('sfdc_client_function_response')
-                MavensMateRequestHandler().execute()
-                mm_response = commandOut.getvalue()
+        MavensMateRequestHandler().execute()
+        mm_response = commandOut.getvalue()
 
         sys.stdout = self.saved_stdout
 
