@@ -1,6 +1,6 @@
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the (LGPL) GNU Lesser General Public License as
-# published by the Free Software Foundation; either version 3 of the 
+# published by the Free Software Foundation; either version 3 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -27,7 +27,7 @@ from operator import itemgetter
 debug = config.logger.debug
 
 class SforceMetadataClient(SforceBaseClient):
-  
+
     def __init__(self, wsdl, *args, **kwargs):
         kwargs['isMetadata'] = True
         super(SforceMetadataClient, self).__init__(wsdl, *args, **kwargs)
@@ -54,7 +54,7 @@ class SforceMetadataClient(SforceBaseClient):
         #     'unpackaged' : {
         #         'types' : [
         #             {
-        #                 "members": "*", 
+        #                 "members": "*",
         #                 "name": "ApexClass"
         #             }
         #         ]
@@ -65,8 +65,8 @@ class SforceMetadataClient(SforceBaseClient):
 
         debug('retrieve request: ')
         debug(kwargs['package'])
-        
-        if 'package' in kwargs and type(kwargs['package']) is not dict: 
+
+        if 'package' in kwargs and type(kwargs['package']) is not dict:
             #if package is location of package.xml, we'll parse the xml and create a request
             package_dict = xmltodict.parse(util.get_file_as_string(kwargs['package']))
             api_version = package_dict['Package']['version']
@@ -137,7 +137,7 @@ class SforceMetadataClient(SforceBaseClient):
                     },
                     'apiVersion' : util.SFDC_API_VERSION
                 }
-            
+
             #if custom object is asterisked, we need to explictly retrieve standard objects
             for t in package['unpackaged']['types']:
                 debug('----> ')
@@ -160,7 +160,7 @@ class SforceMetadataClient(SforceBaseClient):
                                         objs.append(obj['title']+"/"+child['title'])
                             objs.sort()
                             t['members'] = objs
-                    elif t['name'] == 'CustomObject':              
+                    elif t['name'] == 'CustomObject':
                         if 'members' in t and type(t['members']) is not list:
                             if t['members'] == "*":
                                 mlist = self.listMetadata('CustomObject', False)
@@ -171,12 +171,12 @@ class SforceMetadataClient(SforceBaseClient):
                                 objs.append("*")
                                 objs.sort()
                                 t['members'] = objs
-            
+
             request_payload = package
             debug('---request payload---')
             debug(request_payload)
         result = self._handleResultTyping(self._sforce.service.retrieve(request_payload))
-        
+
         debug('result of retrieve: \n\n')
         debug(result)
 
@@ -200,8 +200,8 @@ class SforceMetadataClient(SforceBaseClient):
 
     def deploy(self, params={}, **kwargs):
         if 'debug_categories' in params:
-            self._setHeaders('deploy', debug_categories=params['debug_categories'])  
-        
+            self._setHeaders('deploy', debug_categories=params['debug_categories'])
+
         deploy_options = {}
 
         is_test = kwargs.get('is_test', False)
@@ -233,7 +233,7 @@ class SforceMetadataClient(SforceBaseClient):
             except:
                 pass
 
-            self._sforce.set_options(retxml=False)  
+            self._sforce.set_options(retxml=False)
 
             return deploy_result
         else:
@@ -282,7 +282,7 @@ class SforceMetadataClient(SforceBaseClient):
                 metadata_request_type = self.__transformFolderMetadataNameForListRequest(metadata_type)
             else:
                 metadata_request_type = metadata_type
-            list_response = self.listMetadata(metadata_request_type, True, util.SFDC_API_VERSION) 
+            list_response = self.listMetadata(metadata_request_type, True, util.SFDC_API_VERSION)
             debug('--------------->')
             debug(list_response)
             if type(list_response) is not list:
@@ -341,7 +341,7 @@ class SforceMetadataClient(SforceBaseClient):
                 children = []
                 full_name = element['fullName']
                 #if full_name == "PersonAccount":
-                #    full_name = "Account" 
+                #    full_name = "Account"
                 #print 'processing: ', element
                 if has_children_metadata == True:
                     if not full_name in object_hash:
@@ -368,8 +368,8 @@ class SforceMetadataClient(SforceBaseClient):
                                     "select"    : False,
                                     "title"     : gchild_el
                                 })
-                                children = sorted(children, key=itemgetter('text')) 
-                          
+                                children = sorted(children, key=itemgetter('text'))
+
                             children.append({
                                 "text"      : child_type_def['tagName'],
                                 "isFolder"  : True,
@@ -381,7 +381,7 @@ class SforceMetadataClient(SforceBaseClient):
                                 "select"    : False,
                                 "title"     : child_type_def['tagName']
                             })
-                                            
+
                 #if this type has folders, run queries to grab all metadata in the folders
                 if is_folder_metadata == True:
                     if config.connection.get_plugin_client_setting('mm_ignore_managed_metadata', True):
@@ -392,7 +392,7 @@ class SforceMetadataClient(SforceBaseClient):
                         "type"      : metadata_type,
                         "folder"    : element["fullName"]
                     }
-                    list_basic_response = self.listMetadata(list_request, True, config.connection.sfdc_api_version) 
+                    list_basic_response = self.listMetadata(list_request, True, config.connection.sfdc_api_version)
 
                     if type(list_basic_response) is not list:
                         list_basic_response = [list_basic_response]
@@ -409,8 +409,8 @@ class SforceMetadataClient(SforceBaseClient):
                             "title"     : folder_element['fullName'].split("/")[1]
 
                         })
-                    
-                children = sorted(children, key=itemgetter('text')) 
+
+                children = sorted(children, key=itemgetter('text'))
                 is_leaf = True
                 cls = ''
                 if is_folder_metadata:
@@ -436,7 +436,7 @@ class SforceMetadataClient(SforceBaseClient):
                     "title"     : element['fullName']
                 })
 
-            return_elements = sorted(return_elements, key=itemgetter('text')) 
+            return_elements = sorted(return_elements, key=itemgetter('text'))
             # if list_response == []:
             #     return list_response
 
@@ -479,12 +479,12 @@ class SforceMetadataClient(SforceBaseClient):
         while finished == False:
             time.sleep(1)
             if int(float(util.SFDC_API_VERSION)) <= 30:
-                checkStatusResponse = self._sforce.service.checkStatus(id, True)
+                checkStatusResponse = self._sforce.service.checkStatus(id)
                 finished = checkStatusResponse[0].done
                 if finished:
                     return None
             else: #api 31.0 and greeater
-                checkStatusResponse = self._sforce.service.checkRetrieveStatus(id)                
+                checkStatusResponse = self._sforce.service.checkRetrieveStatus(id)
                 debug('checkStatusResponse --->')
                 debug(checkStatusResponse)
                 finished = checkStatusResponse.success
