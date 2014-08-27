@@ -1,0 +1,36 @@
+{
+    "properties": [], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [
+        {
+            "modifiers": [], 
+            "name": "coolbeans", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 9, 
+                "line": 2
+            }, 
+            "type": null
+        }
+    ], 
+    "namespace": null, 
+    "name": "coolbeans", 
+    "tableDeclaration": {
+        "type": "coolbeans", 
+        "modifiers": [], 
+        "references": [], 
+        "location": {
+            "column": 27, 
+            "line": 1
+        }, 
+        "name": "coolbeans"
+    }, 
+    "key": "01p40000000DxQYAA0", 
+    "variables": [], 
+    "id": "01p40000000DxQYAA0", 
+    "methods": []
+}

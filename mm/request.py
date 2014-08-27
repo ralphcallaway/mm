@@ -50,6 +50,7 @@ class MavensMateRequestHandler():
         """    
         if self.payload != None and type(self.payload) is dict and 'settings' in self.payload:
             config.plugin_client_settings = self.payload['settings']
+        config.offline = self.args.offline
         config.connection = PluginConnection(
             client=self.args.client or 'SUBLIME_TEXT_3',
             ui=self.args.ui_switch,
@@ -172,6 +173,8 @@ def parse_args():
         dest='respond_with_html', help='Makes various commands return HTML')
     parser.add_argument('--v', '--verbose', action='store_true', default=False, 
         dest='verbose', help='Makes me really loud and annoying')
+    parser.add_argument('--offline', action='store_true', default=False, 
+        dest='offline', help='Use --offline flag for commands that do not require an active session')
     args, unknown = parser.parse_known_args()
     return args, unknown
 

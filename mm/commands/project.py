@@ -21,6 +21,8 @@ class NewProjectCommand(Command):
             raise MMException('Please specify a username')
         if 'password' not in self.params or self.params['password'] == '':
             raise MMException('Please specify a password')
+        if 'org_type' not in self.params or self.params['org_type'] == '':
+            raise MMException('Please specify org_type')
         if 'project_name' not in self.params or self.params['project_name'] == '':
             raise MMException('Please specify a project name')
 

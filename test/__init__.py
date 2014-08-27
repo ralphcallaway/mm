@@ -6,8 +6,9 @@ import shutil
 import lib.test_helper as test_helper
 import inspect
 
-# ALL TEST COMMANDS SHOULD BE RUN FROM PROJECT ROOT
-#
+# *** ALL TEST COMMANDS SHOULD BE RUN FROM PROJECT ROOT ***
+
+# FUNCTIONAL (LIVE) TESTS:
 # to run test suite:
 #   $ python test
 # to run test suite for a particular api version:
@@ -16,6 +17,16 @@ import inspect
 #   $ python test ProjectTest
 # to run a specific test method in one of the test suite classes:
 #   $ python test ProjectTest.test_01_should_create_new_project
+
+# UNIT (FIXTURE-BASED) TESTS:
+# to run test suite:
+#   $ python test --unit
+# to run test suite for a particular api version:
+#   $ python test --unit --api=31.0
+# to run all test methods in one of the test suite classes:
+#   $ python test ProjectCreateTest --unit
+# to run a specific test method in one of the test suite classes:
+#   $ python test ProjectCreateTest.test_should_notify_user_of_duplicate_project_name_in_workspace --unit
 
 def suite(clz=None,tst=None):
     
@@ -48,10 +59,12 @@ def suite(clz=None,tst=None):
     else:
         from unit.project.project_create_tests import ProjectCreateTest
         from unit.login.login_tests import LoginUnitTest
+        from unit.code_assist.code_assist_tests import CodeAssistTest
 
         test_classes = [
             ProjectCreateTest,
-            LoginUnitTest
+            LoginUnitTest,
+            CodeAssistTest
         ]
 
     suite = unittest.TestSuite()

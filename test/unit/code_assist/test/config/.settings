@@ -1,0 +1,21 @@
+{
+    "username": "mm@force.com", 
+    "environment": "production", 
+    "project_name": "rctest2", 
+    "workspace": "/Users/josephferraro/Development/st2", 
+    "org_url": "", 
+    "namespace": "", 
+    "id": "8FDQY8LDZZIDX105325USN610EH336MK", 
+    "metadata_container": "1dcd0000000CgWcAAK", 
+    "subscription": [
+        "ApexClass", 
+        "ApexComponent", 
+        "ApexPage", 
+        "ApexTrigger", 
+        "CustomObject", 
+        "Profile", 
+        "Settings", 
+        "StaticResource", 
+        "Workflow"
+    ]
+}

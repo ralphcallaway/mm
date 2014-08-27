@@ -1,0 +1,47 @@
+{
+    "properties": [], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [
+        {
+            "modifiers": [], 
+            "name": "EntityFactory", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 9, 
+                "line": 2
+            }, 
+            "type": null
+        }
+    ], 
+    "namespace": null, 
+    "name": "EntityFactory", 
+    "tableDeclaration": {
+        "type": "EntityFactory", 
+        "modifiers": [], 
+        "references": [], 
+        "location": {
+            "column": 27, 
+            "line": 1
+        }, 
+        "name": "EntityFactory"
+    }, 
+    "key": "01p40000000TjROAA0", 
+    "variables": [
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 10, 
+                "line": 3
+            }, 
+            "name": "foo"
+        }
+    ], 
+    "id": "01p40000000TjROAA0", 
+    "methods": []
+}

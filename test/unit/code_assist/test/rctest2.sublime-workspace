@@ -1,0 +1,2553 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"in",
+				"indent=	(parameter_keyword, instance)"
+			],
+			[
+				"file",
+				"file_base_name	(local, instance)"
+			],
+			[
+				"curre",
+				"current_active_view_name	(local, instance)"
+			],
+			[
+				"active",
+				"active_window"
+			],
+			[
+				"_pr",
+				"__print_to_panel(msg)	(attribute, function)"
+			],
+			[
+				"__print",
+				"__print_to_panel(msg)	(attribute, function)"
+			],
+			[
+				"pri",
+				"print_result_message(operation, process_id, status_region, res, printer, thread)	(attribute, function)"
+			],
+			[
+				"json",
+				"json_response	(local, instance)"
+			],
+			[
+				"result",
+				"result_handler	(local, instance)"
+			],
+			[
+				"sta",
+				"status_region	(local, instance)"
+			],
+			[
+				"proc",
+				"process_region	(local, instance)"
+			],
+			[
+				"mm_r",
+				"mm_response_handlers"
+			],
+			[
+				"object",
+				"object_name	(local, instance)"
+			],
+			[
+				"Meeting",
+				"Meeting_Vendor_MERC__c"
+			],
+			[
+				"hotel",
+				"hotelItineraries"
+			],
+			[
+				"sg",
+				"Sgmnt_End_TS_MERC__c 	DateTime"
+			],
+			[
+				"MeetingP",
+				"Meeting_Participant_MERC__c	[Sobject Name]"
+			],
+			[
+				"Partici",
+				"Meeting_Participant_MERC__c	[Sobject Name]"
+			],
+			[
+				"inserth",
+				"PUBLIC insertHotelsForMeeting(Integer numberOfHotels, String meetingId) 	LIST"
+			],
+			[
+				"Account",
+				"Account	[Sobject Name]"
+			],
+			[
+				"day",
+				"dayNumber"
+			],
+			[
+				"me",
+				"meetings"
+			],
+			[
+				"ins",
+				"PUBLIC insertAccounts(Integer numberOfAccounts) 	LIST"
+			],
+			[
+				"parti",
+				"participants"
+			],
+			[
+				"nm",
+				"numberOfAccounts"
+			],
+			[
+				"val",
+				"validRecordTypeIds"
+			],
+			[
+				"panel",
+				"apex:outputPanel"
+			],
+			[
+				"outpu",
+				"apex:outputPanel"
+			],
+			[
+				"action",
+				"apex:actionRegion"
+			],
+			[
+				"outp",
+				"apex:outputPanel"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"tex-",
+				"text-decoration"
+			],
+			[
+				"select",
+				"apex:selectOptions"
+			],
+			[
+				"sele",
+				"apex:selectList"
+			],
+			[
+				"MERCu",
+				"MERC_Util	[Custom Apex Class]"
+			],
+			[
+				"Select",
+				"SelectOption	[Standard Apex Class]"
+			],
+			[
+				"Meeti",
+				"Meeting_Participant_MERC__c"
+			],
+			[
+				"re",
+				"required	(Boolean)"
+			],
+			[
+				"input",
+				"apex:inputField"
+			],
+			[
+				"pageblock",
+				"apex:pageBlockSection"
+			],
+			[
+				"layou",
+				"layoutComponent"
+			],
+			[
+				"Layout",
+				"LayoutSection"
+			],
+			[
+				"butt",
+				"apex:pageBlockButtons"
+			],
+			[
+				"Meetin",
+				"Meeting_MERC__c"
+			],
+			[
+				"meetin",
+				"meetingIds"
+			],
+			[
+				"mee",
+				"meetingIds"
+			],
+			[
+				"old",
+				"oldMap"
+			],
+			[
+				"hot",
+				"hotelTravelItinerariesForParticipant"
+			],
+			[
+				"meeti",
+				"Meeting_Participant_MERC__c 	Lookup"
+			],
+			[
+				"meetingpart",
+				"meetingParticipantIds"
+			],
+			[
+				"Meetingda",
+				"Meeting_Day_MERC__c	[Sobject Name]"
+			],
+			[
+				"vendorclas",
+				"Vendor_Class_Code_MERC__c 	Number"
+			],
+			[
+				"Travel",
+				"Travel_Itinerary_MERC__c	[Sobject Name]"
+			],
+			[
+				"sobj",
+				"PRIVATE sObjectRecordType	String"
+			],
+			[
+				"sObj",
+				"sObjectDesc"
+			],
+			[
+				"MEeting",
+				"Meeting_Day_MERC__c	[Sobject Name]"
+			],
+			[
+				"Meeting_",
+				"Meeting_Day_MERC__c	[Sobject Name]"
+			],
+			[
+				"fieldset",
+				"fieldSetNames"
+			],
+			[
+				"meeting",
+				"Meeting_Time_Zone_MERC__c 	Text"
+			],
+			[
+				"poutpu",
+				"apex:outputPanel"
+			],
+			[
+				"search",
+				"PUBLIC searchResults	LIST"
+			],
+			[
+				"out",
+				"apex:outputPanel"
+			],
+			[
+				"st",
+				"styleClass	(String)"
+			],
+			[
+				"head",
+				"headerValue	(String)"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"sty",
+				"style	(String)"
+			],
+			[
+				"time",
+				"Meeting_Time_Zone_MERC__c 	Picklist"
+			],
+			[
+				"asse",
+				"assertEquals()"
+			],
+			[
+				"Date",
+				"Datetime	[Standard Apex Class]"
+			],
+			[
+				"as",
+				"assert()"
+			],
+			[
+				"Agendai",
+				"Agenda_Item_MERC__c	[Sobject Name]"
+			],
+			[
+				"ass",
+				"assert()"
+			],
+			[
+				"Mee",
+				"Meeting_Time_Zone_MERC__C"
+			],
+			[
+				"g",
+				"PUBLIC getStackTraceString() 	String"
+			],
+			[
+				"Sobje",
+				"sObjectField"
+			],
+			[
+				"Budget",
+				"Budget_MERC__c	[Sobject Name]"
+			],
+			[
+				"sobjectfield",
+				"sObjectFieldsToSerialize"
+			],
+			[
+				"recordTose",
+				"recordsToSerializeById"
+			],
+			[
+				"seri",
+				"serializedData"
+			],
+			[
+				"inpt",
+				"apex:inputHidden"
+			],
+			[
+				"t",
+				"title	(String)"
+			],
+			[
+				"sho",
+				"showHeader	(Boolean)"
+			],
+			[
+				"ac",
+				"action	(ApexPages.Action)"
+			],
+			[
+				"pagemess",
+				"apex:pageMessages"
+			],
+			[
+				"on",
+				"oncomplete	(String)"
+			],
+			[
+				"reutrn",
+				"returnSobjects"
+			],
+			[
+				"Page",
+				"PageReference	[Standard Apex Class]"
+			],
+			[
+				"page",
+				"apex:pageBlockSection"
+			],
+			[
+				"ol",
+				"oldMap"
+			],
+			[
+				"timeZone",
+				"timeZoneFieldAPIName"
+			],
+			[
+				"tim",
+				"timeZoneFieldAPIName"
+			],
+			[
+				"timzeon",
+				"timeZoneFieldsForObject"
+			],
+			[
+				"Stri",
+				"String	[Standard Apex Class]"
+			],
+			[
+				"Timezon",
+				"Time_Zone_Field_Mappings_MERC__c	[Sobject Name]"
+			],
+			[
+				"get",
+				"PUBLIC getTimeZoneFieldNamesForObject(String objectAPIName) 	LIST"
+			],
+			[
+				"Time",
+				"Time_Zone_Field_Mappings_MERC__c	[Sobject Name]"
+			],
+			[
+				"corre",
+				"correctedDateTime"
+			],
+			[
+				"v",
+				"var	(String)"
+			],
+			[
+				"Meetingpa",
+				"Meeting_Participant_MERC__c	[Sobject Name]"
+			],
+			[
+				"Meetingp",
+				"Meeting_Participant_MERC__c	[Sobject Name]"
+			],
+			[
+				"MEetingpa",
+				"Meeting_Participant_MERC__c	[Sobject Name]"
+			],
+			[
+				"Search",
+				"SearchResultWrapper"
+			],
+			[
+				"set",
+				"PUBLIC setHeader(String key, String value) 	void"
+			],
+			[
+				"seriali",
+				"serializedSobjects"
+			],
+			[
+				"des",
+				"PUBLIC deserialize(String jsonString, system.Type apexType) 	Object"
+			],
+			[
+				"sobje",
+				"sobjectType"
+			],
+			[
+				"serial",
+				"serializedSobjects"
+			],
+			[
+				"so",
+				"sobjectTypeAPIName"
+			],
+			[
+				"HTTP",
+				"HttpResponse	[Standard Apex Class]"
+			],
+			[
+				"HTT",
+				"Http	[Standard Apex Class]"
+			],
+			[
+				"Entti",
+				"EntityFactory	[Custom Apex Class]"
+			],
+			[
+				"Entit",
+				"EntityFactory	[Custom Apex Class]"
+			],
+			[
+				"table",
+				"apex:pageBlockTable"
+			],
+			[
+				"i",
+				"interval	(Integer)"
+			],
+			[
+				"sfdc",
+				"sfdc_session	statement"
+			],
+			[
+				"m",
+				"move(src, dst)	(imported, function)"
+			],
+			[
+				"zip",
+				"zip_directory(directory_to_zip, where_to_put_zip_file)	(imported, function)"
+			],
+			[
+				"fil",
+				"fileinfo	forflow"
+			],
+			[
+				"mm",
+				"mm_util	import"
+			],
+			[
+				"sublime",
+				"sublime_plugin	import"
+			],
+			[
+				"compl",
+				"completion_flags	statement"
+			],
+			[
+				"ba",
+				"base_page_name	statement"
+			],
+			[
+				"is",
+				"isdir	import"
+			],
+			[
+				"tpd",
+				"typedef_class"
+			],
+			[
+				"tpy",
+				"typedef_class"
+			],
+			[
+				"typedef",
+				"typedef_class	statement"
+			],
+			[
+				"stri",
+				"stringify"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/classes/ApexClassesSelector.cls",
+			"settings":
+			{
+				"buffer_size": 2836,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/CompileAndTest.cls",
+			"settings":
+			{
+				"buffer_size": 183,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/classes/MyApexClassfddsfdfssdf.cls",
+			"settings":
+			{
+				"buffer_size": 93,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "rctest2.sublime-project",
+			"settings":
+			{
+				"buffer_size": 692,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "rctest2.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 194,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/package.xml",
+			"settings":
+			{
+				"buffer_size": 490,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "TestLREngine:\n	TEST RESULT: PASS\n\nTestContext:\n	TEST RESULT: PASS\n\nMetadataServiceTest:\n	TEST RESULT: PASS\n\nAUTOTEST:\n	TEST RESULT: PASS\n\nRollupSummariesTest:\n	TEST RESULT: PASS\n\nRollupServiceTest:\n	TEST RESULT: PASS\n\nRollupJobTest:\n	TEST RESULT: PASS\n\nRollupControllerTest:\n	TEST RESULT: PASS\n\nSObjectSelectorTest:\n	TEST RESULT: PASS\n\nSObjectDomainTest:\n	TEST RESULT: PASS\n\nCompileAndTest:\n	TEST RESULT: FAIL\n\n	 METHOD RESULT 	\n	test_method_one : Fail\n\n	 STACK TRACE 	\n	Class.CompileAndTest.test_method_one: line 6, column 1\n\n	 MESSAGE 	\n	System.AssertException: Assertion Failed\n\n\nMultiselectExampleControllerTest:\n	TEST RESULT: PASS\n\nMultiselectControllerTest:\n	TEST RESULT: PASS\n\n",
+			"settings":
+			{
+				"buffer_size": 684,
+				"line_ending": "Unix",
+				"name": "Run All Tests Result",
+				"scratch": true
+			}
+		},
+		{
+			"file": "config/.tests",
+			"settings":
+			{
+				"buffer_size": 109,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/josephferraro/Development/st/mm.log",
+			"settings":
+			{
+				"buffer_size": 9352979,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 93.0,
+		"selected_items":
+		[
+			[
+				"run ap",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"new ap",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"delet",
+				"MavensMate: Delete File From Server..."
+			],
+			[
+				"new apex",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"new ape",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"edi",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"edit p",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"refre",
+				"MavensMate: Refresh Current File From Server"
+			],
+			[
+				"execu",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"new pag",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"edit pro",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"dpel",
+				"MavensMate: Deploy To Server..."
+			],
+			[
+				"runa p",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"run ape",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"cover",
+				"MavensMate: Get Apex Code Coverage"
+			],
+			[
+				"dele",
+				"MavensMate: Delete File From Server..."
+			],
+			[
+				"clean",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"new pa",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new pro",
+				"MavensMate: New Project..."
+			],
+			[
+				"listo",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"refres",
+				"MavensMate: Refresh Apex Code Symbols"
+			],
+			[
+				"listfie",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"fields",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listif",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listob",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listi",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"lsitfiel",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"eidt pro",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"index",
+				"MavensMate: Update Apex Code Index"
+			],
+			[
+				"bundl",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"listf",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listfi",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"list",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"apexco",
+				"MavensMate: Update Apex Code Index"
+			],
+			[
+				"upda",
+				"MavensMate: Update Apex Code Index"
+			],
+			[
+				"lis",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"lisfie",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listobj",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"listife",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"lisr",
+				"MavensMate: List Fields For Object"
+			],
+			[
+				"bundle",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"BUNDL",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"bund",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new apex t",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"new apex cl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"tabs",
+				"MavensMate: Compile Tabs"
+			],
+			[
+				"compile t",
+				"MavensMate: Compile Tabs"
+			],
+			[
+				"compile tab",
+				"MavensMate: Compile Tabs"
+			],
+			[
+				"new ape x",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new page",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"new trgg",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"exec",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"new ape ",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"delete",
+				"MavensMate: Delete File From Server..."
+			],
+			[
+				"enw apex c",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"quick",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"edit pr",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"edit",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"edit ",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"eidt",
+				"MavensMate: Edit Project..."
+			],
+			[
+				"new proj",
+				"MavensMate: New Project..."
+			],
+			[
+				"run ",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"fetch",
+				"MavensMate: Fetch Logs"
+			],
+			[
+				"async",
+				"MavensMate: Run Async Apex Tests For This Class"
+			],
+			[
+				"new class",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"qui",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"fet",
+				"MavensMate: Fetch Logs"
+			],
+			[
+				"clean pro",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"run as",
+				"MavensMate: Run Async Apex Tests For This Class"
+			],
+			[
+				"fetc",
+				"MavensMate: Fetch Logs"
+			],
+			[
+				"refresh",
+				"MavensMate: Refresh Current File From Server"
+			],
+			[
+				"new lo",
+				"MavensMate: New Debug Log..."
+			],
+			[
+				"new cla",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"clean pr",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"new ",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new c",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new ape xl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"comp",
+				"MavensMate: Compile Project"
+			],
+			[
+				"healt",
+				"MavensMate: Project Health Check (beta)"
+			],
+			[
+				"new de",
+				"MavensMate: New Debug Log..."
+			],
+			[
+				"run a",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"new",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new debug",
+				"MavensMate: New Debug Log..."
+			],
+			[
+				"heal",
+				"MavensMate: Project Health Check (beta)"
+			],
+			[
+				"health",
+				"MavensMate: Project Health Check (beta)"
+			],
+			[
+				"run apex",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"clena pr",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"new quic",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"asyn",
+				"MavensMate: Run Async Apex Tests For This Class"
+			],
+			[
+				"new a",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"nemw de",
+				"MavensMate: New Debug Log..."
+			],
+			[
+				"new com",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"open pr",
+				"MavensMate: Open Project..."
+			],
+			[
+				"new apex ",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"depl",
+				"MavensMate: Deploy To Server..."
+			],
+			[
+				"etch",
+				"MavensMate: Fetch Logs"
+			],
+			[
+				"new deb",
+				"MavensMate: New Debug Log..."
+			],
+			[
+				"runs c",
+				"MavensMate: Run Apex Script..."
+			],
+			[
+				"run sc",
+				"MavensMate: Run Apex Script..."
+			],
+			[
+				"new visual",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"deply",
+				"MavensMate: Deploy To Server..."
+			],
+			[
+				"aysnc",
+				"MavensMate: Run Async Apex Tests For This Class"
+			],
+			[
+				"clean ",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"INSTALL",
+				"Package Control: Install Package"
+			],
+			[
+				"new clas",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"quikc",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"quk",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"fetch ",
+				"MavensMate: Fetch Logs"
+			],
+			[
+				"quick ",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"run s",
+				"MavensMate: Run Apex Script..."
+			],
+			[
+				"run asy",
+				"MavensMate: Run Async Apex Tests For This Class"
+			],
+			[
+				"apex sc",
+				"MavensMate: Run Apex Script..."
+			],
+			[
+				"deele",
+				"MavensMate: Delete File From Server..."
+			],
+			[
+				"new cl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new trig",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"new ape xcl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"ne wproj",
+				"MavensMate: New Project..."
+			],
+			[
+				"new prj",
+				"MavensMate: New Project..."
+			],
+			[
+				"ne wp",
+				"MavensMate: New Project..."
+			],
+			[
+				"new pr",
+				"MavensMate: New Project..."
+			],
+			[
+				"quicklo",
+				"MavensMate: New Quick Debug Log"
+			],
+			[
+				"clean p",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"new trigg",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"new tri",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"hea",
+				"MavensMate: Project Health Check (beta)"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			]
+		],
+		"width": 633.0
+	},
+	"console":
+	{
+		"height": 530.0,
+		"history":
+		[
+			"parse('foo')",
+			"p = subprocess.Popen([chrome_path,\"--app=file://foo\"], close_fds=False)",
+			"p = subprocess.Popen([chrome_path,\"--app=file://foo\"], close_fds=True)",
+			"chrome_path = system_path",
+			"system_path = os.path.join(\"/\", \"Applications\", \"Google Chrome.app\", \"Contents\", \"MacOS\", \"Google Chrome\")",
+			"import os",
+			"import subprocess",
+			"import mavensmate",
+			"apex_completions",
+			"os.path.basename(util.get_active_file())",
+			"import os",
+			"util.get_active_file()",
+			"import util",
+			"util.get_active_file()",
+			"os.path.basename('/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/mavensmate.py')",
+			"os.basename('/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/mavensmate.py')",
+			"import os",
+			"sublime.active_window().active_view().file_name()",
+			"sublime.active_window().active_view().file_name())",
+			"sublime.active_window().active_view()",
+			"sublime.active_window()",
+			"sublime.active_window())",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())",
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp = sublime.installed_packages_path(); os.makedirs( ipp ) if not os.path.exists(ipp) else None; urllib2.install_opener( urllib2.build_opener( urllib2.ProxyHandler( ))); open( os.path.join( ipp, pf), 'wb' ).write( urllib2.urlopen( 'http://sublime.wbond.net/' +pf.replace( ' ','%20' )).read()); print( 'Please restart Sublime Text to finish installation')",
+			"sublime.active_window().run_command('force_compile_file')",
+			"sublime.active_window()",
+			"sublime.active_window())",
+			"settings.get('diff_region_change_scope')",
+			"settings = sublime.load_settings('mavensmate.sublime-settings')",
+			"from MavensMate.lib.threads import ThreadTracker",
+			"from MavensMate.lib import ThreadTracker",
+			"sys.version_info",
+			"import sys",
+			"ThreadTracker.get_pending(sublime.active_window().id())",
+			"ThreadTracker.get_pending(sublime.get_active_window().id())",
+			"import sublime",
+			"ThreadTracker.get_pending(sublime.get_active_window().id())",
+			"ThreadTracker.get_pending()",
+			"from MavensMate.lib.threads import ThreadTracker",
+			"ThreadTracker.get_pending()",
+			"import MavensMate.lib.threads",
+			"mmp.size()",
+			"mmp = sublime.windows()[1].get_output_panel('MavensMate-OutputPanel')",
+			"mmp.size()",
+			"mmp = sublime.windows()[0].get_output_panel('MavensMate-OutputPanel')",
+			"mmp.size()",
+			"mmp = sublime.windows()[1].get_output_panel('MavensMate-OutputPanel')",
+			"mmp.size()",
+			"mmp.find('va2llv4ky9',0)",
+			"mmp",
+			"mmp = sublime.windows()[0].get_output_panel('MavensMate-OutputPanel')",
+			"sublime.windows()[0].id()",
+			"sublime.windows()[1].id()",
+			"wins[0].id()",
+			"len(wins[0].id)",
+			"len(wins[0].views())",
+			"len(wins[1].views())",
+			"len(wins[1].views)",
+			"wins[1].views",
+			"wins[0].views",
+			"wins[0]",
+			"winds[0]",
+			"wins",
+			"wins = sublime.windows()",
+			"p.size()",
+			"p.is_dirty()",
+			"p.find('va2llv4ky9',100)",
+			"p.find('va2llv4ky9',1)",
+			"p.find('va2llv4ky9',[0,0])",
+			"p.find('va2llv4ky9',0)",
+			"p.find('response from mm',0)",
+			"p.find('response from mm')",
+			"p",
+			"p = sublime.active_window().get_output_panel('MavensMate-OutputPanel')",
+			"sublime.active_window().get_output_panel('MavensMate-OutputPanel')",
+			"sublime.active_window()",
+			"dir(sublime)",
+			"sublime",
+			"sublime.active_view()",
+			"clear()",
+			"clear",
+			"sublime.version()",
+			"settings.get('mm_hide_panel_on_success')",
+			"settings = sublime.load_settings('mavensmate.sublime-settings')",
+			"sublime.settings().get('mm_soap_log')",
+			"view.settings().get('font_face')",
+			"view.settings().get('mm_soap_log')",
+			"view.settings().get('foo')",
+			"view.settings()",
+			"settings()",
+			"view.settings().get('font_face')",
+			"view.settings().get('mm_api_version')",
+			"view.settings().get('mm_location')",
+			"view.settings().get('font_face')",
+			"sublime.settings",
+			"settings.get('mm_location')",
+			"import sublime",
+			"settings.get('mm_location')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/josephferraro/Development/st2/rctest2/src/triggers/MyCoolTriggerfdsdfsfsdsdf.trigger",
+		"/Users/josephferraro/Development/st2/rctest2/src/triggers/MyCoolTriggerISSOCOOL.trigger",
+		"/Users/josephferraro/Development/st2/rctest2/config/.settings",
+		"/Users/josephferraro/Development/st/mm.log",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/AUTOTEST.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/TestContext.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/pages/kinda.page",
+		"/Users/josephferraro/Development/st2/rctest2/apex-scripts/log/2014-01-23-16.20.41.log",
+		"/Users/josephferraro/Development/st2/rctest2/apex-scripts/MyScriptNameTEST.cls",
+		"/Users/josephferraro/Development/st2/rctest2/apex-scripts/log/2014-01-23-16.18.12.log",
+		"/Users/josephferraro/Development/st2/rctest2/apex-scripts/log/2014-01-23-16.17.43.log",
+		"/Users/josephferraro/Development/st2/rctest2/rctest2.sublime-project",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/User/mavensmate.sublime-settings",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamehttp2.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/CompileAndTest.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/package.xml",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamemock.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamemock33.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamejdsfklffd.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamefdkj.cls",
+		"/Users/josephferraro/Development/st2/rctest2/src/classes/MyClassNamefdfdfdf.cls",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/sublime/menus/Side Bar.sublime-menu",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/lib/mm_interface.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/lib/reloader.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/lib/completioncommon.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/lib/parsehelp.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/util.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/sublime/menus/Main.sublime-menu",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/sublime/Default.sublime-commands",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/mavensmate.sublime-settings",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/sublime/keymaps/Default (OSX).sublime-keymap",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/sublime/keymaps/Default (Linux).sublime-keymap",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/mm/test/misc/util_tests.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/config.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/packages.json",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/lib/printer.py",
+		"/Users/josephferraro/Library/Application Support/Sublime Text 3/Packages/MavensMate/mm/test/suite.py",
+		"/Users/josephferraro/Development/st/mercury-force/mercury-force.sublime-project",
+		"/Users/josephferraro/Development/st/mercury-force/config/.symbols/MERC_AddMeetingParticipantsController.json",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_AddMeetingParticipants.page",
+		"/Users/josephferraro/Development/st/mercury-force/config/.apex_file_properties",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_DailyAttendanceControllerStressTest.cls",
+		"/Users/josephferraro/Development/st/mercury-force/config/.local_store",
+		"/Users/josephferraro/Development/st/mercury-force/config/.org_metadata",
+		"/Users/josephferraro/Development/st/mercury-force/config/.session",
+		"/Users/josephferraro/Development/st/mercury-force/config/.describe",
+		"/Users/josephferraro/Development/st/mercury-force/config/.symbols/CUST_RecordTypeIdLookup.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/MERC_TeamMemberShareHandler.json",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TeamMemberShareHandler.cls",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/aboutLoop.json",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TestFactory.cls",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/dsUser.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/RollupController.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/PostInstall.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/GLBL_TriggerHandler.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/GLBL_BaseEditController.json",
+		"/Users/josephferraro/Development/st/mercury-force/config/symbols/cioClone.json",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/TestDataFactoryMVN.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TOVCalculator.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TimeZoneUtility.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_DailyAttendanceController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_DailyAttendanceControllerTest.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/staticresources/TimeZoneMappingTestData_MERC.resource",
+		"/Users/josephferraro/Development/st/mercury-force/apex-scripts/TimeZoneStuff.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/objects/Travel_Itinerary_MERC__c.object",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_DailyAttendanceTOV.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/src/objects/Daily_Attendance_TOV_MERC__c.object",
+		"/Users/josephferraro/Development/st/mercury-force/test/lib/templates/ApexTrigger.html",
+		"/Users/josephferraro/Development/st/mercury-force/src/objects/Account.object",
+		"/Users/josephferraro/Development/st/mercury-force/test/lib/ui/templates/snippets/tree_store.html",
+		"/Users/josephferraro/Development/st/mercury-force/src/objects/Travel_MERC__c.object",
+		"/Users/josephferraro/Development/st/mercury-force/apex-scripts/SerializeTester.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/layouts/ContentVersion-HCP_Contract_MERC.layout",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TOVCalculatorTest.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/GLBL_CustomerSearchToolService.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_AddMeetingParticipantsController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/labels/CustomLabels.labels",
+		"/Users/josephferraro/Development/st/mercury-force/resource-bundles/mercury.resource/css/chosen.css",
+		"/Users/josephferraro/Desktop/foo.cls",
+		"/Users/josephferraro/Development/st/mercury-force/config/.symbols",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_DocusignService.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/GLBL_BaseEditController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/debug/test_logs/2014-01-14 13:19:40.07L11000002IXNmEAO.log",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_MeetingParticipant.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_ParticipantFMVCalculator.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_Util.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/GLBL_TriggerHandler.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/GLBL_SobjectDataLoader.cls",
+		"/Users/josephferraro/Development/st/mercury-force/debug/test_logs/2014-01-14 13:16:00.07L11000002IX7bEAG.json",
+		"/Users/josephferraro/Development/st/mercury-force/src/profiles/Mercury TCS.profile",
+		"/Users/josephferraro/Development/st/mercury-force/resource-bundles/mercury.resource/js/mercury.js",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_Meeting.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_Exception.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_DailyAttendance.page",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_MeetingVendor.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/resource-bundles/mercury.resource/css/bootstrap.tabs.css",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_MeetingDateTimesEdit.page",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_MeetingDateTimesController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_MeetingDateManagerController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_MeetingDayNewEditController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/PersonSearchControllerTestMVN.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/staticresources/DeclarativeRollupTestData_MERC.resource",
+		"/Users/josephferraro/Desktop/rollups.csv",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/PersonSearchMVN.page",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/PersonSearchControllerMVN.cls",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-14T09:16:13.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-14T09:13:43.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-14T09:11:11.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/src/staticresources/PersonSearchMVN.resource",
+		"/Users/josephferraro/Development/st/mercury-force/src/package.xml",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_AgendaBuilderController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TravelItineraryNewEditController.cls",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-13T20:27:46.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/Mercury/mercury-et-php/index.php",
+		"/Users/josephferraro/Development/Mercury/mercury-et-php/functions.php",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_TravelItineraryNewEdit.page",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_TravelItinerary.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TimestampHandler.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_MeetingDayNewEdit.page",
+		"/Users/josephferraro/Development/st/mercury-force/src/triggers/MERC_MeetingDay.trigger",
+		"/Users/josephferraro/Development/st/mercury-force/src/objects/Affiliation_GLBL__c.object",
+		"/Users/josephferraro/Development/st/mercury-force/src/classes/MERC_TravelItineraryNewEdit.cls",
+		"/Users/josephferraro/Development/st/mercury-force/src/pages/MERC_MeetingDateTimes.page",
+		"/Users/josephferraro/Development/st/mercury-force/apex-scripts/DocusignGenerateEnvelope.cls",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-13T08:57:31.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-13T08:55:23.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/debug/logs/2014-01-13T08:49:41.000Z-005b0000000ShWMAA0.log",
+		"/Users/josephferraro/Development/st/mercury-force/circle.yml"
+	],
+	"find":
+	{
+		"height": 37.0
+	},
+	"find_in_files":
+	{
+		"height": 573.0,
+		"where_history":
+		[
+			"src/",
+			"",
+			"src/",
+			"src/classes",
+			"src/",
+			"debug/logs/",
+			"debug/logs",
+			"src/",
+			"",
+			"src/layouts",
+			"src/",
+			"src/triggers",
+			"src/",
+			"src",
+			"",
+			"src",
+			"",
+			"src",
+			"",
+			"src/",
+			"",
+			"/Users/josephferraro/Development/Github/mm/lib",
+			"/Users/josephferraro/Development/Github/mm/local_modules",
+			"/Users/josephferraro/Development/Github/mm/lib",
+			"",
+			"/Users/josephferraro/Development/Github/mm/lib,-*.js,-*.svg,-*.css,-*.json",
+			"/Users/josephferraro/Development/Github/mm/lib,-*.js,-*.svg,-*.css",
+			"",
+			"src/triggers",
+			"src/classes",
+			"",
+			"src/classes",
+			"cls",
+			"",
+			"/Users/josephferraro/Development/Github/mm/lib",
+			"",
+			"mavensmate.py",
+			"",
+			"/Users/josephferraro/Development/Python/mavensmate/mm/lib/ui",
+			"",
+			"*.py",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"707d000000dUUiHAAW",
+			"__handle_coverage_result",
+			"mark",
+			"MMResultHandler",
+			"thread",
+			"printer",
+			"res",
+			"print_result_message",
+			"print_region",
+			"handle_result",
+			"[self.status_region.end(), self.status_region.end()+10]",
+			".get(",
+			"parse(",
+			"parse",
+			"parse(",
+			"util.",
+			"get_var_type",
+			"MERC_",
+			".cls",
+			"DocuSignAPI",
+			".cls",
+			"refreshParticipants",
+			"activeTab",
+			"show",
+			"don't show",
+			"tov",
+			"upsertMissingTovRecords",
+			"standAloneSearch",
+			"system.debug",
+			"validRecordTypeIds",
+			"ACCOUNTFIELDS",
+			"ADDRESSFIELDS",
+			".query",
+			"date",
+			".",
+			"string",
+			"GLBL_TriggerHandler",
+			"delete",
+			"getTimeZonePicklistValueForCurrentUser",
+			"meeting",
+			"timestam",
+			"timezone",
+			"fieldSetLabels",
+			"handleAddResponse",
+			"showMessage",
+			"statusMessage",
+			"showMessage",
+			"resultTableWrapper",
+			"resultBlockWrapper",
+			"resultBlock",
+			"resultTableWrapper",
+			"resultBlockWrapper",
+			"meetingParticipantBlock",
+			"responseWrapper",
+			"meetingParticipantBlock",
+			"hover",
+			"height:",
+			"13px",
+			"border-radius",
+			"preferred",
+			"allFields",
+			"TRIGGER IS BEFORE",
+			"calculating tov",
+			"user_debug",
+			"sobjectDescribe",
+			"required",
+			"super",
+			"Schema.SobjectType",
+			"super",
+			"addfields",
+			"getUrlParam",
+			"myid",
+			"sobjecttype",
+			"sObjectType",
+			"DescribeSObjectResult",
+			"this.s",
+			"addfields",
+			"getSalutation",
+			"Opportunity",
+			"Title",
+			"MERC_HcpCapActualsCalculator",
+			"rollupCapCalculationsFromParticipantToAccount",
+			"Agenda_Builder_MERC",
+			"Agenda_Builder_Non_UI_Fields_MERC",
+			"Agenda_Item_Date_Time_View_MERC",
+			"New_Edit_Agenda_Item_Date_Time_MERC",
+			"New_Edit_Agenda_Item_Basic_Info_MERC",
+			"Agenda_Item_Date_Time_User_TZ_View_MERC",
+			"agendaItem",
+			"handleAddResponse",
+			"sfdc_id",
+			"__c",
+			" :.*",
+			":",
+			",",
+			":",
+			"\"",
+			"primary_addr_line2_glbl",
+			"MERC_TimeZoneCalculator",
+			"TimeZoneCalculator",
+			"SObjectType",
+			"MERC_TimeZoneCalculator",
+			"objectNameString",
+			"user_debug",
+			"GLBL_CustomerSearchToolService",
+			"document.get",
+			"label",
+			".....",
+			"getUrlParam",
+			"other_",
+			"other",
+			"other_tov",
+			"hotel",
+			"insertMercuryCustomSettings",
+			"\"message",
+			"class=\"message",
+			"M2",
+			"infoM2",
+			">>>",
+			"ready",
+			"ready to correct date",
+			"processing",
+			"...processing:",
+			"m.",
+			"child so",
+			"compile",
+			"comppile",
+			"finalize"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"self.thread",
+			"self.printer",
+			"self.result",
+			"self.__print_region()",
+			"",
+			"11px",
+			"sObjectAPIName",
+			"this.mySobject",
+			"meetingDay",
+			"",
+			" { get; set; }",
+			"{ get; set; }",
+			"",
+			"record.",
+			"sobjectAPIName",
+			"<layoutItems>\n    <height>80</height>\n    <page>MERC_MeetingDateTimes</page>\n    <showLabel>false</showLabel>\n    <showScrollbars>false</showScrollbars>\n    <width>100%</width>\n</layoutItems>",
+			"CASESAFEID($Organization.Id) &amp;&quot;_&quot;&amp; CASESAFEID(Id)",
+			"",
+			"NumberOfEmployees",
+			"Last_Review_Date_MERC__c",
+			"GLBL_LookupRollupSummaryEngine",
+			"GLBL_LookupRollupSummaryEngineTest",
+			"GLBL_LookupRollupSummaryEngine",
+			"Mdl_Nm_GLBL__c",
+			"Zip_Postal_Code_GLBL__c",
+			"Adrs_Cntry_Cd_GLBL__c",
+			"Address_GLBL__c",
+			"City_GLBL__c",
+			"St_Cd_GLBL__c",
+			"Adrs_Cntry_Cd_GLBL__c",
+			"St_Cd_GLBL__c",
+			"HCP_GLBL",
+			"Account_GLBL__r",
+			"State_Province_GLBL__c",
+			"Mdl_Nm_GLBL__c",
+			"text/javascript",
+			"</script>",
+			"\\\\",
+			"debug",
+			"GLBL_SobjectDataLoader",
+			"MERC_DocusignServiceMock",
+			"MERC_DocusignServiceMock.",
+			"MERC_DocusignService.",
+			"MERC_DocusignServiceTest.",
+			"MERC_TestFactory",
+			"SObjectDataLoaderMVN.",
+			") {",
+			"authHeader",
+			"Docusign_Settings_EVNT__c",
+			"DocusignService",
+			") {",
+			"Docusign_Settings_EVNT__c",
+			"DocusignServiceMVN",
+			"logger",
+			"https://mavens-mavensconsulting.netdna-ssl.com",
+			"86",
+			"VendorWrapper",
+			"EventVendorWrapper",
+			"s.step.",
+			"new_topic_create_hash",
+			"newTopicFieldsPanel",
+			"newTopicModal",
+			"open-sans",
+			"Open Sans",
+			"open-sans",
+			"Open Sans",
+			"mmDiffView",
+			"MavensMateDiffThread",
+			"MavensMateDifferScrollSync",
+			"MavensMateDiffer",
+			"config.settings.get",
+			"util.to_bool",
+			"mm.call",
+			"",
+			"mavens_mate",
+			"process",
+			"config.mm_dir",
+			"util.is_mm_file",
+			"util.is_mm_project",
+			"is_mm_project",
+			"is_mm_file()"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/classes/ApexClassesSelector.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2836,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								241,
+								241
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "java",
+							"buffer_scroll_name": "b392b761",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/classes/CompileAndTest.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 183,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								183,
+								183
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "java",
+							"buffer_scroll_name": "c6333e1e",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/classes/MyApexClassfddsfdfssdf.cls",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 93,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								93,
+								93
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "java",
+							"buffer_scroll_name": "a1bdfd33",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "rctest2.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 692,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								328,
+								328
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "json",
+							"buffer_scroll_name": "0ce6671a",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "rctest2.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 194,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								192,
+								192
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "json",
+							"buffer_scroll_name": "d8dea057",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/package.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 490,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								379,
+								379
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "xml",
+							"buffer_scroll_name": "36fc2884",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 684,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								136,
+								136
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "plain text",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/MavensMate/sublime/lang/Apex.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "config/.tests",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 109,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								109,
+								109
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "plain text",
+							"buffer_scroll_name": "a22880a9",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/Users/josephferraro/Development/st/mm.log",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9352979,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bs_sintax": "plain text",
+							"buffer_scroll_name": "7d65bf7c",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.MavensMate-OutputPanel":
+	{
+		"height": 233.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"project": "rctest2.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"mmin",
+				"lib/mm_interface.py"
+			],
+			[
+				"mminte",
+				"lib/mm_interface.py"
+			],
+			[
+				"defau",
+				"sublime/Default.sublime-commands"
+			],
+			[
+				"main",
+				"sublime/menus/Main.sublime-menu"
+			],
+			[
+				"mmint",
+				"lib/mm_interface.py"
+			],
+			[
+				"uti",
+				"util.py"
+			],
+			[
+				"comple",
+				"lib/completioncommon.py"
+			],
+			[
+				"parsehe",
+				"lib/parsehelp.py"
+			],
+			[
+				"mavens",
+				"mavensmate.py"
+			],
+			[
+				"sideba",
+				"sublime/menus/Side Bar.sublime-menu"
+			],
+			[
+				"merc_addmeetingparticipants",
+				"src/pages/MERC_AddMeetingParticipants.page"
+			],
+			[
+				"merc_addmeetingparticipants.cls",
+				"src/classes/MERC_AddMeetingParticipantsController.cls"
+			],
+			[
+				"testfac",
+				"src/classes/MERC_TestFactory.cls"
+			],
+			[
+				"timezone",
+				"src/classes/MERC_TimeZoneUtility.cls"
+			],
+			[
+				"testfa",
+				"src/classes/MERC_TestFactory.cls"
+			],
+			[
+				"merc_dailyattendancecontroller",
+				"src/classes/MERC_DailyAttendanceController.cls"
+			],
+			[
+				"attendancetest",
+				"src/classes/MERC_DailyAttendanceControllerTest.cls"
+			],
+			[
+				"stress",
+				"src/classes/MERC_DailyAttendanceControllerStressTest.cls"
+			],
+			[
+				"merc_teammembersharehandler",
+				"src/classes/MERC_TeamMemberShareHandler.cls"
+			],
+			[
+				"merc_addmeetingparticipantscontroller",
+				"src/classes/MERC_AddMeetingParticipantsController.cls"
+			],
+			[
+				"customsearchtoo",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"glblbase",
+				"src/classes/GLBL_BaseEditController.cls"
+			],
+			[
+				"glbl",
+				"src/classes/GLBL_TriggerHandler.cls"
+			],
+			[
+				"merc_docusignservice.cls",
+				"src/classes/MERC_DocusignService.cls"
+			],
+			[
+				"merc_participantfmvcalculator",
+				"src/classes/MERC_ParticipantFMVCalculator.cls"
+			],
+			[
+				"mercutil",
+				"src/classes/MERC_Util.cls"
+			],
+			[
+				"merc_testfactory",
+				"src/classes/MERC_TestFactory.cls"
+			],
+			[
+				"merc_dailyattendancecontrollerte",
+				"src/classes/MERC_DailyAttendanceControllerTest.cls"
+			],
+			[
+				"merc_dailyattendance",
+				"src/pages/MERC_DailyAttendance.page"
+			],
+			[
+				"merc_meetingvendor",
+				"src/triggers/MERC_MeetingVendor.trigger"
+			],
+			[
+				"merc_tovcalculator",
+				"src/classes/MERC_TOVCalculator.cls"
+			],
+			[
+				"merc_meetingdatetimescontroller",
+				"src/classes/MERC_MeetingDateTimesController.cls"
+			],
+			[
+				"merc_meetingdatetimesedit",
+				"src/pages/MERC_MeetingDateTimesEdit.page"
+			],
+			[
+				"merctest",
+				"src/classes/MERC_TestFactory.cls"
+			],
+			[
+				"tov",
+				"src/classes/MERC_TOVCalculator.cls"
+			],
+			[
+				"personsearchcontrollermvn",
+				"src/classes/PersonSearchControllerMVN.cls"
+			],
+			[
+				"persons",
+				"src/pages/PersonSearchMVN.page"
+			],
+			[
+				"merc_agendabuildercontroller",
+				"src/classes/MERC_AgendaBuilderController.cls"
+			],
+			[
+				"merc_dailyattendancetov",
+				"src/triggers/MERC_DailyAttendanceTOV.trigger"
+			],
+			[
+				"glbl_baseeditcontroller",
+				"src/classes/GLBL_BaseEditController.cls"
+			],
+			[
+				"merc_travelitinerarynewedit",
+				"src/classes/MERC_TravelItineraryNewEditController.cls"
+			],
+			[
+				"merc_timezoneutility",
+				"src/classes/MERC_TimeZoneUtility.cls"
+			],
+			[
+				"merc_timestamphandler",
+				"src/classes/MERC_TimestampHandler.cls"
+			],
+			[
+				"merc_meetingdayneweditcontroller",
+				"src/classes/MERC_MeetingDayNewEditController.cls"
+			],
+			[
+				"merc_meetingdaynewedit",
+				"src/pages/MERC_MeetingDayNewEdit.page"
+			],
+			[
+				"merc_travelitineraryneweditcontroller",
+				"src/classes/MERC_TravelItineraryNewEditController.cls"
+			],
+			[
+				"datetime",
+				"src/pages/MERC_MeetingDateTimesEdit.page"
+			],
+			[
+				"glbl_customersearchtoolservice",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"chosen.",
+				"resource-bundles/mercury.resource/css/chosen.css"
+			],
+			[
+				"meru",
+				"src/classes/MERC_Util.cls"
+			],
+			[
+				"merc_hcpcapactualscalculatortest",
+				"src/classes/MERC_HcpCapActualsCalculatorTest.cls"
+			],
+			[
+				"basecontrol",
+				"src/classes/GLBL_BaseEditController.cls"
+			],
+			[
+				"tovc",
+				"src/classes/MERC_TOVCalculator.cls"
+			],
+			[
+				"glbl_triggerhandler",
+				"src/classes/GLBL_TriggerHandler.cls"
+			],
+			[
+				"merc_agendaitemneweditcontroller",
+				"src/classes/MERC_AgendaItemNewEditController.cls"
+			],
+			[
+				"agendaitemnewedi",
+				"src/pages/MERC_AgendaItemNewEdit.page"
+			],
+			[
+				"merc_agendaitemnewedit",
+				"src/pages/MERC_AgendaItemNewEdit.page"
+			],
+			[
+				"glbl_genericrelatedlistcontroller",
+				"src/classes/GLBL_GenericRelatedListController.cls"
+			],
+			[
+				"agendaitem",
+				"src/pages/MERC_AgendaItemDateTimes.page"
+			],
+			[
+				"mercury.js",
+				"resource-bundles/mercury.resource/js/mercury.js"
+			],
+			[
+				"customersea",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"customersearch",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"mercuti",
+				"src/classes/MERC_Util.cls"
+			],
+			[
+				"agendabu",
+				"src/pages/MERC_AgendaBuilder.page"
+			],
+			[
+				"meetingdatetime",
+				"src/pages/MERC_MeetingDateTimesEdit.page"
+			],
+			[
+				"customersear",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"merc_hcpcapactualscalculator",
+				"src/classes/MERC_HcpCapActualsCalculator.cls"
+			],
+			[
+				"merc_agendaitemneweditcontrollertest.cls",
+				"src/classes/MERC_AgendaItemNewEditControllerTest.cls"
+			],
+			[
+				"meetingdatet",
+				"src/classes/MERC_MeetingDateTimesController.cls"
+			],
+			[
+				"egandaite",
+				"src/pages/MERC_AgendaItemNewEdit.page"
+			],
+			[
+				"agendabuil",
+				"src/pages/MERC_AgendaBuilder.page"
+			],
+			[
+				"merc_timezonecalculator",
+				"src/classes/MERC_TimeZoneCalculator.cls"
+			],
+			[
+				"merc_agendabuilder",
+				"src/pages/MERC_AgendaBuilder.page"
+			],
+			[
+				"agendaitemnewe",
+				"src/pages/MERC_AgendaItemNewEdit.page"
+			],
+			[
+				"factor",
+				"src/classes/MERC_TestFactory.cls"
+			],
+			[
+				"agendatest",
+				"src/classes/MERC_AgendaItemNewEditControllerTest.cls"
+			],
+			[
+				"timezon",
+				"src/classes/MERC_TimeZoneCalculator.cls"
+			],
+			[
+				"agendadateti",
+				"src/pages/MERC_AgendaItemDateTimes.page"
+			],
+			[
+				"timezonecal",
+				"src/classes/MERC_TimeZoneCalculator.cls"
+			],
+			[
+				"searchtool",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"mercmeeting",
+				"src/triggers/MERC_Meeting.trigger"
+			],
+			[
+				"agendaitemcon",
+				"src/classes/MERC_AgendaItemNewEditController.cls"
+			],
+			[
+				"mercmeet",
+				"src/triggers/MERC_Meeting.trigger"
+			],
+			[
+				"daily",
+				"src/classes/MERC_DailyAttendanceController.cls"
+			],
+			[
+				"merc_hcpcapactualscalculatortest.cls",
+				"src/classes/MERC_HcpCapActualsCalculatorTest.cls"
+			],
+			[
+				"budgetversio",
+				"src/classes/MERC_BudgetVersionController.cls"
+			],
+			[
+				"budgethistor",
+				"src/classes/MERC_BudgetHistoryController.cls"
+			],
+			[
+				"glbl_sobjectdataloader",
+				"src/classes/GLBL_SobjectDataLoader.cls"
+			],
+			[
+				"merc_budgetversioncontroller",
+				"src/classes/MERC_BudgetVersionController.cls"
+			],
+			[
+				"merc_budgetversioncontrollertest.cls",
+				"src/classes/MERC_BudgetVersionControllerTest.cls"
+			],
+			[
+				"dailyatt",
+				"src/classes/MERC_DailyAttendanceControllerTest.cls"
+			],
+			[
+				"merc_dailyattendancecontrollertest.cls",
+				"src/classes/MERC_DailyAttendanceControllerTest.cls"
+			],
+			[
+				"mercme",
+				"src/triggers/MERC_Meeting.trigger"
+			],
+			[
+				"mercmeeting.r",
+				"src/triggers/MERC_Meeting.trigger"
+			],
+			[
+				"personsearchcontrollertestmvn",
+				"src/classes/PersonSearchControllerTestMVN.cls"
+			],
+			[
+				"personsearchresultmockmvn",
+				"src/classes/PersonSearchResultMockMVN.cls"
+			],
+			[
+				"testdatafactorymvn",
+				"src/classes/TestDataFactoryMVN.cls"
+			],
+			[
+				"tovca",
+				"src/classes/MERC_TOVCalculator.cls"
+			],
+			[
+				"glbl_rollupsummaryutility",
+				"src/classes/GLBL_RollupSummaryUtility.cls"
+			],
+			[
+				"glblrol",
+				"src/classes/GLBL_RollupSummaryUtility.cls"
+			],
+			[
+				"rollupsumm",
+				"src/classes/RollupSummariesTest.cls"
+			],
+			[
+				"rollup",
+				"src/classes/GLBL_RollupSummaryUtility.cls"
+			],
+			[
+				"dail",
+				"src/classes/MERC_DailyAttendanceController.cls"
+			],
+			[
+				"mercmeetingdate",
+				"src/pages/MERC_MeetingDateTimes.page"
+			],
+			[
+				"mercbud",
+				"src/classes/MERC_BudgetVersionController.cls"
+			],
+			[
+				"budgetvers",
+				"src/classes/MERC_BudgetVersionController.cls"
+			],
+			[
+				"notifyser",
+				"src/classes/MERC_DeleteNotifyService.cls"
+			],
+			[
+				"merc_newcontentcontroller",
+				"src/classes/MERC_NewContentController.cls"
+			],
+			[
+				"merc_newcontentgeneric",
+				"src/components/MERC_NewContentGeneric.component"
+			],
+			[
+				"mercuit",
+				"src/classes/MERC_Util.cls"
+			],
+			[
+				"meetingdatecon",
+				"src/classes/MERC_MeetingDateTimesController.cls"
+			],
+			[
+				"agendab",
+				"src/pages/MERC_AgendaBuilder.page"
+			],
+			[
+				"mercmeecontroll",
+				"src/classes/MERC_MeetingDateTimesController.cls"
+			],
+			[
+				"timezonec",
+				"src/classes/MERC_TimeZoneCalculator.cls"
+			],
+			[
+				"meetingdatetim",
+				"src/pages/MERC_MeetingDateTimesEdit.page"
+			],
+			[
+				"meetindatim",
+				"src/pages/MERC_MeetingDateTimes.page"
+			],
+			[
+				"lockhan",
+				"src/classes/AEU_EVENT_LOCKED_HANDLER.cls"
+			],
+			[
+				"customere",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"capcal",
+				"src/classes/MERC_HcpCapActualsCalculator.cls"
+			],
+			[
+				"searchserv",
+				"src/classes/GLBL_CustomerSearchToolService.cls"
+			],
+			[
+				"util",
+				"src/classes/MERC_Util.cls"
+			],
+			[
+				"local",
+				"lib/mm_local_store.py"
+			],
+			[
+				"mmpro",
+				"lib/mm_project.py"
+			],
+			[
+				"confi",
+				"lib/config.py"
+			],
+			[
+				"entityfactory",
+				"src/classes/EntityFactory.cls"
+			],
+			[
+				"mmcl",
+				"lib/mm_client.py"
+			],
+			[
+				"mmconn",
+				"lib/mm_connection.py"
+			],
+			[
+				"meta",
+				"lib/sforce/metadata.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 375.0,
+		"selected_items":
+		[
+		],
+		"width": 471.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 217.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -1,0 +1,50 @@
+{
+    "properties": [], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [
+        {
+            "modifiers": [], 
+            "name": "a2", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 9, 
+                "line": 2
+            }, 
+            "type": null
+        }
+    ], 
+    "namespace": null, 
+    "name": "a2", 
+    "tableDeclaration": {
+        "type": "a2", 
+        "modifiers": [], 
+        "references": [], 
+        "location": {
+            "column": 27, 
+            "line": 1
+        }, 
+        "name": "a2"
+    }, 
+    "key": "01p40000000DmScAAK", 
+    "variables": [], 
+    "id": "01p40000000DmScAAK", 
+    "methods": [
+        {
+            "modifiers": [], 
+            "name": "foo", 
+            "parameters": [], 
+            "visibility": "PRIVATE", 
+            "references": [], 
+            "location": {
+                "column": 12, 
+                "line": 6
+            }, 
+            "returnType": "String", 
+            "type": null
+        }
+    ]
+}

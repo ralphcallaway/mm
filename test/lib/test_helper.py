@@ -44,7 +44,10 @@ class MavensMateTest(unittest.TestCase):
                 print '\n\n['+str(command_name_or_argv)+'] ------->\n'
 
             print '\n[STDIN] -->\n'
-            print json.dumps(stdin)
+            if type(stdin) is str:
+                print stdin
+            elif type(stdin) is dict or type(stdin) is list and stdin != {}:
+                print json.dumps(stdin)
             print '\n[STDOUT] -->\n'
             print mm_response
         if as_json:

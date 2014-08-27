@@ -55,6 +55,7 @@ frozen = __get_is_frozen()
 base_path = __get_base_path()
 support_dir = __get_support_directory()
 
+offline = None #whether the context of the command is offline (for example, parsing, which should not require an sfdc session)
 plugin_client_settings = None
 connection = None
 project = None

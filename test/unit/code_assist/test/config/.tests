@@ -1,0 +1,8 @@
+{
+	"my cool suite" : [
+		"CompileAndTest"
+	],
+	"this is a suite" : [
+		"CompileAndTest", "RollupJobTest"
+	]
+}

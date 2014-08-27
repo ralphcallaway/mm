@@ -1,0 +1,59 @@
+{
+    "properties": [
+        {
+            "modifiers": [], 
+            "name": "helloWorld", 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 17, 
+                "line": 3
+            }, 
+            "type": "Boolean"
+        }
+    ], 
+    "externalReferences": [], 
+    "innerClasses": [], 
+    "interfaces": [], 
+    "constructors": [
+        {
+            "modifiers": [], 
+            "name": "MyApexClass", 
+            "parameters": [], 
+            "visibility": "PUBLIC", 
+            "references": [], 
+            "location": {
+                "column": 9, 
+                "line": 5
+            }, 
+            "type": null
+        }
+    ], 
+    "namespace": null, 
+    "name": "MyApexClass", 
+    "tableDeclaration": {
+        "type": "MyApexClass", 
+        "modifiers": [], 
+        "references": [], 
+        "location": {
+            "column": 27, 
+            "line": 1
+        }, 
+        "name": "MyApexClass"
+    }, 
+    "key": "01p40000000DxbXAAS", 
+    "variables": [
+        {
+            "type": "String", 
+            "modifiers": [], 
+            "references": [], 
+            "location": {
+                "column": 11, 
+                "line": 9
+            }, 
+            "name": "foo"
+        }
+    ], 
+    "id": "01p40000000DxbXAAS", 
+    "methods": []
+}

@@ -474,6 +474,15 @@ div.x-panel-body .x-tree-checkbox-checked-disabled input.x-tree-checkbox {
 	margin-bottom: 10px !important;
 }
 
+form.form-stacked .btn-group.select.select-block.mbl.info.span12 {
+	max-width:580px !important;
+	margin-bottom: 10px !important;
+}
+
+form.form-stacked input.span12, form.form-stacked select {
+	max-width:580px;
+}
+
 /*
 	Adding Icons
 

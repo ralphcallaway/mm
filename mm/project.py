@@ -62,31 +62,30 @@ class MavensMateProject(object):
             if self.subscription == []:
                 self.subscription           = self.settings.get('subscription', [])
             self.conflict_manager = ConflictManager(self)
-            #config.logger.debug(self.sfdc_session)
-            #config.logger.debug(self.get_creds())
+            
+            if not config.offline:
+                if (self.ui == False and self.defer_connection == False) or config.connection.operation in self.ui_commands_that_require_client:
+                    needs_session_override = False
+                    if self.sfdc_session != None and 'endpoint' in self.sfdc_session:
+                        endpoint = self.sfdc_session['endpoint']
+                        api_version_preference = int(float(util.SFDC_API_VERSION))
+                        if int(float(endpoint.split("/")[-1])) != api_version_preference:
+                            needs_session_override = True
 
-            if (self.ui == False and self.defer_connection == False) or config.connection.operation in self.ui_commands_that_require_client:
-                needs_session_override = False
-                if self.sfdc_session != None and 'endpoint' in self.sfdc_session:
-                    endpoint = self.sfdc_session['endpoint']
-                    api_version_preference = int(float(util.SFDC_API_VERSION))
-                    if int(float(endpoint.split("/")[-1])) != api_version_preference:
-                        needs_session_override = True
+                    self.sfdc_client = MavensMateClient(credentials=self.get_creds(),override_session=needs_session_override)
 
-                self.sfdc_client = MavensMateClient(credentials=self.get_creds(),override_session=needs_session_override)
-
-                if self.sfdc_session != None and 'sid' in self.sfdc_session and self.sfdc_client != None and (self.sfdc_session['sid'] != self.sfdc_client.sid): 
-                    config.logger.debug('storing updated session information locally')
-                    self.__set_sfdc_session()
-                elif self.sfdc_session == None:
-                    config.logger.debug('storing new session information locally')
-                    self.__set_sfdc_session()
-                elif 'server_url' not in self.sfdc_session:
-                    config.logger.debug('storing new session information locally because of missing server_url')
-                    self.__set_sfdc_session()
-                elif self.sfdc_client.reset_creds == True:
-                    config.logger.debug('storing new session information locally because reset_creds')
-                    self.__set_sfdc_session()
+                    if self.sfdc_session != None and 'sid' in self.sfdc_session and self.sfdc_client != None and (self.sfdc_session['sid'] != self.sfdc_client.sid): 
+                        config.logger.debug('storing updated session information locally')
+                        self.__set_sfdc_session()
+                    elif self.sfdc_session == None:
+                        config.logger.debug('storing new session information locally')
+                        self.__set_sfdc_session()
+                    elif 'server_url' not in self.sfdc_session:
+                        config.logger.debug('storing new session information locally because of missing server_url')
+                        self.__set_sfdc_session()
+                    elif self.sfdc_client.reset_creds == True:
+                        config.logger.debug('storing new session information locally because reset_creds')
+                        self.__set_sfdc_session()
 
         elif config.connection.operation not in self.deferred_project_commands and self.project_name != None and not os.path.exists(os.path.join(config.connection.workspace,self.project_name)):
             raise MMException('Project not found in your workspace')

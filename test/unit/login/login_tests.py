@@ -40,10 +40,20 @@ class LoginUnitTest(MavensMateTest):
         self.assertEqual(mm_response['success'], False) 
         self.assertTrue('Please enter a Salesforce.com username' in mm_response['body'])
 
-    def test_should_return_bad_creds_message(self): 
+    def test_should_prompt_for_org_type(self): 
         stdin = {
             "username" : test_helper.get_creds()['username'],
-            "password" : test_helper.get_creds()['password'],
+            "password" : test_helper.get_creds()['password']
+        }
+        
+        mm_response = self.runCommand('get_active_session', stdin)
+        self.assertEqual(mm_response['success'], False) 
+        self.assertEqual(mm_response['body'], 'Please select an org type')
+
+    def test_should_return_bad_creds_message(self): 
+        stdin = {
+            "username" : 'thiswontwork@foo.com',
+            "password" : 'boobarbat',
             "org_type" : test_helper.get_creds()['org_type']
         }
         

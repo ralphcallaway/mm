@@ -1,0 +1,12 @@
+[
+    {
+        "username": "mm@force.com", 
+        "environment": "production", 
+        "id": "NX9EM5CBHD8I3ZJBCRPK0SHNTMVOCD1R"
+    }, 
+    {
+        "username": "mm2@force.com", 
+        "environment": "production", 
+        "id": "67V3V9MIF5RV7IL0NT8IGO1GA44Q4IQ5"
+    }
+]
