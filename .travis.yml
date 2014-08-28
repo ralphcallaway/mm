@@ -12,7 +12,8 @@ before_deploy:
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
   - tar -xzvf PyInstaller-2.1.tar.gz
   - ls
-  - python PyInstaller-2.1/pyinstaller.py mm/mm.spec
+  - cd mm
+  - python ../PyInstaller-2.1/pyinstaller.py mm.spec
   - ls
   - tar -zcvf mm-linux.tar.gz -C dist .
   - ls 
