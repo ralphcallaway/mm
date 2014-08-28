@@ -185,7 +185,7 @@ def put_password_by_key(key, password):
             import keyring
 
         if config.is_windows:
-            keyring.set_keyring(keyring.backends.file.EncryptedKeyring())
+            keyring.set_keyring(keyring.backends.Windows.WinVaultKeyring())
 
         if config.is_linux:
             try:
@@ -210,8 +210,8 @@ def get_password_by_key(key):
             import keyring
 
         if config.is_windows:
-            keyring.set_keyring(keyring.backends.file.EncryptedKeyring())
-            
+            keyring.set_keyring(keyring.backends.Windows.WinVaultKeyring())
+
         if config.is_linux:
             try:
                 items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
