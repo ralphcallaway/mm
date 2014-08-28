@@ -3,7 +3,20 @@ import os
 import encodings
 
 a = Analysis(['mm.py'],
-             hiddenimports=['encodings','jinja2.ext'],
+             hiddenimports=[
+              'encodings',
+              'jinja2.ext',
+              'keyring.backends.file',
+              'keyring.backends.Gnome',
+              'keyring.backends.Google',
+              'keyring.backends.keyczar',
+              'keyring.backends.kwallet',
+              'keyring.backends.multi',
+              'keyring.backends.OS_X',
+              'keyring.backends.pyfs',
+              'keyring.backends.SecretService',
+              'keyring.backends.Windows'
+            ],
              hookspath=None,
              runtime_hooks=None)
 
