@@ -34,6 +34,11 @@ try:
 except:
     pass
 
+if config.is_windows:
+    try:
+        import keyring.backends._win_crypto as _win_crypto
+    except:
+        pass
 
 import jinja2.ext
 import jinja2htmlcompress
@@ -184,9 +189,6 @@ def put_password_by_key(key, password):
         else:
             import keyring
 
-        if config.is_windows:
-            keyring.set_keyring(keyring.backends.Windows.WinVaultKeyring())
-
         if config.is_linux:
             try:
                 gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
@@ -208,9 +210,6 @@ def get_password_by_key(key):
             import gnomekeyring
         else:
             import keyring
-
-        if config.is_windows:
-            keyring.set_keyring(keyring.backends.Windows.WinVaultKeyring())
 
         if config.is_linux:
             try:
