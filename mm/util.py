@@ -915,20 +915,15 @@ def generate_error_response(message, dump_to_json=True, verbose=False):
                 #todo: support windows and linux
             except:
                 pass
-            # try to get the executable version
-            try:
-                if sys.platform == 'darwin':
-                    dic = plistlib.readPlist('/Applications/MavensMate.app/Contents/Info.plist')
-                    if 'CFBundleVersion' in dic:
-                        stack_trace += ', MavensMate ' + dic['CFBundleVersion']
-            except:
-                pass
-
+            
         if 'nodename nor servname provided' in stack_trace:
             message = 'No internet connection'
 
+        stack_trace = re.sub(r'/Users\/.+?.pyz\/', '', stack_trace)
+
         config.logger.exception("[MAVENSMATE CAUGHT ERROR]")
         config.logger.debug(stack_trace)
+
         if config.connection.verbose or verbose:
             res = {
                 "success"       : False,
@@ -947,6 +942,7 @@ def generate_error_response(message, dump_to_json=True, verbose=False):
         else:
             return res
     except:
+        stack_trace = re.sub(r'/Users\/.+?.pyz\/', '', stack_trace)
         res = {
             "success"       : False,
             "body_type"     : "text",
@@ -963,7 +959,9 @@ def format_exception(exc_info=None):
         exc_info = sys.exc_info()
     out = StringIO()
     traceback.print_exception(*exc_info, **dict(file=out))
-    return out.getvalue()
+    formatted_exception = out.getvalue()
+    formatted_exception = re.sub(r'/Users\/.+?.pyz\/', '', formatted_exception)
+    return formatted_exception
 
 def prepare_for_metadata_tree(metadata_list):
     apex_types = ['ApexClass', 'ApexComponent', 'ApexTrigger', 'ApexPage', 'StaticResource']
