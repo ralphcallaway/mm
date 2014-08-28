@@ -24,6 +24,17 @@ from operator import itemgetter
 from mm.exceptions import MMException
 from jinja2 import Environment, FileSystemLoader
 
+# these keyring imports are for pyinstaller
+try:
+    import keyring
+except:
+    pass
+try:
+    import gnomekeyring
+except:
+    pass
+
+
 import jinja2.ext
 import jinja2htmlcompress
 from jinja2htmlcompress import HTMLCompress
