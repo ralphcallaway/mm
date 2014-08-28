@@ -69,5 +69,5 @@ osx_platforms = ["darwin"]
 user_platform = sys.platform
 
 is_windows   = user_platform in windows_platforms
-is_linux     = user_platform in windows_platforms
-is_osx       = user_platform in windows_platforms
+is_linux     = user_platform in linux_platforms
+is_osx       = user_platform in osx_platforms
