@@ -48,8 +48,7 @@ To override default MavensMate settings, modify user-specific settings (MavensMa
 	"mm_app_location" : "/Applications/MavensMate.app",
 
 	//the location of the mm command line tool (must be inside MavensMate.app)
-	"mm_location" : "/Applications/MavensMate.app/Contents/Resources/mm/mm",
-	//"mm_location" : "/Users/josephferraro/Development/Python/mavensmate/mm/dist/mm/mm",
+	"mm_path" : "default",
 
 	//if true, MavensMate.app will start when Sublime Text starts
 	"mm_start_app_on_st_startup" : true,

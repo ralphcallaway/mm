@@ -34,7 +34,7 @@ class BackgroundWorker(threading.Thread):
         self.payload        = payload
         self.plugin_client  = plugin_client
         self.response       = None
-        self.mm_path        = config.connection.get_plugin_client_setting('mm_location')
+        self.mm_path        = config.connection.get_plugin_client_setting('mm_path')
         self.debug_mode     = config.connection.get_plugin_client_setting('mm_debug_mode')
         threading.Thread.__init__(self)
 
