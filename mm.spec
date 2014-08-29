@@ -6,6 +6,7 @@ a = Analysis(['mm.py'],
              hiddenimports=[
               'encodings',
               'jinja2.ext',
+              'gnomekeyring',
               'keyring',
               'keyring.backend',
               'keyring.cli',
