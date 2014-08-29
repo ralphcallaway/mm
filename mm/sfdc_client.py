@@ -48,6 +48,8 @@ class MavensMateClient(object):
         #print self.credentials
 
         if self.credentials != None:
+            debug('creds!')
+            debug(self.credentials)
             self.username               = self.credentials['username']              if 'username' in self.credentials else None
             self.password               = self.credentials['password']              if 'password' in self.credentials else None
             self.sid                    = self.credentials['sid']                   if 'sid' in self.credentials else None

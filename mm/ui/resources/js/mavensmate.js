@@ -112,7 +112,8 @@ function renderBufferedTree(metadata) {
 					"sid"					: $("#sid").val(),
 					"metadata_server_url" 	: $("#metadata_server_url").val(),
 					"server_url" 			: $("#server_url").val(),
-					"command" 			: "list_metadata"
+					"command" 			: "list_metadata",
+					"defer_connection" : true
 				},
 	            complete: function(data){
 	                list_handler(data, node);

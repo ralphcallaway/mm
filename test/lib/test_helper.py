@@ -30,7 +30,8 @@ class MavensMateTest(unittest.TestCase):
         if type(command_name_or_argv) is list:
             sys.argv = command_name_or_argv
         else:
-            sys.argv = ['mm.py', '-o', command_name_or_argv]
+            return_format = kwargs.get('return_format', 'json')
+            sys.argv = ['mm.py', '-o', command_name_or_argv, '-f', return_format]
         
         MavensMateRequestHandler().execute()
         mm_response = commandOut.getvalue()

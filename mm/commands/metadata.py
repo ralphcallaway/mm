@@ -392,6 +392,8 @@ class CompileSelectedMetadataCommand(Command):
 class ListMetadataCommand(Command):
     def execute(self):
         if 'sid' in self.params:
+            debug('executing list metadata!!')
+            debug(self.params)
             client = MavensMateClient(credentials={
                 "sid"                   : self.params.get('sid', None),
                 "metadata_server_url"   : urllib.unquote(self.params.get('metadata_server_url', None)),

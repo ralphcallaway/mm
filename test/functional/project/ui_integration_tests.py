@@ -27,7 +27,7 @@ class ProjectUiIntegrationTest(MavensMateTest):
         self.assertEqual(mm_response['success'], False)
         self.assertEqual(mm_response['body'], "Please enter a Salesforce.com password")
 
-    def test_03_should_get_active_session_good_creds(self): 
+    def test_03_should_get_active_session_and_list_apex_classes(self): 
         stdin = {
             "username" : test_helper.get_creds()['username'],
             "password" : test_helper.get_creds()['password'],
@@ -36,6 +36,16 @@ class ProjectUiIntegrationTest(MavensMateTest):
         mm_response = self.runCommand('get_active_session', stdin)
         self.assertEqual(mm_response['success'], True)
         self.assertEqual(len(mm_response['user_id']), 18)
+
+        stdin = {
+            'sid' : mm_response['sid'],
+            'metadata_server_url' : mm_response['metadata_server_url'],
+            'metadata_type' : 'ApexClass',
+            'server_url' : mm_response['server_url'],
+            'defer_connection' : True
+        }
+        mm_response = self.runCommand('list_metadata', stdin, return_format='json')
+        self.assertEqual(type(mm_response), list)
 
     @classmethod    
     def tearDownClass(self):
