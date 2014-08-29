@@ -940,6 +940,7 @@ def generate_error_response(message, dump_to_json=True, verbose=False):
 
         stack_trace = re.sub(r'/Users\/.+?.pyz\/', '', stack_trace)
         stack_trace = re.sub(r'C:\\Users\\.+?.pyz\/', '', stack_trace)
+        stack_trace = re.sub(r'/home\/travis\/.+?.pyz\/', '', stack_trace)
 
         config.logger.exception("[MAVENSMATE CAUGHT ERROR]")
         config.logger.debug(stack_trace)
@@ -964,6 +965,7 @@ def generate_error_response(message, dump_to_json=True, verbose=False):
     except:
         stack_trace = re.sub(r'/Users\/.+?.pyz\/', '', stack_trace)
         stack_trace = re.sub(r'C:\\Users\\.+?.pyz\/', '', stack_trace)
+        stack_trace = re.sub(r'/home\/travis\/.+?.pyz\/', '', stack_trace)
         res = {
             "success"       : False,
             "body_type"     : "text",
@@ -983,6 +985,7 @@ def format_exception(exc_info=None):
     formatted_exception = out.getvalue()
     formatted_exception = re.sub(r'/Users\/.+?.pyz\/', '', formatted_exception)
     formatted_exception = re.sub(r'C:\\Users\\.+?.pyz\/', '', formatted_exception)
+    formatted_exception = re.sub(r'/home\/travis\/.+?.pyz\/', '', formatted_exception)
     return formatted_exception
 
 def prepare_for_metadata_tree(metadata_list):
