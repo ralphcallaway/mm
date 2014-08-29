@@ -29,10 +29,12 @@ try:
     import keyring
 except:
     pass
-try:
-    import gnomekeyring
-except:
-    pass
+
+if config.is_linux:
+    try:
+        import gnomekeyring
+    except:
+        pass
 
 if config.is_windows:
     try:
@@ -183,20 +185,11 @@ def decode(key, enc):
 def put_password_by_key(key, password):
     use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
     if use_keyring:
-
-        if config.is_linux:
-            import gnomekeyring
-        else:
-            import keyring
-
-        if config.is_linux:
-            try:
-                gnomekeyring.set_network_password_sync(None, key, 'MavensMate: '+key,
-                    None, None, None, None, 0, password)
-            except gnomekeyring.CancelledError:
-                raise MMException('Unable to set password')
-        else:
+        import keyring
+        try:
             keyring.set_password('MavensMate: '+key, key, password)
+        except gnomekeyring.CancelledError:
+            raise MMException('Unable to set password via keyring.')
     else: #not recommend! we only use this for CI
         encoded = encode(key, password)
         src = open(os.path.join(config.connection.get_app_settings_directory(),key+'.json'), "wb")
@@ -206,19 +199,11 @@ def put_password_by_key(key, password):
 def get_password_by_key(key):
     use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
     if use_keyring:
-        if config.is_linux:
-            import gnomekeyring
-        else:
-            import keyring
-
-        if config.is_linux:
-            try:
-                items = gnomekeyring.find_network_password_sync(key, 'MavensMate: '+key)
-                return items[0]['password']
-            except gnomekeyring.CancelledError:
-                raise MMException('Unable to retrieve password')
-        else:
+        import keyring
+        try:
             return keyring.get_password('MavensMate: '+key, key)
+        except:
+            raise MMException('Unable to retrieve password via keyring')
     else: #not recommend! we only use this for CI
         try:
             file_body = get_file_as_string(os.path.join(config.connection.get_app_settings_directory(),key+'.json'))
@@ -230,11 +215,8 @@ def get_password_by_key(key):
 def delete_password_by_key(key):
     use_keyring = config.connection.get_plugin_client_setting('mm_use_keyring', True)
     if use_keyring:
-        if sys.platform == 'linux2':
-            import gnomekeyring
-        else:
-            import keyring
         try:
+            import keyring
             return keyring.delete_password('MavensMate: '+key, key)
         except:
             #TODO: this has not been implemented in keyring yet :-(
