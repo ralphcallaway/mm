@@ -8,6 +8,7 @@ branches:
   except:
     - dev
 before_deploy:
+  - sudo apt-get install python-keyring
   - sudo apt-get install python-gnomekeyring
   - cd ..
   - curl "https://pypi.python.org/packages/source/P/PyInstaller/PyInstaller-2.1.tar.gz" >> PyInstaller-2.1.tar.gz
