@@ -177,18 +177,20 @@ function getPackage() {
                     json[rec.parent.parent.data.text].push(rec.parent.data.text + "/" + rec.data.text);
                 } else {
                     //this is a sub type like a custom field, list view, etc.
-                    
-                    if (rec.children !== null) {
-                    	metadata_type = child_def[rec.data.text];
-                    	if (!json[metadata_type]) {
-                    	    json[metadata_type] = [];
-                    	} 
+                    //console.log(rec.parent);
+                    if (!rec.parent.bSelected) {
+                    	if (rec.children !== null) {
+                    		metadata_type = child_def[rec.data.text];
+                    		if (!json[metadata_type]) {
+                    		    json[metadata_type] = [];
+                    		} 
 
-                    	$.each(rec.children, function(index, childNode) {
-                    	    if (childNode.data.checked) {
-                    	        json[metadata_type].push(childNode.parent.parent.data.text+"."+childNode.data.text);
-                    	    }
-                    	});
+                    		$.each(rec.children, function(index, childNode) {
+                    		    if (childNode.data.checked) {
+                    		        json[metadata_type].push(childNode.parent.parent.data.text+"."+childNode.data.text);
+                    		    }
+                    		});
+                    	}
                     }
                 } 
             } else if (rec.data.level == 4) {
