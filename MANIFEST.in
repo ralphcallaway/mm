@@ -7,7 +7,7 @@ include mm/ui/resources/bootstrap/**/*
 include mm/sforce/*/**
 include mm/config/*
 include mm/bin/MavensMateWindowServer.app/Contents/Info.plist
-include mm/bin/MavensMateWindowServer.app/Contents/PkgIngo
+include mm/bin/MavensMateWindowServer.app/Contents/PkgInfo
 include mm/bin/MavensMateWindowServer.app/Contents/MacOS/MavensMateWindowServer
 include mm/bin/MavensMateWindowServer.app/Contents/Resources/MavensMateWindowServer.icns
 include mm/bin/MavensMateWindowServer.app/Contents/Resources/mm-2.icns
