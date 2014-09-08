@@ -12,5 +12,5 @@ general:
   #     - pip
 test:
   override:
-    #- python test --api=31.0
-    - echo hello world
+    - python test --api=31.0
+    # - echo hello world
