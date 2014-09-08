@@ -166,49 +166,58 @@ function getPackage() {
                     json[rec.parent.data.text].push(rec.data.text);
                 } 
             } else if (rec.data.level == 3) {
-                var drillToType = false;
-                if ('type' in rec.parent.parent.data)
-                	drillToType = true;
-                var inFolder = drillToType ? rec.parent.parent.data.type.inFolder : rec.parent.parent.data.inFolder;              
-                if (inFolder) {
-                    if (json[rec.parent.parent.data.text] === undefined) {
-                        json[rec.parent.parent.data.text] = [];
-                    }
-                    json[rec.parent.parent.data.text].push(rec.parent.data.text + "/" + rec.data.text);
-                } else {
-                    //this is a sub type like a custom field, list view, etc.
-                    //console.log(rec.parent);
-                    if (!rec.parent.bSelected) {
-                    	if (rec.children !== null) {
-                    		metadata_type = child_def[rec.data.text];
-                    		if (!json[metadata_type]) {
-                    		    json[metadata_type] = [];
-                    		} 
-
-                    		$.each(rec.children, function(index, childNode) {
-                    		    if (childNode.data.checked) {
-                    		        json[metadata_type].push(childNode.parent.parent.data.text+"."+childNode.data.text);
-                    		    }
-                    		});
-                    	}
-                    }
-                } 
-            } else if (rec.data.level == 4) {
-                //this is a child metadata object, like a custom field
-                metadata_type = child_def[rec.parent.data.text];
-                if (json.hasOwnProperty(rec.parent.parent.parent.data.text)) { //json['CustomObject'] exists already
-                	if ($.inArray(rec.parent.parent.data.text, json[rec.parent.parent.parent.data.text]) === -1) {
-		            	if (!json[metadata_type]) {
-		            	    json[metadata_type] = [];
-		            	} 
-		            	json[metadata_type].push(rec.parent.parent.data.text+"."+rec.data.text); 	
-		        	}
-                } else {
-                	if (!json[metadata_type]) {
-                	    json[metadata_type] = [];
+                try {
+                	var drillToType = false;
+                	if ('type' in rec.parent.parent.data)
+                		drillToType = true;
+                	var inFolder = drillToType ? rec.parent.parent.data.type.inFolder : rec.parent.parent.data.inFolder;              
+                	if (inFolder) {
+                	    if (json[rec.parent.parent.data.text] === undefined) {
+                	        json[rec.parent.parent.data.text] = [];
+                	    }
+                	    json[rec.parent.parent.data.text].push(rec.parent.data.text + "/" + rec.data.text);
+                	} else {
+                	    //this is a sub type like a custom field, list view, etc.
+                	    //console.log(rec.parent);
+                	    if (!rec.parent.bSelected) {
+                	    	if (rec.children !== undefined && rec.children !== null) {
+                	    		metadata_type = child_def[rec.data.text];
+                	    		if (!json[metadata_type]) {
+                	    		    json[metadata_type] = [];
+                	    		} 
+                	    		// console.log('---->>>>>');
+                	    		// console.log(rec.children);
+                	    		$.each(rec.children, function(index, childNode) {
+                	    		    if (childNode.data.checked) {
+                	    		        json[metadata_type].push(childNode.parent.parent.data.text+"."+childNode.data.text);
+                	    		    }
+                	    		});
+                	    	}
+                	    }
                 	} 
-                	json[metadata_type].push(rec.parent.parent.data.text+"."+rec.data.text); 	
-                } 
+                } catch(e) { 
+                	//todo
+                }
+            } else if (rec.data.level == 4) {
+                try {
+                	 //this is a child metadata object, like a custom field
+	                metadata_type = child_def[rec.parent.data.text];
+	                if (json.hasOwnProperty(rec.parent.parent.parent.data.text)) { //json['CustomObject'] exists already
+	                	if ($.inArray(rec.parent.parent.data.text, json[rec.parent.parent.parent.data.text]) === -1) {
+			            		if (!json[metadata_type]) {
+			            	  	json[metadata_type] = [];
+			            		} 
+			            		json[metadata_type].push(rec.parent.parent.data.text+"."+rec.data.text); 	
+			        			}
+	                } else {
+	                	if (!json[metadata_type]) {
+	                	    json[metadata_type] = [];
+	                	} 
+	                	json[metadata_type].push(rec.parent.parent.data.text+"."+rec.data.text); 	
+	                } 
+                } catch(e) {
+                	//todo	
+                }
             }
         });  
     } catch(e) {
