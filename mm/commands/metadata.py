@@ -268,6 +268,21 @@ class OpenSelectedMetadataCommand(Command):
         else:
             raise MMException("To open on Salesforce, you must provide an array of 'files'")
 
+class SyncMetadataWithServerCommand(Command):
+    """
+        Syncs local copy of file with server copy
+    """
+    def execute(self):        
+        project = config.project
+        files = self.params.get('files', None)
+
+        msg = config.project.conflict_manager.sync_with_server(files)
+        if msg != None:
+            return msg
+        else:
+            return util.generate_error_response('Unable to find file in local store.')
+
+
 class CompileSelectedMetadataCommand(Command):
     """
         Compiles metadata

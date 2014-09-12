@@ -669,6 +669,7 @@ def generate_ui(operation,params={},args={}):
         template = env.get_template('/metadata/new.html')
         file_body = template.render(
             name=config.project.project_name,
+            metadata_type=metadata_type,
             template_list=template_package_json[metadata_type],
             templates=json.dumps(template_package_json[metadata_type])
         ).encode('UTF-8')
@@ -887,6 +888,16 @@ def generate_request_for_action_response(message, operation, actions=[], **kwarg
         "body"          : message,
         "actions"       : actions,
         "operation"     : operation
+    }
+    if 'tmp_file_path' in kwargs and kwargs['tmp_file_path'] != None:
+        res['tmp_file_path'] = kwargs['tmp_file_path']
+    return json.dumps(res)
+
+def generate_sync_response(message, **kwargs):
+    res = {
+        "success"       : True,
+        "body_type"     : "text",
+        "body"          : message
     }
     if 'tmp_file_path' in kwargs and kwargs['tmp_file_path'] != None:
         res['tmp_file_path'] = kwargs['tmp_file_path']

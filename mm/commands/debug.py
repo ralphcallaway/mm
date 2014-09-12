@@ -50,23 +50,38 @@ class FetchLogsCommand(Command):
         number_of_logs = 0
         limit   = config.connection.get_plugin_client_setting('mm_number_of_logs_limit', 20)
         id_list = ','.join("'"+item+"'" for item in config.project.get_debug_users())
-        log_result = config.sfdc_client.execute_query('Select Id, LogUserId, SystemModstamp From ApexLog Where SystemModstamp >= TODAY and Location != \'HeapDump\' AND LogUserId IN ({0}) order by SystemModstamp desc limit {1}'.format(id_list, str(limit)))
+        # log_result = config.sfdc_client.execute_query('Select Id, LogUserId, SystemModstamp From ApexLog Where SystemModstamp >= TODAY and Location != \'HeapDump\' AND LogUserId IN ({0}) order by SystemModstamp desc limit {1}'.format(id_list, str(limit)))
+
+        log_result = config.sfdc_client.execute_query('Select Id, LogUserId, SystemModstamp From ApexLog WHERE Location != \'HeapDump\' AND LogUserId IN ({0}) order by SystemModstamp desc limit {1}'.format(id_list, str(limit)))
         config.logger.debug(log_result)
         logs = []
         if 'records' in log_result:
-            for r in log_result['records']:
-                id = r["Id"]
-                log = config.sfdc_client.download_log(id)
-                logs.append({"id":id,"modstamp":str(r["SystemModstamp"]),"log":log,"userid":r["LogUserId"]})
+            # make log directory if it doesnt exist
             if os.path.isdir(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs")) == False:
                 os.makedirs(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs"))
-            for the_file in os.listdir(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs")):
-                file_path = os.path.join(config.connection.workspace,config.project.project_name,"debug","logs", the_file)
-                try:
-                    if os.path.isfile(file_path):
-                        os.unlink(file_path)
-                except Exception, e:
-                    print e
+
+            for r in log_result['records']:
+                modstamp = str(r["SystemModstamp"])
+                if config.is_windows:
+                    modstamp = modstamp.replace(':', ' ')
+                file_name = modstamp+"-"+r["LogUserId"]+".log"
+
+                # only download the log if it doesn't already exist on the filesystem
+                if not os.path.isfile(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name)):
+                    id = r["Id"]
+                    log = config.sfdc_client.download_log(id)
+                    logs.append({"id":id,"modstamp":modstamp,"log":log,"userid":r["LogUserId"]})
+            
+            # for the_file in os.listdir(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs")):
+            #     file_path = os.path.join(config.connection.workspace,config.project.project_name,"debug","logs", the_file)
+            #     try:
+            #         if os.path.isfile(file_path):
+            #             os.unlink(file_path)
+            #     except Exception, e:
+            #         print e
+            
+            new_logs = []
+            # write logs to file system
             number_of_logs = len(logs)
             for log in logs:
                 modstamp = log["modstamp"]
@@ -74,12 +89,19 @@ class FetchLogsCommand(Command):
                     modstamp = modstamp.replace(':', ' ')
                 file_name = modstamp+"-"+log["userid"]+".log"
                 src = open(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name), "w")
+                new_logs.append(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name))
                 src.write(log["log"])
                 src.close()
+
+            if number_of_logs > 0:
+                res = util.generate_success_response(str(number_of_logs)+' logs successfully downloaded')
+                res['logs'] = new_logs
+            else:
+                res = util.generate_success_response('No new logs from today available for download.')
+            return res
         else:
             config.logger.debug("No logs to download")
-
-        return util.generate_success_response(str(number_of_logs)+' Logs successfully downloaded')
+            return util.generate_success_response('No logs from today available to download.')
 
 class NewTraceFlagCommand(Command):
     aliases=["new_log"]

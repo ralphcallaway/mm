@@ -10,7 +10,7 @@
 <div class="content">
 		 
 	<ul class="nav nav-tabs nav-append-content">
-		<li class="active"><a id="project_details_tab" href="#form" data-toggle="tab">New Metadata Details</a></li>
+		<li class="active"><a id="project_details_tab" href="#form" data-toggle="tab">New {{metadata_type}} Details</a></li>
 	</ul>
 	
 	<div class="tab-content" id="main-tab-content">
@@ -48,7 +48,8 @@
 	<script type="text/javascript">
 		var response;
 		var operation;
-		var templates = {{ templates }}
+		var templates = {{ templates }};
+		var selectedTemplate = null;
 		
 		function getTemplateDefinition() {
 			operation = "get_templates";
@@ -68,6 +69,14 @@
 		}
 
 		function newMetadata() {
+			paramPayload = {}
+
+			$("input.templateParam").each(function(index) {
+				var paramName = $( this ).data( "param" );
+				var paramValue = $( this ).val();
+				paramPayload[paramName] = paramValue;
+			})
+
 			operation = "new_metadata";
 			$.ajax({
 				type: "POST",
@@ -77,7 +86,10 @@
 				data: JSON.stringify({
 					project_name 		: '{{ name }}',
 					project_location	: $("#STATIC-project-location").val(),
-					command 			: 'new_metadata'
+					command 			: 'new_metadata',
+					params 				: paramPayload,
+					metadata_type		: '{{ metadata_type }}',
+					github_template		: selectedTemplate
 				}),
 				beforeSend: function() { showLoading('Creating new metadata...'); },
 				complete: function(data){
@@ -112,7 +124,7 @@
 		    
 		    $("#template").change(function() {
 		    	var value = $(this).val();
-		    	var template = null;
+		    	selectedTemplate = null;
 		    	var paramsHtml = '';
 
 		    	if (value === null || value === '') {
@@ -122,12 +134,12 @@
 		    			if (templates[t].name === value) {
 		    				console.log('our template!');
 		    				console.log(templates[t]);
-		    				template = templates[t];
+		    				selectedTemplate = templates[t];
 		    				break;
 		    			}
 		    		}
-		    		for (p in template.params) {
-		    			paramsHtml += '<div class="control-group large"><input class="span12" type="text" placeholder="'+template.params[p].description+'"/></div>';
+		    		for (p in selectedTemplate.params) {
+		    			paramsHtml += '<div class="control-group large"><input class="span12 templateParam" data-param="'+selectedTemplate.params[p].name+'" type="text" placeholder="'+selectedTemplate.params[p].description+'"/></div>';
 		    		}
 		    	}
 		    	

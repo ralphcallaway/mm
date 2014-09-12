@@ -1,4 +1,4 @@
-import os.path
+import os
 import mm.util as util
 import json
 import mm.config as config
@@ -149,6 +149,50 @@ class ConflictManager(object):
                     self.mark_dirty(api_name_plus_extension)
                     return True, msg
         return False, None
+
+    def sync_with_server(self, files):
+        local_store = self.get_local_store()
+        retrieve_result = self.project.get_retrieve_result({"files":files})
+        properties = retrieve_result.fileProperties
+        for f in files:
+            debug('\n\n\n\nFILE BRO ----->')
+
+            ext = util.get_file_extension_no_period(f)
+            apex_type = util.get_meta_type_by_suffix(ext)
+            apex_entity_api_name = util.get_file_name_no_extension(f)
+            body_field = 'Body'
+            if apex_type['xmlName'] == 'ApexPage' or apex_type['xmlName'] == 'ApexComponent':
+                body_field = 'Markup'
+            api_name_plus_extension = apex_entity_api_name+"."+ext
+            
+            server_property = None
+            for p in properties:
+                if p["fullName"] == apex_entity_api_name:
+                    server_property = p
+                    try:
+                        config.api_name_to_id_dict[p["fullName"]] = p["id"]
+                    except:
+                        pass
+                    break
+            
+            debug(api_name_plus_extension)
+
+            if api_name_plus_extension in local_store and server_property != None:
+                local_store_entry = local_store[api_name_plus_extension]
+                local_last_modified_date = local_store_entry["lastModifiedDate"]
+                server_last_modified_date = server_property['lastModifiedDate']
+                last_modified_name = server_property['lastModifiedByName']
+                
+                qr = self.project.sfdc_client.execute_query("Select LastModifiedById, LastModifiedDate, LastModifiedBy.Name, {0} From {1} Where Name = '{2}'".format(body_field, apex_type['xmlName'], apex_entity_api_name))
+                body = qr['records'][0][body_field]
+                body = body.encode('utf-8')
+
+                msg = util.generate_sync_response(
+                    "Server version was last modified by {0} on {1}.".format(last_modified_name, server_last_modified_date),
+                    tmp_file_path=util.put_tmp_file_on_disk(apex_entity_api_name, body, apex_type.get('suffix', ''))
+                )
+                return msg
+        return None
 
     def get_local_store(self):
         local_store = None
