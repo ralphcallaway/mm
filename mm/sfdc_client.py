@@ -328,6 +328,8 @@ class MavensMateClient(object):
             config.logger.debug('Updating existing member')
             config.logger.debug(payload)
             r = requests.post(self.get_tooling_url()+"/sobjects/"+tooling_type, data=payload, headers=self.get_rest_headers('POST'), proxies=self.__get_proxies(), verify=False)
+            debug(r.text)
+            
             response = util.parse_rest_response(r.text)
 
             #if the member already exists, patch it (TODO: cache member ids and go right to patch, handle exception)
@@ -517,7 +519,7 @@ class MavensMateClient(object):
         }
         self.create_trace_flag(payload)
         
-        return util.generate_success_response("Done")
+        return util.parse_rest_response(r.text)
 
     #deletes ALL checkpoints in the org
     def delete_apex_checkpoints(self):
