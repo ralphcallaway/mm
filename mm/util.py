@@ -673,6 +673,9 @@ def generate_ui(operation,params={},args={}):
             template_list=template_package_json[metadata_type],
             templates=json.dumps(template_package_json[metadata_type])
         ).encode('UTF-8')
+    elif operation == 'share':
+        template = env.get_template('/share/index.html')
+        file_body = template.render(hash=params['hash']).encode('UTF-8')
     else:
         raise MMException('Unsupported UI Command')
     temp.write(file_body)
