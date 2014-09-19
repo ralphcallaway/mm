@@ -290,8 +290,12 @@ class PluginConnection(object):
 
     def get_sfdc_api_version(self):
         try:
-            return self.get_plugin_client_setting('mm_api_version')
+            api_version = str(self.get_plugin_client_setting('mm_api_version'))
+            if not api_version.endswith('.0'):
+                api_version = api_version+'.0'
+            return api_version
         except:
+            debug('Invalid API version set by mm_api_version')
             return None
 
     def get_app_settings_directory(self):
