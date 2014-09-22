@@ -103,34 +103,40 @@ class PluginConnection(object):
             if self.get_log_location() != None:
                 try:
                     config.logger.handlers = []
-                    config.suds_logger.handlers = []
-                    handler = RotatingFileHandler(os.path.join(self.get_log_location(),"mm.log"), maxBytes=10*1024*1024, backupCount=5)
+                    handler = RotatingFileHandler(os.path.join(self.get_log_location(),"mm-"+self.operation+".log"), maxBytes=10*1024*1024, backupCount=5)
                     config.logger.addHandler(handler)
-                    config.suds_logger.addHandler(handler)
                     config.requests_log.addHandler(handler)
                 except:
                     pass
+            
             log_level = self.get_log_level()
+            log_soap = self.get_log_soap()
+
             if log_level == 'CRITICAL':
                 config.logger.setLevel(logging.CRITICAL)
-                config.suds_logger.setLevel(logging.CRITICAL)
                 config.requests_log.setLevel(logging.CRITICAL)
+                if log_soap:
+                    config.setup_soap_logging(handler, logging.CRITICAL)
             elif log_level == 'ERROR':
                 config.logger.setLevel(logging.ERROR)
-                config.suds_logger.setLevel(logging.ERROR)
                 config.requests_log.setLevel(logging.ERROR)
+                if log_soap:
+                    config.setup_soap_logging(handler, logging.ERROR)
             elif log_level == 'WARNING':
                 config.logger.setLevel(logging.WARNING)
-                config.suds_logger.setLevel(logging.WARNING)
                 config.requests_log.setLevel(logging.WARNING)
+                if log_soap:
+                    config.setup_soap_logging(handler, logging.WARNING)
             elif log_level == 'DEBUG':
                 config.logger.setLevel(logging.DEBUG)
-                config.suds_logger.setLevel(logging.DEBUG)
                 config.requests_log.setLevel(logging.DEBUG)
+                if log_soap:
+                    config.setup_soap_logging(handler, logging.DEBUG)
             elif log_level == 'INFO':
                 config.logger.setLevel(logging.INFO) 
-                config.suds_logger.setLevel(logging.INFO)
                 config.requests_log.setLevel(logging.INFO)
+                if log_soap:
+                    config.setup_soap_logging(handler, logging.INFO)
 
     #returns the workspace for the current connection (/Users/username/Workspaces/MavensMate)
     def get_workspace(self):
@@ -279,6 +285,12 @@ class PluginConnection(object):
     def get_log_level(self):
         try:
             return self.get_plugin_client_setting('mm_log_level')
+        except:
+            return None
+
+    def get_log_soap(self):
+        try:
+            return self.get_plugin_client_setting('mm_log_soap')
         except:
             return None
 

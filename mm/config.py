@@ -12,12 +12,23 @@ logging.basicConfig(level=logging.INFO)
 
 logging_handler = RotatingFileHandler(os.path.join(tempfile.gettempdir(),"mm.log"), maxBytes=2*1024*1024, backupCount=5)
 
-#suds log setup
-suds_logger = logging.getLogger('suds.client')
-suds_logger.setLevel(logging.WARN)
-suds_logger.propagate = False
-suds_logger.addHandler(logging_handler) 
+# other suds loggers that we dont want to use:
+# 'suds.transport',
+# 'suds.xsd.schema',
+# 'suds.wsdl',
+# 'suds.resolver',
+# 'suds.xsd.query',
+# 'suds.xsd.basic',
+# 'suds.binding.marshaller'
 
+suds_loggers = [ 'suds.client' ]
+def setup_soap_logging(handler=logging_handler, level=logging.ERROR):
+    for l in suds_loggers:
+       suds_logger = logging.getLogger(l)
+       suds_logger.setLevel(level)
+       suds_logger.propagate = False
+       suds_logger.addHandler(handler) 
+     
 #mm log setup
 logger = logging.getLogger('mm')
 logger.setLevel(logging.ERROR)
