@@ -6,6 +6,8 @@ import mm.config as config
 from mm.exceptions import *
 from mm.basecommand import Command
 
+debug = config.logger.debug
+
 class UpdateDebugSettingsCommand(Command):
     def execute(self):
         users       = self.params.get('users', None)
@@ -16,7 +18,7 @@ class UpdateDebugSettingsCommand(Command):
 
 class NewQuickTraceFlagCommand(Command):
     name="new_quick_trace_flag"
-    aliases=["new_quick_log"]
+    aliases=["new_quick_log","start_logging"]
     def execute(self):
         debug_users = config.project.get_debug_users()
         debug_settings = config.project.get_debug_settings()
@@ -42,7 +44,51 @@ class NewQuickTraceFlagCommand(Command):
                 response = json.loads(response)
                 if "success" in response and response["success"] == False:
                     return util.generate_error_response(response["errors"][0])
-            return util.generate_success_response('{0} Log(s) created successfully'.format(str(len(debug_users))))
+            return util.generate_success_response('Started logging for {0} user(s) for {1} hours. Logging can be configured in your project\'s config/.debug file.'.format(str(len(debug_users)), str(debug_settings["expiration"]/60)))
+
+class DownloadLogCommand(Command):
+    def execute(self):
+        log_id = self.params['log_id']
+        debug('log_id is: '+log_id)
+
+        log_result = config.sfdc_client.execute_query("Select Id, LogUserId, SystemModstamp From ApexLog WHERE Id = '{0}'".format(log_id))
+        
+        debug('log SOQL result: ')
+        debug(log_result)
+        
+        logSobject = None
+        if 'records' in log_result:
+            logSobject = log_result['records'][0]
+
+        # make log directory if it doesnt exist
+        if os.path.isdir(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs")) == False:
+            os.makedirs(os.path.join(config.connection.workspace,config.project.project_name,"debug","logs"))
+
+        modstamp = str(logSobject["SystemModstamp"])
+        if config.is_windows:
+            modstamp = modstamp.replace(':', ' ')
+        file_name = modstamp+"-"+logSobject["LogUserId"]+".log"
+
+        file_path = os.path.join(config.connection.workspace,config.project.project_name,"debug","logs",file_name)
+        # only download the log if it doesn't already exist on the filesystem
+        if os.path.isfile(file_path):
+            return util.generate_success_response('Log already downloaded')
+
+
+        id = logSobject["Id"]
+        downloaded_log = config.sfdc_client.download_log(id)
+        debug('loaded log: ')
+        debug(downloaded_log)
+
+        # write file
+        src = open(file_path, "w")
+        src.write(downloaded_log)
+        src.close()
+
+        log_result = {"id":id,"modstamp":modstamp,"path":file_path,"userid":logSobject["LogUserId"]}
+        res = util.generate_success_response('Log successfully download')
+        res['log'] = log_result
+        return res
 
 class FetchLogsCommand(Command):
     name="fetch_logs"
@@ -94,7 +140,7 @@ class FetchLogsCommand(Command):
                 src.close()
 
             if number_of_logs > 0:
-                res = util.generate_success_response(str(number_of_logs)+' logs successfully downloaded')
+                res = util.generate_success_response(str(number_of_logs)+' logs successfully downloaded to debug/logs')
                 res['logs'] = new_logs
             else:
                 res = util.generate_success_response('No new logs from today available for download.')
