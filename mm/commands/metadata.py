@@ -203,6 +203,7 @@ class OpenSelectedMetadataCommand(Command):
     def execute(self):
         project = config.project
         sfdc_client = config.sfdc_client
+        
         if "files" in self.params:
             if "type" in self.params: 
                 open_type = self.params.get("type", None) 
@@ -212,6 +213,8 @@ class OpenSelectedMetadataCommand(Command):
             if len(files) > 0:
                 apex_file_properties = util.parse_json_from_file(os.path.join(project.location,"config",".local_store"))
                 opened = []
+                urls = []
+                pages = []
                 for fileabs in files:
                     basename = os.path.basename(fileabs)
 
@@ -250,6 +253,9 @@ class OpenSelectedMetadataCommand(Command):
                     if open_type == "wsdl":
                         f, e = os.path.splitext(basename)
                         ret_url = "/services/wsdl/class/" + f
+                    elif open_type == "preview" and object_type == "ApexPage":
+                        f, e = os.path.splitext(basename)
+                        ret_url = "/apex/"+f
                     else:
                         f, ext = os.path.splitext(basename)
                         if object_type == "CustomObject" and not f.endswith('__c'):
@@ -258,12 +264,22 @@ class OpenSelectedMetadataCommand(Command):
                         else:
                             ret_url = "/" + object_id
 
-                    # open the browser window for this file and track it
-                    webbrowser.open(frontdoor+ret_url, new=2)
-                    opened.append(basename)
-                if len(opened) == 0:
+                    if open_type == "preview":
+                        urls.append(frontdoor+ret_url)
+                        pages.append(basename)
+                    else:
+                        # open the browser window for this file and track it
+                        webbrowser.open(frontdoor+ret_url, new=2)
+                        opened.append(basename)
+                if len(opened) == 0 and open_type != 'preview':
                     return util.generate_error_response("There were no valid files to open.")
-                return util.generate_success_response("Opened "+(", ".join(opened))+" on server.")
+                if open_type == 'preview':
+                    result = util.generate_success_response("Opened "+(", ".join(opened))+" on server.")
+                    result['urls'] = urls
+                    result['pages'] = pages
+                    return result
+                else:
+                    return util.generate_success_response("Opened "+(", ".join(opened))+" on server.")
             return util.generate_error_response("Unable to open file on server.")
         else:
             raise MMException("To open on Salesforce, you must provide an array of 'files'")
