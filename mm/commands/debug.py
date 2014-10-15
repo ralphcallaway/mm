@@ -46,6 +46,14 @@ class NewQuickTraceFlagCommand(Command):
                     return util.generate_error_response(response["errors"][0])
             return util.generate_success_response('Started logging for {0} user(s) for {1} hours. Logging can be configured in your project\'s config/.debug file.'.format(str(len(debug_users)), str(debug_settings["expiration"]/60)))
 
+class StopLoggingCommand(Command):
+    def execute(self):
+        debug_users = config.project.get_debug_users()
+        debug_settings = config.project.get_debug_settings()
+        for user_id in debug_users:
+            config.sfdc_client.delete_trace_flags(user_id)    
+        return util.generate_success_response('Stopped logging for debug users.')
+
 class DownloadLogCommand(Command):
     def execute(self):
         log_id = self.params['log_id']
