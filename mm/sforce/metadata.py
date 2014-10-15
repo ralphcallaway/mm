@@ -75,11 +75,18 @@ class SforceMetadataClient(SforceBaseClient):
             package_dict['unpackaged'].pop("@xmlns", None)
             package_dict['unpackaged'].pop("#text", None)
             package_dict['apiVersion'] = api_version
+            
+            if 'types' not in package_dict['unpackaged']:
+                # raise MMException('Invalid package.xml. Please ensure your package ')
+                package_dict['unpackaged']['types'] = []
+            
             types = package_dict['unpackaged']['types']
+            
             if type(types) is not list:
                 types = [types]
             if type(package_dict['unpackaged']['types']) is not list:
                 package_dict['unpackaged']['types'] = [package_dict['unpackaged']['types']]
+            
             requested_types = []
             if 'type' in kwargs and kwargs['type'] != None and kwargs['type'] != '': #if the request is for a certain type, only request that type
                 for i, val in enumerate(types):
