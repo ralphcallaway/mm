@@ -32,7 +32,7 @@ class NewMetadataCommand(Command):
         if params == None:
             raise MMException('The payload to create metadata has recently changed. If you are using Sublime Text, you likely need to update your MavensMate plugin to 3.4.8+')
 
-        if "api_name" not in params or params["api_name"] == None:
+        if "api_name" not in params or params["api_name"] == None or params["api_name"] == '':
             return util.generate_error_response("You must provide a name for the new metadata.")
 
         api_name = params.get('api_name')
