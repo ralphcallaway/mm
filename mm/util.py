@@ -675,7 +675,7 @@ def generate_ui(operation,params={},args={}):
         ).encode('UTF-8')
     elif operation == 'share':
         template = env.get_template('/share/index.html')
-        file_body = template.render(hash=params['hash']).encode('UTF-8')
+        file_body = template.render(hash=params['hash'].strip()).encode('UTF-8')
     else:
         raise MMException('Unsupported UI Command')
     temp.write(file_body)
