@@ -627,6 +627,8 @@ class MavensMateClient(object):
         else:
             query_string = "Select Id From TraceFlag WHERE TracedEntityId = '{0}'".format(config.sfdc_client.user_id)
         qr = self.tooling_query(query_string)
+        debug('trace flag QR: ')
+        debug(qr)
         if type(qr['records'] is list and len(qr['records']) > 0):
             for record in qr['records']:
                 self.delete_tooling_entity("TraceFlag", record["Id"])
