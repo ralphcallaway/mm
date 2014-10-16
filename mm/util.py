@@ -539,7 +539,10 @@ def generate_ui(operation,params={},args={}):
     env.globals['project_location']         = config.project.location
     env.globals['static_resource_path']     = static_resource_path
     env.globals['client']                   = config.connection.plugin_client
-    env.globals['support_dir']              = config.support_dir
+    if config.connection.plugin_client.lower() == 'atom':
+        env.globals['support_dir'] = 'mm'
+    else:
+        env.globals['support_dir'] = config.support_dir
 
     temp = tempfile.NamedTemporaryFile(delete=False, prefix="mm", suffix=".html")
     if operation == 'new_project':
@@ -727,7 +730,10 @@ def generate_html_response(operation, obj, params=None):
     env.globals['get_file_lines'] = get_file_lines
     env.globals['htmlize'] = htmlize
     env.globals['does_file_exist'] = does_file_exist
-    env.globals['support_dir'] = config.support_dir
+    if config.connection.plugin_client.lower() == 'atom':
+        env.globals['support_dir'] = 'mm'
+    else:
+        env.globals['support_dir'] = config.support_dir
 
     if operation == 'test_legacy':
         template = env.get_template('/unit_test/result.html')
