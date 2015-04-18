@@ -469,12 +469,13 @@ class MavensMateProject(object):
                             metadata['CustomField'] = []
                         metadata['CustomField'] = list(set(metadata['CustomField']+custom_fields))
 
-            if len(metadata) == 0:
-                raise MMException("Could not find metadata types to refresh")
         elif 'files' in params and len(params['files']) > 0:
             metadata = util.get_metadata_hash(params['files'])
         else:
             raise MMException("Please provide either an array of 'directories' or an array of 'files'")
+
+        if len(metadata) == 0:
+            raise MMException("Could not find metadata types to refresh")
 
         #retrieves a fresh set of metadata based on the files that have been requested
         retrieve_result = self.sfdc_client.retrieve(package=metadata)

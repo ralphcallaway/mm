@@ -1141,6 +1141,7 @@ def get_metadata_hash(selected_files=[]):
             base_name_no_ext = os.path.basename(f).split(".")[0]+"."+os.path.basename(f).split(".")[1]
         else:
             base_name_no_ext = os.path.basename(f).split(".")[0]
+        meta_type = None
         try:
             metadata_definition = get_meta_type_by_suffix(ext_no_period)
             meta_type = metadata_definition["xmlName"]
@@ -1152,6 +1153,9 @@ def get_metadata_hash(selected_files=[]):
             if 'documents' in dir_parts:
                 metadata_definition = get_meta_type_by_name("Document")
                 meta_type = metadata_definition["xmlName"]
+
+        if meta_type is None: # file doesn't have a metadata type, skip it
+            continue
 
         if meta_type not in meta_hash: #key isn't there yet, put it in
             meta_hash[meta_type] = [];        
