@@ -62,6 +62,8 @@ class PluginConnection(object):
         
         if 'wsdl_path' in params:
             util.WSDL_PATH = params.get('wsdl_path')
+        elif self.get_plugin_client_setting('mm_wsdl_path', None) != None:
+            util.WSDL_PATH = self.get_plugin_client_setting('mm_wsdl_path')
 
         self.setup_logging()
         
