@@ -1090,7 +1090,7 @@ class MavensMateProject(object):
         default_levels = {
             "Database"      : "INFO",
             "System"        : "DEBUG",
-            "Visualforce"   : "DEBUG",
+            "Visualforce"   : "INFO",
             "Workflow"      : "INFO",
             "Validation"    : "INFO",
             "Callout"       : "INFO",
